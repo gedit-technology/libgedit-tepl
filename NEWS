@@ -1,5 +1,7 @@
-News in 5.99.1, xxxx-yy-zz (not yet released)
+News in 5.99.1, 2022-xx-yy (not yet released)
 --------------------------
+* The project is now located at: https://gitlab.gnome.org/swilmet/tepl
+
 * API changes:
  - The TeplInfoBar class has been reworked.
 
@@ -9,9 +11,13 @@ News in 5.99.1, xxxx-yy-zz (not yet released)
  - TeplLanguageChooserWidget
  - TeplLanguageChooserDialog
  - TeplProgressInfoBar
+ - TeplSignalGroup (make the class public).
  - Utility functions: add a few functions.
 
 * Misc:
+ - tepl_utils_replace_home_dir_with_tilde(): support $HOME that ends with a
+   slash.
+ - Documentation improvements.
  - Translation updates.
 
 News in 5.1.1, 2020-10-11
