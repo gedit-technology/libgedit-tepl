@@ -176,21 +176,23 @@ PKG_CONFIG.generate(tepl_lib,
   libraries: TEPL_PUBLIC_DEPS,
 )
 
-GNOME.generate_gir(
-  tepl_lib,
-  export_packages: 'tepl-@0@'.format(TEPL_API_VERSION),
-  header: 'tepl/tepl.h',
-  identifier_prefix: 'Tepl',
-  include_directories: ROOT_INCLUDE_DIR,
-  includes: ['Gtk-3.0', 'GtkSource-4', 'Amtk-5'],
-  install: true,
-  namespace: 'Tepl',
-  nsversion: TEPL_API_VERSION,
-  sources: [
-    tepl_public_headers,
-    tepl_public_c_files,
-    tepl_enum_types
-  ],
-  # Support for deps being built as subprojects:
-  dependencies: TEPL_DEPS,
-)
+if get_option('gobject_introspection')
+  GNOME.generate_gir(
+    tepl_lib,
+    export_packages: 'tepl-@0@'.format(TEPL_API_VERSION),
+    header: 'tepl/tepl.h',
+    identifier_prefix: 'Tepl',
+    include_directories: ROOT_INCLUDE_DIR,
+    includes: ['Gtk-3.0', 'GtkSource-4', 'Amtk-5'],
+    install: true,
+    namespace: 'Tepl',
+    nsversion: TEPL_API_VERSION,
+    sources: [
+      tepl_public_headers,
+      tepl_public_c_files,
+      tepl_enum_types
+    ],
+    # Support for deps being built as subprojects:
+    dependencies: TEPL_DEPS,
+  )
+endif

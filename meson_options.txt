@@ -1,4 +1,10 @@
 option(
+  'gobject_introspection',
+  type: 'boolean', value: true,
+  description: 'Build GObject Introspection data (requires gobject-introspection)'
+)
+
+option(
   'gtk_doc',
   type: 'boolean', value: true,
   description: 'Build API reference (requires gtk-doc)'
