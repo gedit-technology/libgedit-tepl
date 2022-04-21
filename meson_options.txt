@@ -1,5 +1,5 @@
 option(
   'gtk_doc',
-  type: 'boolean', value: false,
+  type: 'boolean', value: true,
   description: 'Build API reference (requires gtk-doc)'
 )
