@@ -62,5 +62,5 @@ High-level spell-checking API
 
 - Status: **todo**
 
-Integrate [gspell](https://wiki.gnome.org/Projects/gspell) with the Tepl
+Integrate [gspell](https://gitlab.gnome.org/GNOME/gspell/) with the Tepl
 framework.

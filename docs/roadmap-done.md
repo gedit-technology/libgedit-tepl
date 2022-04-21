@@ -1,8 +1,8 @@
 Tepl roadmap - done tasks
 =========================
 
-New small features in Tepl 6.0 (GNOME 40)
------------------------------------------
+New small features in Tepl 6.0
+------------------------------
 
 New:
 - TeplSpaceDrawerPrefs: preferences widget for GtkSourceSpaceDrawer.
