@@ -1,4 +1,4 @@
-News in 5.99.1, 2022-xx-yy (not yet released)
+News in 5.99.1, 2022-04-21
 --------------------------
 * The project is now located at: https://gitlab.gnome.org/swilmet/tepl
 
@@ -15,6 +15,7 @@ News in 5.99.1, 2022-xx-yy (not yet released)
  - Utility functions: add a few functions.
 
 * Misc:
+ - Build: add a gobject_introspection option.
  - tepl_utils_replace_home_dir_with_tilde(): support $HOME that ends with a
    slash.
  - Documentation improvements.
