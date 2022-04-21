@@ -32,7 +32,7 @@ Description:
 	  split very long lines (and then showing a warning when saving the
 	  file).
 
-Already done:
+Already done (Tepl 4 -> Tepl 5):
 - TeplFile: rework it, keep what is well implemented, and replace the code that
   does sync I/O with async I/O.
 - TeplFileLoader and TeplFileSaver: remove the old implementation, re-implement
