@@ -1,3 +1,10 @@
+News in 6.0.1, 2022-05-02
+-------------------------
+* No changes.
+* Note that a 6.00.0 version was released in 2021. The double 00 was a mistake.
+  See https://download.gnome.org/sources/tepl/6.00/
+  Hence the .1 micro version number in this release.
+
 News in 5.99.1, 2022-04-21
 --------------------------
 * The project is now located at: https://gitlab.gnome.org/swilmet/tepl
