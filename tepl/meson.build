@@ -139,20 +139,16 @@ TEPL_STATIC_DEP = declare_dependency(
   dependencies: TEPL_DEPS
 )
 
-tepl_lib_link_args = []
-tepl_lib_link_depends = []
-
-if meson.get_compiler('c').get_argument_syntax() != 'msvc'
-  symbol_map = meson.current_source_dir() / 'symbol.map'
-  tepl_lib_link_args = '-Wl,--version-script,' + symbol_map
-  tepl_lib_link_depends = symbol_map
-endif
+symbol_map = 'symbol.map'
+tepl_lib_link_args = c_compiler.get_supported_link_arguments([
+  '-Wl,--version-script,@0@/@1@'.format(meson.current_source_dir(), symbol_map),
+])
 
 tepl_lib = library(
   'tepl-@0@'.format(TEPL_API_VERSION),
   dependencies: TEPL_DEPS,
   link_args: tepl_lib_link_args,
-  link_depends: tepl_lib_link_depends,
+  link_depends: symbol_map,
   # link_whole is not supported with MSVC, so we use extract_all_objects().
   objects: tepl_static_lib.extract_all_objects(),
   version: TEPL_LT_VERSION,
