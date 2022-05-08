@@ -132,5 +132,9 @@
       <title>Index of new symbols in 6.0</title>
       <xi:include href="xml/api-index-6.0.xml"><xi:fallback /></xi:include>
     </index>
+    <index id="api-index-6-2" role="6.2">
+      <title>Index of new symbols in 6.2</title>
+      <xi:include href="xml/api-index-6.2.xml"><xi:fallback /></xi:include>
+    </index>
   </part>
 </book>
