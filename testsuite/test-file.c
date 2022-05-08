@@ -7,6 +7,16 @@
 #include <glib/gi18n-lib.h>
 #include "tepl-test-utils.h"
 
+static gchar *
+default_untitled_file_cb (gint untitled_file_number)
+{
+	/* For the translation it needs to be the exact same string as in the
+	 * TeplFile implementation, to be able to run the unit test with any
+	 * locale.
+	 */
+	return g_strdup_printf (_("Untitled File %d"), untitled_file_number);
+}
+
 static void
 check_short_name (TeplFile    *file,
 		  const gchar *expected_short_name)
@@ -24,11 +34,7 @@ check_short_name_is_untitled_file_number (TeplFile *file,
 {
 	gchar *expected_short_name;
 
-	/* For the translation it needs to be the exact same string as in the
-	 * TeplFile implementation, to be able to run the unit test with any
-	 * locale.
-	 */
-	expected_short_name = g_strdup_printf (_("Untitled File %d"), untitled_number);
+	expected_short_name = default_untitled_file_cb (untitled_number);
 	check_short_name (file, expected_short_name);
 	g_free (expected_short_name);
 }
