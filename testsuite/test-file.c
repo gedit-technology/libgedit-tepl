@@ -17,6 +17,12 @@ default_untitled_file_cb (gint untitled_file_number)
 	return g_strdup_printf (_("Untitled File %d"), untitled_file_number);
 }
 
+static gchar *
+custom_untitled_file_cb (gint untitled_file_number)
+{
+	return g_strdup_printf ("Unsaved Document %d", untitled_file_number);
+}
+
 static void
 check_short_name (TeplFile    *file,
 		  const gchar *expected_short_name)
@@ -74,6 +80,27 @@ test_untitled_files (void)
 	g_object_unref (file2);
 	g_object_unref (file3);
 	g_object_unref (location);
+}
+
+static void
+test_custom_untitled_file_name (void)
+{
+	TeplFile *file;
+	gchar *short_name;
+	gchar *expected_short_name;
+
+	file = tepl_file_new ();
+	/* Not yet custom. */
+	check_short_name_is_untitled_file_number (file, 1);
+
+	tepl_file_set_untitled_file_callback (file, custom_untitled_file_cb);
+	short_name = tepl_file_get_short_name (file);
+	expected_short_name = custom_untitled_file_cb (1);
+	g_assert_cmpstr (short_name, ==, expected_short_name);
+	g_free (short_name);
+	g_free (expected_short_name);
+
+	g_object_unref (file);
 }
 
 static void
@@ -380,6 +407,7 @@ main (int    argc,
 	gtk_test_init (&argc, &argv);
 
 	g_test_add_func ("/file/untitled_files", test_untitled_files);
+	g_test_add_func ("/file/custom_untitled_file_name", test_custom_untitled_file_name);
 	g_test_add_func ("/file/short_name", test_short_name);
 
 #if 0
