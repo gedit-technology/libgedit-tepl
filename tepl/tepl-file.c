@@ -37,6 +37,7 @@ struct _TeplFilePrivate
 	TeplNewlineType newline_type;
 
 	/* For the short-name. */
+	TeplUntitledFileCallback untitled_file_callback;
 	gint untitled_number;
 	gchar *display_name;
 
@@ -114,6 +115,12 @@ release_untitled_number (gint num)
 						     GINT_TO_POINTER (num));
 
 	g_assert (g_slist_find (allocated_untitled_numbers, GINT_TO_POINTER (num)) == NULL);
+}
+
+static gchar *
+default_untitled_file_cb (gint untitled_file_number)
+{
+	return g_strdup_printf (_("Untitled File %d"), untitled_file_number);
 }
 
 static void
@@ -243,11 +250,15 @@ tepl_file_class_init (TeplFileClass *klass)
 	 *
 	 * The file short name.
 	 *
-	 * When the #TeplFile:location is %NULL, this property contains
-	 * "Untitled File N", with N the Nth untitled file of the application,
-	 * starting at 1. When an untitled file is closed (when the #TeplFile is
-	 * freed) or its #TeplFile:location is set, its untitled number is
-	 * released and can be used by a later file.
+	 * When the #TeplFile:location is %NULL, this property contains by
+	 * default "Untitled File N" (translated), with N the Nth untitled file
+	 * of the application, starting at 1. When an untitled file is closed
+	 * (when the #TeplFile is freed) or its #TeplFile:location is set, its
+	 * untitled number is released and can be used by a later file.
+	 *
+	 * See tepl_file_set_untitled_file_callback() to customize the string.
+	 * Other examples: "Unsaved" instead of "Untitled", or "Document"
+	 * instead of "File".
 	 *
 	 * When the #TeplFile:location is not %NULL, this property contains the
 	 * display-name (see #G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME). However,
@@ -367,6 +378,7 @@ tepl_file_init (TeplFile *file)
 	file->priv = tepl_file_get_instance_private (file);
 
 	file->priv->newline_type = TEPL_NEWLINE_TYPE_DEFAULT;
+	file->priv->untitled_file_callback = default_untitled_file_cb;
 	update_short_name (file);
 }
 
@@ -442,7 +454,7 @@ tepl_file_get_short_name (TeplFile *file)
 
 	if (file->priv->untitled_number > 0)
 	{
-		return g_strdup_printf (_("Untitled File %d"), file->priv->untitled_number);
+		return file->priv->untitled_file_callback (file->priv->untitled_number);
 	}
 
 	if (file->priv->display_name != NULL)
@@ -451,6 +463,34 @@ tepl_file_get_short_name (TeplFile *file)
 	}
 
 	return _tepl_utils_get_fallback_basename_for_display (file->priv->location);
+}
+
+/**
+ * tepl_file_set_untitled_file_callback:
+ * @file: a #TeplFile.
+ * @callback: (nullable): a #TeplUntitledFileCallback, or %NULL to unset.
+ *
+ * Sets a #TeplUntitledFileCallback, useful to customize the
+ * #TeplFile:short-name.
+ *
+ * Since: 6.2
+ */
+void
+tepl_file_set_untitled_file_callback (TeplFile                 *file,
+				      TeplUntitledFileCallback  callback)
+{
+	g_return_if_fail (TEPL_IS_FILE (file));
+
+	if (callback != NULL)
+	{
+		file->priv->untitled_file_callback = callback;
+	}
+	else
+	{
+		file->priv->untitled_file_callback = default_untitled_file_cb;
+	}
+
+	g_object_notify_by_pspec (G_OBJECT (file), properties[PROP_SHORT_NAME]);
 }
 
 void

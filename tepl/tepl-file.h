@@ -53,6 +53,18 @@ typedef GMountOperation *(*TeplMountOperationFactory) (TeplFile *file,
 						       gpointer  user_data);
 
 /**
+ * TeplUntitledFileCallback:
+ * @untitled_file_number: the number.
+ *
+ * Type definition for a function that will be called to create a string
+ * containing @untitled_file_number, to give a name to a file not yet present on
+ * disk.
+ *
+ * Since: 6.2
+ */
+typedef gchar *(*TeplUntitledFileCallback) (gint untitled_file_number);
+
+/**
  * TeplNewlineType:
  * @TEPL_NEWLINE_TYPE_LF: line feed, used on UNIX.
  * @TEPL_NEWLINE_TYPE_CR: carriage return, used on Mac.
@@ -96,6 +108,10 @@ void			tepl_file_set_location			(TeplFile *file,
 
 _TEPL_EXTERN
 gchar *			tepl_file_get_short_name		(TeplFile *file);
+
+_TEPL_EXTERN
+void			tepl_file_set_untitled_file_callback	(TeplFile                 *file,
+								 TeplUntitledFileCallback  callback);
 
 _TEPL_EXTERN
 TeplNewlineType		tepl_file_get_newline_type		(TeplFile *file);
