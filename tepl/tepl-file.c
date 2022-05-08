@@ -465,8 +465,11 @@ tepl_file_get_short_name (TeplFile *file)
 	return _tepl_utils_get_fallback_basename_for_display (file->priv->location);
 }
 
+/* FIXME: GI: instead of (skip) try to find a simple solution without too much
+ * boilerplate like for tepl_file_set_mount_operation_factory().
+ */
 /**
- * tepl_file_set_untitled_file_callback:
+ * tepl_file_set_untitled_file_callback: (skip)
  * @file: a #TeplFile.
  * @callback: (nullable): a #TeplUntitledFileCallback, or %NULL to unset.
  *
