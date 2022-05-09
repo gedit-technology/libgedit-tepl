@@ -61,6 +61,7 @@ typedef GMountOperation *(*TeplMountOperationFactory) (TeplFile *file,
  * disk.
  *
  * Since: 6.2
+ * Stability: Unstable
  */
 typedef gchar *(*TeplUntitledFileCallback) (gint untitled_file_number);
 
