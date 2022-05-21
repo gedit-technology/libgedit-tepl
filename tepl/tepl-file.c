@@ -473,7 +473,7 @@ tepl_file_get_short_name (TeplFile *file)
  * Sets a #TeplUntitledFileCallback, useful to customize the
  * #TeplFile:short-name.
  *
- * Since: 6.2
+ * Since: 300.0
  */
 void
 tepl_file_set_untitled_file_callback (TeplFile                 *file,
