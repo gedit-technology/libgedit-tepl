@@ -14,7 +14,7 @@ Dependencies
 
 - GLib
 - GTK 3
-- GtkSourceView 4
+- [GtkSourceView 300](https://gitlab.gnome.org/swilmet/gtksourceview)
 - [Amtk](https://gitlab.gnome.org/swilmet/amtk/) 5
 - [ICU](http://site.icu-project.org/)
 

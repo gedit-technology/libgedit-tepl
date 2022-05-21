@@ -179,7 +179,7 @@ if get_option('gobject_introspection')
     header: 'tepl/tepl.h',
     identifier_prefix: 'Tepl',
     include_directories: ROOT_INCLUDE_DIR,
-    includes: ['Gtk-3.0', 'GtkSource-4', 'Amtk-5'],
+    includes: ['Gtk-3.0', 'GtkSource-300', 'Amtk-5'],
     install: true,
     namespace: 'Tepl',
     nsversion: TEPL_API_VERSION,
