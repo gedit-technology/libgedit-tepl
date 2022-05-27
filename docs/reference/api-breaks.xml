@@ -216,8 +216,8 @@
     <itemizedlist>
       <listitem>
         <para>
-          Tepl 300 depends on GtkSourceView 300. The “3” in “300” means that it targets
-          GTK 3.
+          Tepl 300 depends on Tepl-gsv 300. The “3” in “300” means that it
+          targets GTK 3.
         </para>
       </listitem>
     </itemizedlist>
