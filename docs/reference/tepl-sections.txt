@@ -396,6 +396,11 @@ tepl_pango_font_description_to_css
 </SECTION>
 
 <SECTION>
+<FILE>prefs</FILE>
+tepl_prefs_create_font_component
+</SECTION>
+
+<SECTION>
 <FILE>progress-info-bar</FILE>
 TeplProgressInfoBar
 tepl_progress_info_bar_new
