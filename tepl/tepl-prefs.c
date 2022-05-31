@@ -92,6 +92,10 @@ tepl_prefs_create_font_component (GSettings   *settings,
 	GtkWidget *vgrid;
 	GtkWidget *hgrid;
 
+	g_return_val_if_fail (G_IS_SETTINGS (settings), NULL);
+	g_return_val_if_fail (use_default_font_key != NULL, NULL);
+	g_return_val_if_fail (editor_font_key != NULL, NULL);
+
 	/* Widgets */
 	default_font_checkbutton = create_default_font_checkbutton ();
 	label = gtk_label_new_with_mnemonic (_("Editor _font:"));
