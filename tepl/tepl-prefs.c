@@ -15,6 +15,30 @@
  * panel. In order to configure a text editor.
  */
 
+static void
+update_default_font_checkbutton_label (GtkCheckButton *checkbutton)
+{
+	gchar *label;
+
+	label = g_strdup_printf (_("_Use the system fixed width font"));
+
+	gtk_button_set_label (GTK_BUTTON (checkbutton), label);
+	gtk_button_set_use_underline (GTK_BUTTON (checkbutton), TRUE);
+
+	g_free (label);
+}
+
+static GtkWidget *
+create_default_font_checkbutton (void)
+{
+	GtkWidget *default_font_checkbutton;
+
+	default_font_checkbutton = gtk_check_button_new ();
+	update_default_font_checkbutton_label (GTK_CHECK_BUTTON (default_font_checkbutton));
+
+	return default_font_checkbutton;
+}
+
 /**
  * tepl_prefs_create_font_component:
  * @settings: a #GSettings.
@@ -38,7 +62,7 @@ tepl_prefs_create_font_component (GSettings   *settings,
 	GtkWidget *hgrid;
 
 	/* Widgets */
-	default_font_checkbutton = gtk_check_button_new_with_mnemonic (_("_Use the system fixed width font"));
+	default_font_checkbutton = create_default_font_checkbutton ();
 	label = gtk_label_new_with_mnemonic (_("Editor _font:"));
 	font_button = gtk_font_button_new ();
 	gtk_label_set_mnemonic_widget (GTK_LABEL (label), font_button);
