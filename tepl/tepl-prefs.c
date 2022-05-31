@@ -5,6 +5,7 @@
 #include "config.h"
 #include "tepl-prefs.h"
 #include <glib/gi18n-lib.h>
+#include "tepl-settings.h"
 
 /**
  * SECTION:prefs
@@ -18,13 +19,21 @@
 static void
 update_default_font_checkbutton_label (GtkCheckButton *checkbutton)
 {
+	TeplSettings *settings;
+	GSettings *desktop_interface_settings;
+	gchar *monospace_font_name;
 	gchar *label;
 
-	label = g_strdup_printf (_("_Use the system fixed width font"));
+	settings = _tepl_settings_get_singleton ();
+	desktop_interface_settings = _tepl_settings_peek_desktop_interface_settings (settings);
+	monospace_font_name = g_settings_get_string (desktop_interface_settings, "monospace-font-name");
+
+	label = g_strdup_printf (_("_Use the system fixed width font (%s)"), monospace_font_name);
 
 	gtk_button_set_label (GTK_BUTTON (checkbutton), label);
 	gtk_button_set_use_underline (GTK_BUTTON (checkbutton), TRUE);
 
+	g_free (monospace_font_name);
 	g_free (label);
 }
 
