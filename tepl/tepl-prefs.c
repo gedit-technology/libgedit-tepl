@@ -18,6 +18,8 @@
 /**
  * tepl_prefs_create_font_component:
  * @settings: a #GSettings.
+ * @use_default_font_key: a key part of @settings to store whether to use the
+ *   system font. The type of the key must be a boolean.
  * @editor_font_key: a key part of @settings to store the editor font. The type
  *   of the key must be a string.
  *
@@ -26,28 +28,49 @@
  */
 GtkWidget *
 tepl_prefs_create_font_component (GSettings   *settings,
+				  const gchar *use_default_font_key,
 				  const gchar *editor_font_key)
 {
+	GtkWidget *default_font_checkbutton;
 	GtkWidget *label;
 	GtkWidget *font_button;
+	GtkWidget *vgrid;
 	GtkWidget *hgrid;
 
 	/* Widgets */
+	default_font_checkbutton = gtk_check_button_new_with_mnemonic (_("_Use the system fixed width font"));
 	label = gtk_label_new_with_mnemonic (_("Editor _font:"));
 	font_button = gtk_font_button_new ();
 	gtk_label_set_mnemonic_widget (GTK_LABEL (label), font_button);
 
 	/* GSettings */
+	g_settings_bind (settings, use_default_font_key,
+			 default_font_checkbutton, "active",
+			 G_SETTINGS_BIND_DEFAULT);
+
 	g_settings_bind (settings, editor_font_key,
 			 font_button, "font",
 			 G_SETTINGS_BIND_DEFAULT);
 
 	/* Packing */
+	vgrid = gtk_grid_new ();
+	gtk_orientable_set_orientation (GTK_ORIENTABLE (vgrid), GTK_ORIENTATION_VERTICAL);
+	gtk_grid_set_row_spacing (GTK_GRID (vgrid), 6);
+	gtk_container_add (GTK_CONTAINER (vgrid), default_font_checkbutton);
+
 	hgrid = gtk_grid_new ();
 	gtk_grid_set_column_spacing (GTK_GRID (hgrid), 12);
 	gtk_container_add (GTK_CONTAINER (hgrid), label);
 	gtk_container_add (GTK_CONTAINER (hgrid), font_button);
-	gtk_widget_show_all (hgrid);
+	gtk_container_add (GTK_CONTAINER (vgrid), hgrid);
 
-	return hgrid;
+	/* Sensitivity */
+	g_object_bind_property (default_font_checkbutton, "active",
+				hgrid, "sensitive",
+				G_BINDING_DEFAULT |
+				G_BINDING_SYNC_CREATE |
+				G_BINDING_INVERT_BOOLEAN);
+
+	gtk_widget_show_all (vgrid);
+	return vgrid;
 }

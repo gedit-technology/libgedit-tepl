@@ -16,6 +16,7 @@ G_BEGIN_DECLS
 
 _TEPL_EXTERN
 GtkWidget *	tepl_prefs_create_font_component	(GSettings   *settings,
+							 const gchar *use_default_font_key,
 							 const gchar *editor_font_key);
 
 G_END_DECLS
