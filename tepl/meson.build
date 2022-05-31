@@ -27,6 +27,7 @@ tepl_public_headers = [
   'tepl-pango.h',
   'tepl-prefs.h',
   'tepl-progress-info-bar.h',
+  'tepl-settings.h',
   'tepl-signal-group.h',
   'tepl-space-drawer-prefs.h',
   'tepl-statusbar.h',
@@ -67,6 +68,7 @@ tepl_public_c_files = [
   'tepl-pango.c',
   'tepl-prefs.c',
   'tepl-progress-info-bar.c',
+  'tepl-settings.c',
   'tepl-signal-group.c',
   'tepl-space-drawer-prefs.c',
   'tepl-statusbar.c',
@@ -86,7 +88,6 @@ TEPL_PRIVATE_HEADERS = [
   'tepl-io-error-info-bar.h',
   'tepl-metadata-attic.h',
   'tepl-metadata-parser.h',
-  'tepl-settings.h',
   'tepl-window-actions-edit.h',
   'tepl-window-actions-file.h',
   'tepl-window-actions-search.h'
@@ -98,7 +99,6 @@ tepl_private_c_files = [
   'tepl-io-error-info-bar.c',
   'tepl-metadata-attic.c',
   'tepl-metadata-parser.c',
-  'tepl-settings.c',
   'tepl-window-actions-edit.c',
   'tepl-window-actions-file.c',
   'tepl-window-actions-search.c'

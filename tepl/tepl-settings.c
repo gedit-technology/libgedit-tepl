@@ -4,7 +4,7 @@
 
 #include "tepl-settings.h"
 
-/*
+/**
  * SECTION:settings
  * @title: TeplSettings
  * @short_description: Central access to #GSettings objects
@@ -27,53 +27,53 @@ struct _TeplSettingsPrivate
 /* TeplSettings is a singleton. */
 static TeplSettings *singleton = NULL;
 
-G_DEFINE_TYPE_WITH_PRIVATE (TeplSettings, _tepl_settings, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (TeplSettings, tepl_settings, G_TYPE_OBJECT)
 
 static void
-_tepl_settings_dispose (GObject *object)
+tepl_settings_dispose (GObject *object)
 {
 	TeplSettings *self = TEPL_SETTINGS (object);
 
 	g_clear_object (&self->priv->settings_desktop_interface);
 
-	G_OBJECT_CLASS (_tepl_settings_parent_class)->dispose (object);
+	G_OBJECT_CLASS (tepl_settings_parent_class)->dispose (object);
 }
 
 static void
-_tepl_settings_finalize (GObject *object)
+tepl_settings_finalize (GObject *object)
 {
 	if (singleton == TEPL_SETTINGS (object))
 	{
 		singleton = NULL;
 	}
 
-	G_OBJECT_CLASS (_tepl_settings_parent_class)->finalize (object);
+	G_OBJECT_CLASS (tepl_settings_parent_class)->finalize (object);
 }
 
 static void
-_tepl_settings_class_init (TeplSettingsClass *klass)
+tepl_settings_class_init (TeplSettingsClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	object_class->dispose = _tepl_settings_dispose;
-	object_class->finalize = _tepl_settings_finalize;
+	object_class->dispose = tepl_settings_dispose;
+	object_class->finalize = tepl_settings_finalize;
 }
 
 static void
-_tepl_settings_init (TeplSettings *self)
+tepl_settings_init (TeplSettings *self)
 {
-	self->priv = _tepl_settings_get_instance_private (self);
+	self->priv = tepl_settings_get_instance_private (self);
 
 	self->priv->settings_desktop_interface = g_settings_new ("org.gnome.desktop.interface");
 }
 
-/*
- * _tepl_settings_get_singleton:
+/**
+ * tepl_settings_get_singleton:
  *
  * Returns: (transfer none): the #TeplSettings singleton instance.
  */
 TeplSettings *
-_tepl_settings_get_singleton (void)
+tepl_settings_get_singleton (void)
 {
 	if (singleton == NULL)
 	{
@@ -97,14 +97,14 @@ _tepl_settings_unref_singleton (void)
 	 */
 }
 
-/*
- * _tepl_settings_peek_desktop_interface_settings:
+/**
+ * tepl_settings_peek_desktop_interface_settings:
  * @self: the #TeplSettings instance.
  *
  * Returns: (transfer none): the #GSettings for `"org.gnome.desktop.interface"`.
  */
 GSettings *
-_tepl_settings_peek_desktop_interface_settings (TeplSettings *self)
+tepl_settings_peek_desktop_interface_settings (TeplSettings *self)
 {
 	g_return_val_if_fail (TEPL_IS_SETTINGS (self), NULL);
 	return self->priv->settings_desktop_interface;
