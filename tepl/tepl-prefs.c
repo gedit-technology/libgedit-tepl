@@ -16,6 +16,8 @@
  * panel. In order to configure a text editor.
  */
 
+#define SETTING_SYSTEM_FONT_KEY "monospace-font-name"
+
 static void
 update_default_font_checkbutton_label (GtkCheckButton *checkbutton)
 {
@@ -26,7 +28,7 @@ update_default_font_checkbutton_label (GtkCheckButton *checkbutton)
 
 	settings = _tepl_settings_get_singleton ();
 	desktop_interface_settings = _tepl_settings_peek_desktop_interface_settings (settings);
-	monospace_font_name = g_settings_get_string (desktop_interface_settings, "monospace-font-name");
+	monospace_font_name = g_settings_get_string (desktop_interface_settings, SETTING_SYSTEM_FONT_KEY);
 
 	label = g_strdup_printf (_("_Use the system fixed width font (%s)"), monospace_font_name);
 
@@ -37,13 +39,33 @@ update_default_font_checkbutton_label (GtkCheckButton *checkbutton)
 	g_free (label);
 }
 
+static void
+system_font_changed_cb (GSettings *desktop_interface_settings,
+			gchar     *key,
+			gpointer   user_data)
+{
+	GtkCheckButton *default_font_checkbutton = GTK_CHECK_BUTTON (user_data);
+	update_default_font_checkbutton_label (default_font_checkbutton);
+}
+
 static GtkWidget *
 create_default_font_checkbutton (void)
 {
 	GtkWidget *default_font_checkbutton;
+	TeplSettings *settings;
+	GSettings *desktop_interface_settings;
 
 	default_font_checkbutton = gtk_check_button_new ();
 	update_default_font_checkbutton_label (GTK_CHECK_BUTTON (default_font_checkbutton));
+
+	settings = _tepl_settings_get_singleton ();
+	desktop_interface_settings = _tepl_settings_peek_desktop_interface_settings (settings);
+
+	g_signal_connect_object (desktop_interface_settings,
+				 "changed::" SETTING_SYSTEM_FONT_KEY,
+				 G_CALLBACK (system_font_changed_cb),
+				 default_font_checkbutton,
+				 0);
 
 	return default_font_checkbutton;
 }
