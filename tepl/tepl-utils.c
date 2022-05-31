@@ -1165,6 +1165,8 @@ tepl_utils_get_titled_component (const gchar *title,
 	gtk_widget_set_margin_start (component, 12);
 	gtk_container_add (vgrid, component);
 
+	gtk_widget_show_all (GTK_WIDGET (vgrid));
+
 	g_free (markup);
 	return GTK_WIDGET (vgrid);
 }
