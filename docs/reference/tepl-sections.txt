@@ -587,6 +587,7 @@ tepl_utils_list_box_scroll_to_selected_row
 tepl_utils_list_box_get_row_at_index_with_filter
 tepl_utils_list_box_get_filtered_children
 tepl_utils_override_font
+tepl_utils_get_titled_component
 tepl_utils_binding_transform_func_smart_bool
 </SECTION>
 

@@ -1123,6 +1123,50 @@ tepl_utils_override_font (GtkWidget   *widget,
 }
 
 /**
+ * tepl_utils_get_titled_component:
+ * @title: the title.
+ * @component: a #GtkWidget.
+ *
+ * To add a title to a GUI component.
+ *
+ * Useful for example in a #GtkDialog window, when there are several components,
+ * or logical groups.
+ *
+ * The title will be in bold, left-aligned, and the @component will have a left
+ * margin.
+ *
+ * Returns: (transfer floating): a new widget containing the @title above the
+ * @component.
+ * Since: 300.0
+ */
+GtkWidget *
+tepl_utils_get_titled_component (const gchar *title,
+				 GtkWidget   *component)
+{
+	GtkContainer *vgrid;
+	GtkWidget *label;
+	gchar *markup;
+
+	vgrid = GTK_CONTAINER (gtk_grid_new ());
+	gtk_orientable_set_orientation (GTK_ORIENTABLE (vgrid), GTK_ORIENTATION_VERTICAL);
+	gtk_grid_set_row_spacing (GTK_GRID (vgrid), 6);
+
+	/* Title in bold, left-aligned. */
+	label = gtk_label_new (NULL);
+	markup = g_strdup_printf ("<b>%s</b>", title);
+	gtk_label_set_markup (GTK_LABEL (label), markup);
+	gtk_widget_set_halign (label, GTK_ALIGN_START);
+	gtk_container_add (vgrid, label);
+
+	/* Left margin for the component. */
+	gtk_widget_set_margin_start (component, 12);
+	gtk_container_add (vgrid, component);
+
+	g_free (markup);
+	return GTK_WIDGET (vgrid);
+}
+
+/**
  * tepl_utils_binding_transform_func_smart_bool:
  * @binding: a #GBinding.
  * @from_value: the #GValue containing the value to transform.

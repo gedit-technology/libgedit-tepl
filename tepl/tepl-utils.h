@@ -135,6 +135,10 @@ _TEPL_EXTERN
 void		tepl_utils_override_font			(GtkWidget   *widget,
 								 const gchar *font_str);
 
+_TEPL_EXTERN
+GtkWidget *	tepl_utils_get_titled_component			(const gchar *title,
+								 GtkWidget   *component);
+
 /* Other */
 
 _TEPL_EXTERN
