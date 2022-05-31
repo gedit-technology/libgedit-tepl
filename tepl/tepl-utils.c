@@ -1147,6 +1147,9 @@ tepl_utils_get_titled_component (const gchar *title,
 	GtkWidget *label;
 	gchar *markup;
 
+	g_return_val_if_fail (title != NULL, NULL);
+	g_return_val_if_fail (GTK_IS_WIDGET (component), NULL);
+
 	vgrid = GTK_CONTAINER (gtk_grid_new ());
 	gtk_orientable_set_orientation (GTK_ORIENTABLE (vgrid), GTK_ORIENTATION_VERTICAL);
 	gtk_grid_set_row_spacing (GTK_GRID (vgrid), 6);
