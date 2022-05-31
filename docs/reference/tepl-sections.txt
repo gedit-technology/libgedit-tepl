@@ -421,6 +421,23 @@ tepl_progress_info_bar_get_type
 </SECTION>
 
 <SECTION>
+<FILE>settings</FILE>
+TeplSettings
+tepl_settings_get_singleton
+tepl_settings_peek_desktop_interface_settings
+<SUBSECTION Standard>
+TEPL_IS_SETTINGS
+TEPL_IS_SETTINGS_CLASS
+TEPL_SETTINGS
+TEPL_SETTINGS_CLASS
+TEPL_SETTINGS_GET_CLASS
+TEPL_TYPE_SETTINGS
+TeplSettingsClass
+TeplSettingsPrivate
+tepl_settings_get_type
+</SECTION>
+
+<SECTION>
 <FILE>signal-group</FILE>
 TeplSignalGroup
 tepl_signal_group_new
