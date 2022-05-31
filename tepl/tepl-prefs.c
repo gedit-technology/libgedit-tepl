@@ -92,7 +92,6 @@ tepl_prefs_create_font_component (GSettings   *settings,
 	GtkWidget *font_button;
 	GtkWidget *vgrid;
 	GtkWidget *hgrid;
-	GtkWidget *titled_component;
 
 	g_return_val_if_fail (G_IS_SETTINGS (settings), NULL);
 	g_return_val_if_fail (use_default_font_key != NULL, NULL);
@@ -132,8 +131,5 @@ tepl_prefs_create_font_component (GSettings   *settings,
 				G_BINDING_SYNC_CREATE |
 				G_BINDING_INVERT_BOOLEAN);
 
-	/* Title */
-	titled_component = tepl_utils_get_titled_component (_("Font"), vgrid);
-	gtk_widget_show_all (titled_component);
-	return titled_component;
+	return tepl_utils_get_titled_component (_("Font"), vgrid);
 }
