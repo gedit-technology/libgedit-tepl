@@ -71,6 +71,7 @@ tepl_settings_init (TeplSettings *self)
  * tepl_settings_get_singleton:
  *
  * Returns: (transfer none): the #TeplSettings singleton instance.
+ * Since: 300.0
  */
 TeplSettings *
 tepl_settings_get_singleton (void)
@@ -102,6 +103,7 @@ _tepl_settings_unref_singleton (void)
  * @self: the #TeplSettings instance.
  *
  * Returns: (transfer none): the #GSettings for `"org.gnome.desktop.interface"`.
+ * Since: 300.0
  */
 GSettings *
 tepl_settings_peek_desktop_interface_settings (TeplSettings *self)
