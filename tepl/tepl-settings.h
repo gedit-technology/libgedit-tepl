@@ -51,6 +51,15 @@ void		_tepl_settings_unref_singleton			(void);
 _TEPL_EXTERN
 GSettings *	tepl_settings_peek_desktop_interface_settings	(TeplSettings *self);
 
+_TEPL_EXTERN
+void		tepl_settings_provide_font_settings		(TeplSettings *self,
+								 GSettings    *font_settings,
+								 const gchar  *use_default_font_key,
+								 const gchar  *editor_font_key);
+
+_TEPL_EXTERN
+gchar *		tepl_settings_get_selected_font			(TeplSettings *self);
+
 G_END_DECLS
 
 #endif /* TEPL_SETTINGS_H */
