@@ -7,10 +7,11 @@
 /**
  * SECTION:settings
  * @title: TeplSettings
- * @short_description: Central access to #GSettings objects
+ * @short_description: Singleton class containing #GSettings objects
  *
- * #TeplSettings is a singleton class to have a central access to #GSettings
- * objects.
+ * #TeplSettings is a singleton class to have a central access to some
+ * #GSettings objects and having convenience features that are useful for a text
+ * editor.
  *
  * The central access permits to:
  * - Share the same #GSettings objects between different parts of the
@@ -82,7 +83,23 @@ tepl_settings_class_init (TeplSettingsClass *klass)
 	 * TeplSettings::font-changed:
 	 * @settings: the #TeplSettings emitting the signal.
 	 *
-	 * The ::font-changed signal is emitted when blablabla.
+	 * The ::font-changed signal is emitted when the return value of
+	 * tepl_settings_get_selected_font() has potentially changed.
+	 *
+	 * It takes into account the @use_default_font_key provided with
+	 * tepl_settings_provide_font_settings() to avoid unnecessary signal
+	 * emission. In other words, for example if @use_default_font_key is
+	 * %FALSE, the signal is not emitted even if the default (system's) font
+	 * has been modified.
+	 *
+	 * The relation between this signal and a potential zoom in and zoom out
+	 * feature, to temporarily make the font larger or smaller (so the zoom
+	 * level not being stored in #GSettings): when this signal is emitted,
+	 * it means that the user has explicitly changed the font setting, and
+	 * as such he or she probably wants to use that font instead. So the
+	 * expected behavior in that case is to reset the zoom level. But it's
+	 * left as an exercise for another class, since #TeplSettings is only
+	 * for #GSettings.
 	 *
 	 * Since: 300.0
 	 */
@@ -201,6 +218,23 @@ tepl_settings_peek_desktop_interface_settings (TeplSettings *self)
 	return self->priv->settings_desktop_interface;
 }
 
+/**
+ * tepl_settings_provide_font_settings:
+ * @self: the #TeplSettings instance.
+ * @font_settings: the #GSettings object containing the keys.
+ * @use_default_font_key: a key of type boolean.
+ * @editor_font_key: a key of type string.
+ *
+ * This function can only be called once, to provide two keys:
+ * - @use_default_font_key: must be of type boolean, to know whether to use the
+ *   system's font (the default font), or the editor font.
+ * - @editor_font_key: must be of type string, containing the font name to have
+ *   a different font for the text editor, rather than using the system's font.
+ *
+ * See tepl_settings_get_selected_font().
+ *
+ * Since: 300.0
+ */
 void
 tepl_settings_provide_font_settings (TeplSettings *self,
 				     GSettings    *font_settings,
@@ -244,6 +278,24 @@ tepl_settings_provide_font_settings (TeplSettings *self,
 	}
 }
 
+/**
+ * tepl_settings_get_selected_font:
+ * @self: the #TeplSettings instance.
+ *
+ * If tepl_settings_provide_font_settings() has *not* been called, this function
+ * always returns the current value of the system's fixed width (monospace)
+ * font.
+ *
+ * If tepl_settings_provide_font_settings() *has* been called, this function
+ * returns the font name depending on the boolean value of
+ * @use_default_font_key.
+ *
+ * See also the #TeplSettings::font-changed signal and the
+ * tepl_utils_override_font() function.
+ *
+ * Returns: the selected font name.
+ * Since: 300.0
+ */
 gchar *
 tepl_settings_get_selected_font (TeplSettings *self)
 {

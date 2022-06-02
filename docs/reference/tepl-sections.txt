@@ -425,6 +425,8 @@ tepl_progress_info_bar_get_type
 TeplSettings
 tepl_settings_get_singleton
 tepl_settings_peek_desktop_interface_settings
+tepl_settings_provide_font_settings
+tepl_settings_get_selected_font
 <SUBSECTION Standard>
 TEPL_IS_SETTINGS
 TEPL_IS_SETTINGS_CLASS
