@@ -1052,29 +1052,24 @@ tepl_utils_list_box_get_filtered_children (GtkListBox           *list_box,
 }
 
 /**
- * tepl_utils_override_font:
+ * tepl_utils_override_font_description:
  * @widget: a #GtkWidget.
- * @font_str: (nullable): a string representation of a #PangoFontDescription, or
- *   %NULL to undo the effect of previous calls to this function on @widget.
+ * @font_desc: (nullable): the #PangoFontDescription to use, or %NULL to undo
+ *   the effect of previous calls to this function on @widget.
  *
  * A replacement for gtk_widget_override_font(). Because
  * gtk_widget_override_font() is deprecated but was useful.
  *
- * See pango_font_description_from_string() for a description of the format of
- * the string representation for @font_str.
+ * See also tepl_pango_font_description_to_css().
  *
- * This function uses tepl_pango_font_description_to_css() and applies the CSS
- * to the #GtkStyleContext of @widget.
- *
- * Since: 6.0
+ * Since: 300.0
  */
 void
-tepl_utils_override_font (GtkWidget   *widget,
-			  const gchar *font_str)
+tepl_utils_override_font_description (GtkWidget                  *widget,
+				      const PangoFontDescription *font_desc)
 {
 	GtkStyleContext *style_context;
 	GtkCssProvider *css_provider;
-	PangoFontDescription *font_description;
 	gchar *css_declarations;
 	gchar *css_rule_set;
 
@@ -1092,15 +1087,12 @@ tepl_utils_override_font (GtkWidget   *widget,
 		css_provider = NULL;
 	}
 
-	if (font_str == NULL)
+	if (font_desc == NULL)
 	{
 		return;
 	}
 
-	font_description = pango_font_description_from_string (font_str);
-	g_return_if_fail (font_description != NULL);
-
-	css_declarations = tepl_pango_font_description_to_css (font_description);
+	css_declarations = tepl_pango_font_description_to_css (font_desc);
 	css_rule_set = g_strdup_printf ("* {\n"
 					"    %s\n"
 				        "}\n",
@@ -1117,9 +1109,60 @@ tepl_utils_override_font (GtkWidget   *widget,
 					GTK_STYLE_PROVIDER (css_provider),
 					TEPL_UTILS_STYLE_PROVIDER_PRIORITY_LIBRARY);
 
-	pango_font_description_free (font_description);
 	g_free (css_declarations);
 	g_free (css_rule_set);
+}
+
+/**
+ * tepl_utils_override_font_string:
+ * @widget: a #GtkWidget.
+ * @font_str: (nullable): a string representation of a #PangoFontDescription, or
+ *   %NULL to undo the effect of previous calls to this function on @widget.
+ *
+ * A convenience function that calls tepl_utils_override_font_description().
+ *
+ * See pango_font_description_from_string() for a description of the format of
+ * the string representation for @font_str.
+ *
+ * Since: 300.0
+ */
+void
+tepl_utils_override_font_string (GtkWidget   *widget,
+				 const gchar *font_str)
+{
+	g_return_if_fail (GTK_IS_WIDGET (widget));
+
+	if (font_str == NULL)
+	{
+		tepl_utils_override_font_description (widget, NULL);
+	}
+	else
+	{
+		PangoFontDescription *font_desc;
+
+		font_desc = pango_font_description_from_string (font_str);
+		g_return_if_fail (font_desc != NULL);
+
+		tepl_utils_override_font_description (widget, font_desc);
+		pango_font_description_free (font_desc);
+	}
+}
+
+/**
+ * tepl_utils_override_font:
+ * @widget: a #GtkWidget.
+ * @font_str: (nullable): a string representation of a #PangoFontDescription, or
+ *   %NULL to undo the effect of previous calls to this function on @widget.
+ *
+ * The old name for tepl_utils_override_font_string().
+ *
+ * Since: 6.0
+ */
+void
+tepl_utils_override_font (GtkWidget   *widget,
+			  const gchar *font_str)
+{
+	tepl_utils_override_font_string (widget, font_str);
 }
 
 /**
