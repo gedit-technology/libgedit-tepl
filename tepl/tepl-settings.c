@@ -290,8 +290,8 @@ tepl_settings_provide_font_settings (TeplSettings *self,
  * returns the font name depending on the boolean value of
  * @use_default_font_key.
  *
- * See also the #TeplSettings::font-changed signal and the
- * tepl_utils_override_font() function.
+ * See also the #TeplSettings::font-changed signal, tepl_utils_override_font()
+ * and tepl_prefs_create_font_component().
  *
  * Returns: the selected font name.
  * Since: 300.0
