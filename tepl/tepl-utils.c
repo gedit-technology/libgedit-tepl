@@ -1157,6 +1157,7 @@ tepl_utils_override_font_string (GtkWidget   *widget,
  * The old name for tepl_utils_override_font_string().
  *
  * Since: 6.0
+ * Deprecated: 300.0
  */
 void
 tepl_utils_override_font (GtkWidget   *widget,
