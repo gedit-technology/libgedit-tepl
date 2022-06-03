@@ -22,6 +22,11 @@
       <xi:include href="xml/init.xml"/>
     </chapter>
 
+    <chapter id="gobject-extras">
+      <title>GObject Extras</title>
+      <xi:include href="xml/signal-group.xml"/>
+    </chapter>
+
     <chapter id="framework">
       <title>Framework</title>
       <xi:include href="xml/abstract-factory.xml"/>
@@ -82,7 +87,6 @@
       <xi:include href="xml/pango.xml"/>
       <xi:include href="xml/prefs.xml"/>
       <xi:include href="xml/settings.xml"/>
-      <xi:include href="xml/signal-group.xml"/>
       <xi:include href="xml/space-drawer-prefs.xml"/>
       <xi:include href="xml/statusbar.xml"/>
       <xi:include href="xml/style-scheme-chooser-widget.xml"/>
