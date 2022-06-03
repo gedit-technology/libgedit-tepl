@@ -144,7 +144,6 @@ add_project_arguments(supported_warning_cflags, language: 'c')
 subdir('po')
 subdir('tepl')
 subdir('tests')
-subdir('unit-tests')
 
 if get_option('gtk_doc')
   subdir('docs/reference')
