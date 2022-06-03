@@ -14,34 +14,12 @@
 
   <xi:include href="intro.xml"/>
 
-  <part id="tepl-api-reference">
-    <title>Tepl API Reference</title>
+  <part id="api-reference-text-editor-support">
+    <title>API Reference - Text Editor Support</title>
 
     <chapter id="preparation">
       <title>Preparation</title>
       <xi:include href="xml/init.xml"/>
-    </chapter>
-
-    <chapter id="gobject-extras">
-      <title>GObject Extras</title>
-      <xi:include href="xml/signal-group.xml"/>
-    </chapter>
-
-    <chapter id="gio-extras-file-metadata">
-      <title>GIO Extras - File Metadata</title>
-      <xi:include href="xml/metadata.xml"/>
-      <xi:include href="xml/metadata-manager.xml"/>
-    </chapter>
-
-    <chapter id="gtk-extras-info-bars">
-      <title>GTK Extras - Info Bars</title>
-      <xi:include href="xml/info-bar.xml"/>
-      <xi:include href="xml/progress-info-bar.xml"/>
-    </chapter>
-
-    <chapter id="gtk-extras-other">
-      <title>GTK Extras - Other</title>
-      <xi:include href="xml/file-chooser.xml"/>
     </chapter>
 
     <chapter id="framework">
@@ -95,6 +73,32 @@
       <xi:include href="xml/statusbar.xml"/>
       <xi:include href="xml/style-scheme-chooser-widget.xml"/>
       <xi:include href="xml/utils.xml"/>
+    </chapter>
+  </part>
+
+  <part id="api-reference-general-utilities">
+    <title>API Reference - General Utilities</title>
+
+    <chapter id="gobject-extras">
+      <title>GObject Extras</title>
+      <xi:include href="xml/signal-group.xml"/>
+    </chapter>
+
+    <chapter id="gio-extras-file-metadata">
+      <title>GIO Extras - File Metadata</title>
+      <xi:include href="xml/metadata.xml"/>
+      <xi:include href="xml/metadata-manager.xml"/>
+    </chapter>
+
+    <chapter id="gtk-extras-info-bars">
+      <title>GTK Extras - Info Bars</title>
+      <xi:include href="xml/info-bar.xml"/>
+      <xi:include href="xml/progress-info-bar.xml"/>
+    </chapter>
+
+    <chapter id="gtk-extras-other">
+      <title>GTK Extras - Other</title>
+      <xi:include href="xml/file-chooser.xml"/>
     </chapter>
   </part>
 
