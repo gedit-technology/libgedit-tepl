@@ -15,7 +15,7 @@ Dependencies
 - GLib
 - GTK 3
 - [Tepl-gsv](https://gitlab.gnome.org/swilmet/tepl-gsv)
-- [Amtk](https://gitlab.gnome.org/swilmet/amtk/) 5
+- [Amtk](https://gitlab.gnome.org/World/amtk)
 - [ICU](http://site.icu-project.org/)
 
 Documentation
@@ -36,4 +36,6 @@ Some links
 Development and maintenance
 ---------------------------
 
-The project is in low-development / maintenance state.
+If you want to see Tepl improved, you are encouraged to contribute. The
+maintainer will do its best at reviewing merge requests. However, contributions
+need to follow the roadmap of Tepl or the general philosophy of the project.
