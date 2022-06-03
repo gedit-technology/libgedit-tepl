@@ -27,6 +27,12 @@
       <xi:include href="xml/signal-group.xml"/>
     </chapter>
 
+    <chapter id="gio-extras-file-metadata">
+      <title>GIO Extras - File Metadata</title>
+      <xi:include href="xml/metadata.xml"/>
+      <xi:include href="xml/metadata-manager.xml"/>
+    </chapter>
+
     <chapter id="framework">
       <title>Framework</title>
       <xi:include href="xml/abstract-factory.xml"/>
@@ -52,12 +58,6 @@
       <xi:include href="xml/file-saver.xml"/>
       <xi:include href="xml/io-error-info-bars.xml"/>
       <xi:include href="xml/file-chooser.xml"/>
-    </chapter>
-
-    <chapter id="file-metadata">
-      <title>File Metadata</title>
-      <xi:include href="xml/metadata.xml"/>
-      <xi:include href="xml/metadata-manager.xml"/>
     </chapter>
 
     <chapter id="code-folding">
