@@ -6,7 +6,7 @@
 #include "tepl-abstract-factory.h"
 #include "tepl-tab-group.h"
 #include "tepl-tab.h"
-#include "tepl-signal-group.h"
+#include "gobject-extras/tepl-signal-group.h"
 
 /**
  * SECTION:notebook

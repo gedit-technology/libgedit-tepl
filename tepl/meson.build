@@ -1,4 +1,4 @@
-tepl_public_headers = [
+tepl_base_public_headers = [
   'tepl.h',
   'tepl-abstract-factory.h',
   'tepl-application.h',
@@ -28,7 +28,6 @@ tepl_public_headers = [
   'tepl-prefs.h',
   'tepl-progress-info-bar.h',
   'tepl-settings.h',
-  'tepl-signal-group.h',
   'tepl-space-drawer-prefs.h',
   'tepl-statusbar.h',
   'tepl-style-scheme-chooser-widget.h',
@@ -40,6 +39,12 @@ tepl_public_headers = [
   'tepl-utils.h',
   'tepl-view.h'
 ]
+
+tepl_subdirs_public_headers = [
+  'gobject-extras/tepl-signal-group.h'
+]
+
+tepl_all_public_headers = tepl_base_public_headers + tepl_subdirs_public_headers
 
 tepl_public_c_files = [
   'tepl-abstract-factory.c',
@@ -69,7 +74,6 @@ tepl_public_c_files = [
   'tepl-prefs.c',
   'tepl-progress-info-bar.c',
   'tepl-settings.c',
-  'tepl-signal-group.c',
   'tepl-space-drawer-prefs.c',
   'tepl-statusbar.c',
   'tepl-style-scheme-chooser-widget.c',
@@ -79,7 +83,8 @@ tepl_public_c_files = [
   'tepl-tab-loading.c',
   'tepl-tab-saving.c',
   'tepl-utils.c',
-  'tepl-view.c'
+  'tepl-view.c',
+  'gobject-extras/tepl-signal-group.c'
 ]
 
 TEPL_PRIVATE_HEADERS = [
@@ -104,17 +109,38 @@ tepl_private_c_files = [
   'tepl-window-actions-search.c'
 ]
 
+# A bit of a hack but it works and simplifies the handling of subdirs for
+# grouping source files.
+foreach subdir_public_header : tepl_subdirs_public_headers
+  configure_file(
+    input: subdir_public_header,
+    output: subdir_public_header.split('/')[1],
+    copy: true
+  )
+endforeach
+
 headers_install_dir = get_option('includedir') / 'tepl-@0@/tepl/'.format(TEPL_API_VERSION)
 install_headers(
-  tepl_public_headers,
-  install_dir: headers_install_dir
+  tepl_base_public_headers,
+  install_dir: headers_install_dir,
+  #preserve_path: true # TODO use it once available in a stable release.
 )
+
+foreach subdir_public_header : tepl_subdirs_public_headers
+  subdir_name = subdir_public_header.split('/')[0]
+  install_headers(
+    subdir_public_header,
+    install_dir:
+      get_option('includedir') /
+      'tepl-@0@/tepl/@1@/'.format(TEPL_API_VERSION, subdir_name)
+  )
+endforeach
 
 tepl_enum_types = GNOME.mkenums_simple(
   'tepl-enum-types',
   decorator: '_TEPL_EXTERN',
   header_prefix: '#include <tepl/tepl-macros.h>',
-  sources: tepl_public_headers,
+  sources: tepl_all_public_headers,
   install_header: true,
   install_dir: headers_install_dir
 )
@@ -188,7 +214,7 @@ if get_option('gobject_introspection')
     namespace: 'Tepl',
     nsversion: TEPL_API_VERSION,
     sources: [
-      tepl_public_headers,
+      tepl_all_public_headers,
       tepl_public_c_files,
       tepl_enum_types
     ],

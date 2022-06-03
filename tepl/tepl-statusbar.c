@@ -5,7 +5,7 @@
 #include "config.h"
 #include "tepl-statusbar.h"
 #include <glib/gi18n-lib.h>
-#include "tepl-signal-group.h"
+#include "gobject-extras/tepl-signal-group.h"
 
 /**
  * SECTION:statusbar
