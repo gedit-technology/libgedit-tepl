@@ -20,7 +20,6 @@
     <chapter id="general">
       <title>General</title>
       <xi:include href="xml/init.xml"/>
-      <xi:include href="xml/settings.xml"/>
     </chapter>
 
     <chapter id="framework">
@@ -82,6 +81,7 @@
       <xi:include href="xml/panel.xml"/>
       <xi:include href="xml/pango.xml"/>
       <xi:include href="xml/prefs.xml"/>
+      <xi:include href="xml/settings.xml"/>
       <xi:include href="xml/signal-group.xml"/>
       <xi:include href="xml/space-drawer-prefs.xml"/>
       <xi:include href="xml/statusbar.xml"/>
