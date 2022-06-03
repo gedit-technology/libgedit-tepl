@@ -7,7 +7,7 @@
 #include <glib/gi18n-lib.h>
 #include "tepl-buffer.h"
 #include "tepl-file.h"
-#include "gobject-extras/tepl-signal-group.h"
+#include "tepl-signal-group.h"
 #include "tepl-utils.h"
 
 /**

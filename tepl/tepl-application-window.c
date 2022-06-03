@@ -7,7 +7,7 @@
 #include <glib/gi18n-lib.h>
 #include "tepl-abstract-factory.h"
 #include "tepl-buffer.h"
-#include "gobject-extras/tepl-signal-group.h"
+#include "tepl-signal-group.h"
 #include "tepl-tab-loading.h"
 #include "tepl-window-actions-file.h"
 #include "tepl-window-actions-edit.h"

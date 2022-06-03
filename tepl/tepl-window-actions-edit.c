@@ -4,7 +4,7 @@
 
 #include "tepl-window-actions-edit.h"
 #include <amtk/amtk.h>
-#include "gobject-extras/tepl-signal-group.h"
+#include "tepl-signal-group.h"
 #include "tepl-tab-group.h"
 #include "tepl-view.h"
 

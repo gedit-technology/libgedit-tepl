@@ -39,6 +39,7 @@
 #include <tepl/tepl-prefs.h>
 #include <tepl/tepl-progress-info-bar.h>
 #include <tepl/tepl-settings.h>
+#include <tepl/tepl-signal-group.h>
 #include <tepl/tepl-space-drawer-prefs.h>
 #include <tepl/tepl-statusbar.h>
 #include <tepl/tepl-style-scheme-chooser-widget.h>
@@ -49,8 +50,6 @@
 #include <tepl/tepl-tab-saving.h>
 #include <tepl/tepl-utils.h>
 #include <tepl/tepl-view.h>
-
-#include <tepl/gobject-extras/tepl-signal-group.h>
 
 #undef TEPL_H_INSIDE
 
