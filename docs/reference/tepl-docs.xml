@@ -39,6 +39,11 @@
       <xi:include href="xml/progress-info-bar.xml"/>
     </chapter>
 
+    <chapter id="gtk-extras-other">
+      <title>GTK Extras - Other</title>
+      <xi:include href="xml/file-chooser.xml"/>
+    </chapter>
+
     <chapter id="framework">
       <title>Framework</title>
       <xi:include href="xml/abstract-factory.xml"/>
@@ -63,7 +68,6 @@
       <xi:include href="xml/file-loader.xml"/>
       <xi:include href="xml/file-saver.xml"/>
       <xi:include href="xml/io-error-info-bars.xml"/>
-      <xi:include href="xml/file-chooser.xml"/>
     </chapter>
 
     <chapter id="code-folding">
