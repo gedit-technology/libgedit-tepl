@@ -33,6 +33,12 @@
       <xi:include href="xml/metadata-manager.xml"/>
     </chapter>
 
+    <chapter id="gtk-extras-info-bars">
+      <title>GTK Extras - Info Bars</title>
+      <xi:include href="xml/info-bar.xml"/>
+      <xi:include href="xml/progress-info-bar.xml"/>
+    </chapter>
+
     <chapter id="framework">
       <title>Framework</title>
       <xi:include href="xml/abstract-factory.xml"/>
@@ -64,12 +70,6 @@
       <title>Code Folding</title>
       <xi:include href="xml/fold-region.xml"/>
       <xi:include href="xml/gutter-renderer-folds.xml"/>
-    </chapter>
-
-    <chapter id="info-bars">
-      <title>Info Bars</title>
-      <xi:include href="xml/info-bar.xml"/>
-      <xi:include href="xml/progress-info-bar.xml"/>
     </chapter>
 
     <chapter id="language-choosers">
