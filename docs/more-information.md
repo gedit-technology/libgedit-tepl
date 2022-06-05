@@ -12,10 +12,10 @@ For example the `4.1.x` versions are unstable (development versions), and the
 Dependencies
 ------------
 
-- GLib
+- GLib 2
 - GTK 3
-- [Tepl-gsv](https://gitlab.gnome.org/swilmet/tepl-gsv)
-- [Amtk](https://gitlab.gnome.org/World/amtk)
+- GtkSourceView 4
+- [Amtk](https://gitlab.gnome.org/World/amtk) 5
 - [ICU](http://site.icu-project.org/)
 
 Documentation
