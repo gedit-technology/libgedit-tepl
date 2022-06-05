@@ -60,7 +60,7 @@ typedef GMountOperation *(*TeplMountOperationFactory) (TeplFile *file,
  * containing @untitled_file_number, to give a name to a file not yet present on
  * disk.
  *
- * Since: 300.0
+ * Since: 6.2
  */
 typedef gchar *(*TeplUntitledFileCallback) (gint untitled_file_number);
 

@@ -80,7 +80,7 @@ create_default_font_checkbutton (void)
  *   of the key must be a string.
  *
  * Returns: (transfer floating): A component for configuring the font.
- * Since: 300.0
+ * Since: 6.2
  */
 GtkWidget *
 tepl_prefs_create_font_component (GSettings   *settings,

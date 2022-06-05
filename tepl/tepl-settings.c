@@ -101,7 +101,7 @@ tepl_settings_class_init (TeplSettingsClass *klass)
 	 * left as an exercise for another class, since #TeplSettings is only
 	 * for #GSettings.
 	 *
-	 * Since: 300.0
+	 * Since: 6.2
 	 */
 	signals[SIGNAL_FONT_CHANGED] =
 		g_signal_new ("font-changed",
@@ -177,7 +177,7 @@ tepl_settings_init (TeplSettings *self)
  * tepl_settings_get_singleton:
  *
  * Returns: (transfer none): the #TeplSettings singleton instance.
- * Since: 300.0
+ * Since: 6.2
  */
 TeplSettings *
 tepl_settings_get_singleton (void)
@@ -209,7 +209,7 @@ _tepl_settings_unref_singleton (void)
  * @self: the #TeplSettings instance.
  *
  * Returns: (transfer none): the #GSettings for `"org.gnome.desktop.interface"`.
- * Since: 300.0
+ * Since: 6.2
  */
 GSettings *
 tepl_settings_peek_desktop_interface_settings (TeplSettings *self)
@@ -233,7 +233,7 @@ tepl_settings_peek_desktop_interface_settings (TeplSettings *self)
  *
  * See tepl_settings_get_selected_font().
  *
- * Since: 300.0
+ * Since: 6.2
  */
 void
 tepl_settings_provide_font_settings (TeplSettings *self,
@@ -294,7 +294,7 @@ tepl_settings_provide_font_settings (TeplSettings *self,
  * tepl_utils_override_font_string() and tepl_prefs_create_font_component().
  *
  * Returns: the selected font name.
- * Since: 300.0
+ * Since: 6.2
  */
 gchar *
 tepl_settings_get_selected_font (TeplSettings *self)

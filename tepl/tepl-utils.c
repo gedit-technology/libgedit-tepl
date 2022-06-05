@@ -1062,7 +1062,7 @@ tepl_utils_list_box_get_filtered_children (GtkListBox           *list_box,
  *
  * See also tepl_pango_font_description_to_css().
  *
- * Since: 300.0
+ * Since: 6.2
  */
 void
 tepl_utils_override_font_description (GtkWidget                  *widget,
@@ -1124,7 +1124,7 @@ tepl_utils_override_font_description (GtkWidget                  *widget,
  * See pango_font_description_from_string() for a description of the format of
  * the string representation for @font_str.
  *
- * Since: 300.0
+ * Since: 6.2
  */
 void
 tepl_utils_override_font_string (GtkWidget   *widget,
@@ -1157,7 +1157,7 @@ tepl_utils_override_font_string (GtkWidget   *widget,
  * The old name for tepl_utils_override_font_string().
  *
  * Since: 6.0
- * Deprecated: 300.0
+ * Deprecated: 6.2
  */
 void
 tepl_utils_override_font (GtkWidget   *widget,
@@ -1181,7 +1181,7 @@ tepl_utils_override_font (GtkWidget   *widget,
  *
  * Returns: (transfer floating): a new widget containing the @title above the
  * @component.
- * Since: 300.0
+ * Since: 6.2
  */
 GtkWidget *
 tepl_utils_get_titled_component (const gchar *title,
