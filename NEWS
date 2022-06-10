@@ -1,3 +1,16 @@
+News in 6.1.1, 2022-06-10
+-------------------------
+* New features / API: see the index of new symbols in the reference
+  documentation (generated with gtk-doc).
+* Tests: files reorganization within the repository, have the following
+  directories:
+    - tests/interactive-tests/
+    - tests/unit-tests/
+* Documentation: split the API Reference into two parts:
+    - Text Editor Support
+    - General Utilities (more broadly applicable)
+* Documentation: various other small improvements.
+
 News in 6.0.2, 2022-05-27
 -------------------------
 * Build system: check if compiler supports --version-script linker option.
