@@ -398,6 +398,7 @@ tepl_pango_font_description_to_css
 <SECTION>
 <FILE>prefs</FILE>
 tepl_prefs_create_font_component
+tepl_prefs_create_color_scheme_component
 </SECTION>
 
 <SECTION>
