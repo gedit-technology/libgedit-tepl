@@ -15,13 +15,17 @@
 G_BEGIN_DECLS
 
 _TEPL_EXTERN
-GtkWidget *	tepl_prefs_create_font_component		(GSettings   *settings,
-								 const gchar *use_default_font_key,
-								 const gchar *editor_font_key);
+GtkWidget *	tepl_prefs_create_font_component			(GSettings   *settings,
+									 const gchar *use_default_font_key,
+									 const gchar *editor_font_key);
 
 _TEPL_EXTERN
-GtkWidget *	tepl_prefs_create_color_scheme_component	(GSettings   *settings,
-								 const gchar *style_scheme_key);
+GtkWidget *	tepl_prefs_create_color_scheme_component		(GSettings   *settings,
+									 const gchar *style_scheme_key);
+
+_TEPL_EXTERN
+GtkWidget *	tepl_prefs_create_display_line_numbers_checkbutton	(GSettings   *settings,
+									 const gchar *display_line_numbers_key);
 
 G_END_DECLS
 

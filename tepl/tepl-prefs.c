@@ -165,3 +165,32 @@ tepl_prefs_create_color_scheme_component (GSettings   *settings,
 	return tepl_utils_get_titled_component (_("Color Scheme"),
 						GTK_WIDGET (style_scheme_chooser));
 }
+
+/**
+ * tepl_prefs_create_display_line_numbers_checkbutton:
+ * @settings: a #GSettings.
+ * @display_line_numbers_key: a key part of @settings. The type of the key must
+ *   be a boolean.
+ *
+ * Returns: (transfer floating): A #GtkCheckButton intended for
+ *   #GtkSourceView:show-line-numbers.
+ * Since: 6.2
+ */
+GtkWidget *
+tepl_prefs_create_display_line_numbers_checkbutton (GSettings   *settings,
+						    const gchar *display_line_numbers_key)
+{
+	GtkWidget *checkbutton;
+
+	g_return_val_if_fail (G_IS_SETTINGS (settings), NULL);
+	g_return_val_if_fail (display_line_numbers_key != NULL, NULL);
+
+	checkbutton = gtk_check_button_new_with_mnemonic (_("_Display line numbers"));
+	gtk_widget_show (checkbutton);
+
+	g_settings_bind (settings, display_line_numbers_key,
+			 checkbutton, "active",
+			 G_SETTINGS_BIND_DEFAULT);
+
+	return checkbutton;
+}
