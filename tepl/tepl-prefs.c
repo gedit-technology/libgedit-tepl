@@ -20,6 +20,26 @@
 
 #define SETTING_SYSTEM_FONT_KEY "monospace-font-name"
 
+static GtkWidget *
+create_checkbutton_simple (GSettings   *settings,
+			   const gchar *key,
+			   const gchar *mnemonic_text)
+{
+	GtkWidget *checkbutton;
+
+	g_return_val_if_fail (G_IS_SETTINGS (settings), NULL);
+	g_return_val_if_fail (key != NULL, NULL);
+
+	checkbutton = gtk_check_button_new_with_mnemonic (mnemonic_text);
+	gtk_widget_show (checkbutton);
+
+	g_settings_bind (settings, key,
+			 checkbutton, "active",
+			 G_SETTINGS_BIND_DEFAULT);
+
+	return checkbutton;
+}
+
 static void
 update_default_font_checkbutton_label (GtkCheckButton *checkbutton)
 {
@@ -180,19 +200,9 @@ GtkWidget *
 tepl_prefs_create_display_line_numbers_checkbutton (GSettings   *settings,
 						    const gchar *display_line_numbers_key)
 {
-	GtkWidget *checkbutton;
-
-	g_return_val_if_fail (G_IS_SETTINGS (settings), NULL);
-	g_return_val_if_fail (display_line_numbers_key != NULL, NULL);
-
-	checkbutton = gtk_check_button_new_with_mnemonic (_("_Display line numbers"));
-	gtk_widget_show (checkbutton);
-
-	g_settings_bind (settings, display_line_numbers_key,
-			 checkbutton, "active",
-			 G_SETTINGS_BIND_DEFAULT);
-
-	return checkbutton;
+	return create_checkbutton_simple (settings,
+					  display_line_numbers_key,
+					  _("_Display line numbers"));
 }
 
 /**
