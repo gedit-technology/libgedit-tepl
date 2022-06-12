@@ -194,3 +194,48 @@ tepl_prefs_create_display_line_numbers_checkbutton (GSettings   *settings,
 
 	return checkbutton;
 }
+
+/**
+ * tepl_prefs_create_tab_width_spinbutton:
+ * @settings: a #GSettings.
+ * @tab_width_key: a key part of @settings. The type of the key must be an
+ *   unsigned integer, with a range.
+ *
+ * Returns: (transfer floating): A widget containing a #GtkSpinButton intended
+ *   for #GtkSourceView:tab-width.
+ * Since: 6.2
+ */
+GtkWidget *
+tepl_prefs_create_tab_width_spinbutton (GSettings   *settings,
+					const gchar *tab_width_key)
+{
+	guint32 min = 0;
+	guint32 max = 0;
+	gboolean success;
+	GtkWidget *label;
+	GtkWidget *spinbutton;
+	GtkWidget *hgrid;
+
+	g_return_val_if_fail (G_IS_SETTINGS (settings), NULL);
+	g_return_val_if_fail (tab_width_key != NULL, NULL);
+
+	success = tepl_settings_get_range_uint (settings, tab_width_key, &min, &max);
+	g_return_val_if_fail (success, NULL);
+
+	label = gtk_label_new_with_mnemonic (_("_Tab width:"));
+	spinbutton = gtk_spin_button_new_with_range (min, max, 1.0);
+	gtk_label_set_mnemonic_widget (GTK_LABEL (label), spinbutton);
+
+	g_settings_bind (settings, tab_width_key,
+			 spinbutton, "value",
+			 G_SETTINGS_BIND_DEFAULT);
+
+	/* Packing */
+	hgrid = gtk_grid_new ();
+	gtk_grid_set_column_spacing (GTK_GRID (hgrid), 6);
+	gtk_container_add (GTK_CONTAINER (hgrid), label);
+	gtk_container_add (GTK_CONTAINER (hgrid), spinbutton);
+	gtk_widget_show_all (hgrid);
+
+	return hgrid;
+}

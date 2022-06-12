@@ -27,6 +27,10 @@ _TEPL_EXTERN
 GtkWidget *	tepl_prefs_create_display_line_numbers_checkbutton	(GSettings   *settings,
 									 const gchar *display_line_numbers_key);
 
+_TEPL_EXTERN
+GtkWidget *	tepl_prefs_create_tab_width_spinbutton			(GSettings   *settings,
+									 const gchar *tab_width_key);
+
 G_END_DECLS
 
 #endif /* TEPL_PREFS_H */
