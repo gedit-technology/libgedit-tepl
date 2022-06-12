@@ -60,6 +60,12 @@ void		tepl_settings_provide_font_settings		(TeplSettings *self,
 _TEPL_EXTERN
 gchar *		tepl_settings_get_selected_font			(TeplSettings *self);
 
+_TEPL_EXTERN
+gboolean	tepl_settings_get_range_uint			(GSettings   *settings,
+								 const gchar *key,
+								 guint32     *min,
+								 guint32     *max);
+
 G_END_DECLS
 
 #endif /* TEPL_SETTINGS_H */

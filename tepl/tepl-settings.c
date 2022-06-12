@@ -310,3 +310,79 @@ tepl_settings_get_selected_font (TeplSettings *self)
 	return g_settings_get_string (self->priv->settings_font,
 				      self->priv->key_editor_font);
 }
+
+/**
+ * tepl_settings_get_range_uint:
+ * @settings: a #GSettings.
+ * @key: a key part of @settings.
+ * @min: (out): the minimum value allowed by the range.
+ * @max: (out): the maximum value allowed by the range.
+ *
+ * This function introspects a #GSettings key to get its range, if the key as a
+ * "u" type (unsigned integer). %FALSE is returned if the introspection failed.
+ *
+ * See g_settings_schema_key_get_range() for more flexibility.
+ *
+ * Returns: whether the operation was successful.
+ * Since: 6.2
+ */
+gboolean
+tepl_settings_get_range_uint (GSettings   *settings,
+			      const gchar *key,
+			      guint32     *min,
+			      guint32     *max)
+{
+	GSettingsSchema *schema = NULL;
+	GSettingsSchemaKey *schema_key = NULL;
+	GVariant *range = NULL;
+	gchar *range_type = NULL;
+	GVariant *range_values = NULL;
+	const gchar *range_values_format;
+	gboolean success = FALSE;
+
+	g_return_val_if_fail (G_IS_SETTINGS (settings), FALSE);
+	g_return_val_if_fail (key != NULL, FALSE);
+	g_return_val_if_fail (min != NULL, FALSE);
+	g_return_val_if_fail (max != NULL, FALSE);
+
+	*min = 0;
+	*max = 0;
+
+	g_object_get (settings,
+		      "settings-schema", &schema,
+		      NULL);
+
+	g_return_val_if_fail (schema != NULL, FALSE);
+
+	if (!g_settings_schema_has_key (schema, key))
+	{
+		goto out;
+	}
+
+	schema_key = g_settings_schema_get_key (schema, key);
+	range = g_settings_schema_key_get_range (schema_key);
+	g_variant_get (range, "(sv)", &range_type, &range_values);
+
+	if (g_strcmp0 (range_type, "range") != 0)
+	{
+		goto out;
+	}
+
+	range_values_format = g_variant_get_type_string (range_values);
+	if (g_strcmp0 (range_values_format, "(uu)") != 0)
+	{
+		goto out;
+	}
+
+	g_variant_get (range_values, "(uu)", min, max);
+	success = TRUE;
+
+out:
+	g_clear_pointer (&schema, g_settings_schema_unref);
+	g_clear_pointer (&schema_key, g_settings_schema_key_unref);
+	g_clear_pointer (&range, g_variant_unref);
+	g_free (range_type);
+	g_clear_pointer (&range_values, g_variant_unref);
+
+	return success;
+}
