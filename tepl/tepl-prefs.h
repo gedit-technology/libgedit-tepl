@@ -41,6 +41,10 @@ GtkWidget *	tepl_prefs_create_highlighting_component		(GSettings   *settings,
 									 const gchar *highlight_current_line_key,
 									 const gchar *highlight_matching_brackets_key);
 
+_TEPL_EXTERN
+GtkWidget *	tepl_prefs_create_files_component			(GSettings   *settings,
+									 const gchar *create_backup_copy_key);
+
 G_END_DECLS
 
 #endif /* TEPL_PREFS_H */

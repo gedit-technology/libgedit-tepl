@@ -343,3 +343,22 @@ tepl_prefs_create_highlighting_component (GSettings   *settings,
 	gtk_widget_show_all (vgrid);
 	return vgrid;
 }
+
+/**
+ * tepl_prefs_create_files_component:
+ * @settings: a #GSettings.
+ * @create_backup_copy_key: a key part of @settings. The type of the key must be
+ *   a boolean. Intended to be used with %TEPL_FILE_SAVER_FLAGS_CREATE_BACKUP
+ *   (for example).
+ *
+ * Returns: (transfer floating): a component for some files preferences.
+ * Since: 6.2
+ */
+GtkWidget *
+tepl_prefs_create_files_component (GSettings   *settings,
+				   const gchar *create_backup_copy_key)
+{
+	return create_checkbutton_simple (settings,
+					  create_backup_copy_key,
+					  _("_Create a backup copy of files before saving"));
+}
