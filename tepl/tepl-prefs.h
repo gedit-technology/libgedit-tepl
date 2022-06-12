@@ -36,6 +36,11 @@ GtkWidget *	tepl_prefs_create_insert_spaces_component		(GSettings   *settings,
 									 const gchar *insert_spaces_key,
 									 const gchar *smart_backspace_key);
 
+_TEPL_EXTERN
+GtkWidget *	tepl_prefs_create_highlighting_component		(GSettings   *settings,
+									 const gchar *highlight_current_line_key,
+									 const gchar *highlight_matching_brackets_key);
+
 G_END_DECLS
 
 #endif /* TEPL_PREFS_H */

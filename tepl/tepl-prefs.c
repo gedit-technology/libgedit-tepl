@@ -303,3 +303,43 @@ tepl_prefs_create_insert_spaces_component (GSettings   *settings,
 
 	return vgrid;
 }
+
+/**
+ * tepl_prefs_create_highlighting_component:
+ * @settings: a #GSettings.
+ * @highlight_current_line_key: a key part of @settings. The type of the key
+ *   must be a boolean.
+ * @highlight_matching_brackets_key: a key part of @settings. The type of the
+ *   key must be a boolean.
+ *
+ * Returns: (transfer floating): a component intended for
+ *   #GtkSourceView:highlight-current-line and
+ *   #GtkSourceBuffer:highlight-matching-brackets.
+ * Since: 6.2
+ */
+GtkWidget *
+tepl_prefs_create_highlighting_component (GSettings   *settings,
+					  const gchar *highlight_current_line_key,
+					  const gchar *highlight_matching_brackets_key)
+{
+	GtkWidget *vgrid;
+
+	g_return_val_if_fail (G_IS_SETTINGS (settings), NULL);
+	g_return_val_if_fail (highlight_current_line_key != NULL, NULL);
+	g_return_val_if_fail (highlight_matching_brackets_key != NULL, NULL);
+
+	vgrid = gtk_grid_new ();
+	gtk_orientable_set_orientation (GTK_ORIENTABLE (vgrid), GTK_ORIENTATION_VERTICAL);
+	gtk_grid_set_row_spacing (GTK_GRID (vgrid), 7);
+
+	gtk_container_add (GTK_CONTAINER (vgrid),
+			   create_checkbutton_simple (settings,
+						      highlight_current_line_key,
+						      _("Highlight current _line")));
+	gtk_container_add (GTK_CONTAINER (vgrid),
+			   create_checkbutton_simple (settings,
+						      highlight_matching_brackets_key,
+						      _("Highlight matching _brackets")));
+	gtk_widget_show_all (vgrid);
+	return vgrid;
+}
