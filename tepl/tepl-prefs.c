@@ -276,18 +276,14 @@ tepl_prefs_create_insert_spaces_component (GSettings   *settings,
 	g_return_val_if_fail (insert_spaces_key != NULL, NULL);
 	g_return_val_if_fail (smart_backspace_key != NULL, NULL);
 
-	insert_spaces_checkbutton = gtk_check_button_new_with_mnemonic (_("Insert _spaces instead of tabs"));
+	insert_spaces_checkbutton = create_checkbutton_simple (settings,
+							       insert_spaces_key,
+							       _("Insert _spaces instead of tabs"));
 
-	smart_backspace_checkbutton = gtk_check_button_new_with_mnemonic (_("_Forget you are not using tabulations"));
+	smart_backspace_checkbutton = create_checkbutton_simple (settings,
+								 smart_backspace_key,
+								 _("_Forget you are not using tabulations"));
 	gtk_widget_set_margin_start (smart_backspace_checkbutton, 12);
-
-	g_settings_bind (settings, insert_spaces_key,
-			 insert_spaces_checkbutton, "active",
-			 G_SETTINGS_BIND_DEFAULT);
-
-	g_settings_bind (settings, smart_backspace_key,
-			 smart_backspace_checkbutton, "active",
-			 G_SETTINGS_BIND_DEFAULT);
 
 	g_object_bind_property (insert_spaces_checkbutton, "active",
 				smart_backspace_checkbutton, "sensitive",
