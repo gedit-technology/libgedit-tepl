@@ -340,21 +340,99 @@ tepl_prefs_create_highlighting_component (GSettings   *settings,
 	return vgrid;
 }
 
+static GtkWidget *
+create_auto_save_component (GSettings   *settings,
+			    const gchar *auto_save_key,
+			    const gchar *auto_save_interval)
+{
+	guint32 min = 0;
+	guint32 max = 0;
+	gboolean success;
+	GtkWidget *checkbutton;
+	GtkWidget *label;
+	GtkWidget *spinbutton;
+	GtkWidget *vgrid;
+	GtkWidget *hgrid;
+
+	/* Widgets */
+
+	success = tepl_settings_get_range_uint (settings, auto_save_interval, &min, &max);
+	g_return_val_if_fail (success, NULL);
+
+	checkbutton = create_checkbutton_simple (settings, auto_save_key, _("_Autosave files"));
+
+	label = gtk_label_new_with_mnemonic (_("_Number of minutes between each autosave:"));
+	spinbutton = gtk_spin_button_new_with_range (min, max, 1.0);
+	gtk_label_set_mnemonic_widget (GTK_LABEL (label), spinbutton);
+
+	g_settings_bind (settings, auto_save_interval,
+			 spinbutton, "value",
+			 G_SETTINGS_BIND_DEFAULT);
+
+	/* Packing */
+
+	vgrid = gtk_grid_new ();
+	gtk_orientable_set_orientation (GTK_ORIENTABLE (vgrid), GTK_ORIENTATION_VERTICAL);
+	gtk_grid_set_row_spacing (GTK_GRID (vgrid), 7);
+	gtk_container_add (GTK_CONTAINER (vgrid), checkbutton);
+
+	hgrid = gtk_grid_new ();
+	gtk_grid_set_column_spacing (GTK_GRID (hgrid), 6);
+	gtk_widget_set_margin_start (hgrid, 12);
+	gtk_container_add (GTK_CONTAINER (hgrid), label);
+	gtk_container_add (GTK_CONTAINER (hgrid), spinbutton);
+	gtk_container_add (GTK_CONTAINER (vgrid), hgrid);
+	gtk_widget_show_all (vgrid);
+
+	/* Sensitivity */
+
+	g_object_bind_property (checkbutton, "active",
+				hgrid, "sensitive",
+				G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
+
+	return vgrid;
+}
+
 /**
  * tepl_prefs_create_files_component:
  * @settings: a #GSettings.
  * @create_backup_copy_key: a key part of @settings. The type of the key must be
  *   a boolean. Intended to be used with %TEPL_FILE_SAVER_FLAGS_CREATE_BACKUP
  *   (for example).
+ * @auto_save_key: a key part of @settings. The type of the key must be a
+ *   boolean. Whether to autosave files.
+ * @auto_save_interval: a key part of @settings. The type of the key must be an
+ *   unsigned integer, with a range. The interval is in minutes.
  *
  * Returns: (transfer floating): a component for some files preferences.
  * Since: 6.2
  */
 GtkWidget *
 tepl_prefs_create_files_component (GSettings   *settings,
-				   const gchar *create_backup_copy_key)
+				   const gchar *create_backup_copy_key,
+				   const gchar *auto_save_key,
+				   const gchar *auto_save_interval)
 {
-	return create_checkbutton_simple (settings,
-					  create_backup_copy_key,
-					  _("_Create a backup copy of files before saving"));
+	GtkWidget *vgrid;
+
+	g_return_val_if_fail (G_IS_SETTINGS (settings), NULL);
+	g_return_val_if_fail (create_backup_copy_key != NULL, NULL);
+	g_return_val_if_fail (auto_save_key != NULL, NULL);
+	g_return_val_if_fail (auto_save_interval != NULL, NULL);
+
+	vgrid = gtk_grid_new ();
+	gtk_orientable_set_orientation (GTK_ORIENTABLE (vgrid), GTK_ORIENTATION_VERTICAL);
+	gtk_grid_set_row_spacing (GTK_GRID (vgrid), 7);
+
+	gtk_container_add (GTK_CONTAINER (vgrid),
+			   create_checkbutton_simple (settings,
+						      create_backup_copy_key,
+						      _("_Create a backup copy of files before saving")));
+	gtk_container_add (GTK_CONTAINER (vgrid),
+			   create_auto_save_component (settings,
+						       auto_save_key,
+						       auto_save_interval));
+
+	gtk_widget_show_all (vgrid);
+	return vgrid;
 }

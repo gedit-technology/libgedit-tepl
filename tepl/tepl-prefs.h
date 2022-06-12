@@ -43,7 +43,9 @@ GtkWidget *	tepl_prefs_create_highlighting_component		(GSettings   *settings,
 
 _TEPL_EXTERN
 GtkWidget *	tepl_prefs_create_files_component			(GSettings   *settings,
-									 const gchar *create_backup_copy_key);
+									 const gchar *create_backup_copy_key,
+									 const gchar *auto_save_key,
+									 const gchar *auto_save_interval);
 
 G_END_DECLS
 
