@@ -239,3 +239,57 @@ tepl_prefs_create_tab_width_spinbutton (GSettings   *settings,
 
 	return hgrid;
 }
+
+/**
+ * tepl_prefs_create_insert_spaces_component:
+ * @settings: a #GSettings.
+ * @insert_spaces_key: a key part of @settings. The type of the key must be a
+ *   boolean.
+ * @smart_backspace_key: a key part of @settings. The type of the key must be a
+ *   boolean.
+ *
+ * Returns: (transfer floating): a component intended for
+ *   #GtkSourceView:insert-spaces-instead-of-tabs and
+ *   #GtkSourceView:smart-backspace.
+ * Since: 6.2
+ */
+GtkWidget *
+tepl_prefs_create_insert_spaces_component (GSettings   *settings,
+					   const gchar *insert_spaces_key,
+					   const gchar *smart_backspace_key)
+{
+	GtkWidget *insert_spaces_checkbutton;
+	GtkWidget *smart_backspace_checkbutton;
+	GtkWidget *vgrid;
+
+	g_return_val_if_fail (G_IS_SETTINGS (settings), NULL);
+	g_return_val_if_fail (insert_spaces_key != NULL, NULL);
+	g_return_val_if_fail (smart_backspace_key != NULL, NULL);
+
+	insert_spaces_checkbutton = gtk_check_button_new_with_mnemonic (_("Insert _spaces instead of tabs"));
+
+	smart_backspace_checkbutton = gtk_check_button_new_with_mnemonic (_("_Forget you are not using tabulations"));
+	gtk_widget_set_margin_start (smart_backspace_checkbutton, 12);
+
+	g_settings_bind (settings, insert_spaces_key,
+			 insert_spaces_checkbutton, "active",
+			 G_SETTINGS_BIND_DEFAULT);
+
+	g_settings_bind (settings, smart_backspace_key,
+			 smart_backspace_checkbutton, "active",
+			 G_SETTINGS_BIND_DEFAULT);
+
+	g_object_bind_property (insert_spaces_checkbutton, "active",
+				smart_backspace_checkbutton, "sensitive",
+				G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
+
+	/* Packing */
+	vgrid = gtk_grid_new ();
+	gtk_orientable_set_orientation (GTK_ORIENTABLE (vgrid), GTK_ORIENTATION_VERTICAL);
+	gtk_grid_set_row_spacing (GTK_GRID (vgrid), 7);
+	gtk_container_add (GTK_CONTAINER (vgrid), insert_spaces_checkbutton);
+	gtk_container_add (GTK_CONTAINER (vgrid), smart_backspace_checkbutton);
+	gtk_widget_show_all (vgrid);
+
+	return vgrid;
+}

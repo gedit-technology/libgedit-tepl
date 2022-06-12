@@ -31,6 +31,11 @@ _TEPL_EXTERN
 GtkWidget *	tepl_prefs_create_tab_width_spinbutton			(GSettings   *settings,
 									 const gchar *tab_width_key);
 
+_TEPL_EXTERN
+GtkWidget *	tepl_prefs_create_insert_spaces_component		(GSettings   *settings,
+									 const gchar *insert_spaces_key,
+									 const gchar *smart_backspace_key);
+
 G_END_DECLS
 
 #endif /* TEPL_PREFS_H */
