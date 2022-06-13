@@ -433,6 +433,5 @@ tepl_prefs_create_files_component (GSettings   *settings,
 						       auto_save_key,
 						       auto_save_interval));
 
-	gtk_widget_show_all (vgrid);
-	return vgrid;
+	return tepl_utils_get_titled_component (_("Files"), vgrid);
 }
