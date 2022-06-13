@@ -336,8 +336,8 @@ tepl_prefs_create_highlighting_component (GSettings   *settings,
 			   create_checkbutton_simple (settings,
 						      highlight_matching_brackets_key,
 						      _("Highlight matching _brackets")));
-	gtk_widget_show_all (vgrid);
-	return vgrid;
+
+	return tepl_utils_get_titled_component (_("Highlighting"), vgrid);
 }
 
 static GtkWidget *
