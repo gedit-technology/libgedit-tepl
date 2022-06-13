@@ -268,35 +268,31 @@ tepl_prefs_create_insert_spaces_component (GSettings   *settings,
 					   const gchar *insert_spaces_key,
 					   const gchar *smart_backspace_key)
 {
-	GtkWidget *insert_spaces_checkbutton;
-	GtkWidget *smart_backspace_checkbutton;
 	GtkWidget *vgrid;
+	GtkWidget *smart_backspace_checkbutton;
 
 	g_return_val_if_fail (G_IS_SETTINGS (settings), NULL);
 	g_return_val_if_fail (insert_spaces_key != NULL, NULL);
 	g_return_val_if_fail (smart_backspace_key != NULL, NULL);
 
-	insert_spaces_checkbutton = create_checkbutton_simple (settings,
-							       insert_spaces_key,
-							       _("Insert _spaces instead of tabs"));
-
-	smart_backspace_checkbutton = create_checkbutton_simple (settings,
-								 smart_backspace_key,
-								 _("_Forget you are not using tabulations"));
-	gtk_widget_set_margin_start (smart_backspace_checkbutton, 12);
-
-	g_object_bind_property (insert_spaces_checkbutton, "active",
-				smart_backspace_checkbutton, "sensitive",
-				G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
-
-	/* Packing */
 	vgrid = gtk_grid_new ();
 	gtk_orientable_set_orientation (GTK_ORIENTABLE (vgrid), GTK_ORIENTATION_VERTICAL);
 	gtk_grid_set_row_spacing (GTK_GRID (vgrid), 7);
-	gtk_container_add (GTK_CONTAINER (vgrid), insert_spaces_checkbutton);
-	gtk_container_add (GTK_CONTAINER (vgrid), smart_backspace_checkbutton);
-	gtk_widget_show_all (vgrid);
 
+	gtk_container_add (GTK_CONTAINER (vgrid),
+			   create_checkbutton_simple (settings,
+						      insert_spaces_key,
+						      _("_Insert spaces instead of tabs")));
+
+	smart_backspace_checkbutton = create_checkbutton_simple (settings,
+								 smart_backspace_key,
+								 _("Delete _spaces as tabs"));
+	gtk_widget_set_tooltip_text (smart_backspace_checkbutton,
+				     _("Only for leading spaces on a line (indentation)"));
+
+	gtk_container_add (GTK_CONTAINER (vgrid), smart_backspace_checkbutton);
+
+	gtk_widget_show_all (vgrid);
 	return vgrid;
 }
 
