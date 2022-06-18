@@ -1,13 +1,12 @@
 Tepl - more information
 =======================
 
-About versions
---------------
+About versions and API
+----------------------
 
-Tepl follows the even/odd minor version scheme.
-
-For example the `4.1.x` versions are unstable (development versions), and the
-`4.2.x` versions are stable.
+The API is now **constantly unstable**, there can be API breaks for new
+versions. As a consequence, it is highly recommended to **bundle** Tepl with the
+program, and for the program to depend on a precise version of Tepl.
 
 Dependencies
 ------------
