@@ -18,6 +18,10 @@
  * panel. In order to configure a text editor.
  */
 
+/* TODO: possibility to use the "dialog-question-symbolic" icon and set a
+ * tooltip to it to provide more infos for an item.
+ */
+
 #define SETTING_SYSTEM_FONT_KEY "monospace-font-name"
 
 static GtkWidget *
