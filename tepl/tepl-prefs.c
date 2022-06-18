@@ -365,7 +365,7 @@ create_auto_save_component (GSettings   *settings,
 
 	checkbutton = create_checkbutton_simple (settings, auto_save_key, _("_Autosave files"));
 
-	label = gtk_label_new_with_mnemonic (_("_Number of minutes between each autosave:"));
+	label = gtk_label_new_with_mnemonic (_("Time in _minutes between each autosave:"));
 	spinbutton = gtk_spin_button_new_with_range (min, max, 1.0);
 	gtk_label_set_mnemonic_widget (GTK_LABEL (label), spinbutton);
 
