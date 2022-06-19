@@ -40,7 +40,13 @@ struct _TeplPrefsDialogClass
 };
 
 _TEPL_EXTERN
-GType		tepl_prefs_dialog_get_type		(void);
+GType			tepl_prefs_dialog_get_type		(void);
+
+_TEPL_EXTERN
+TeplPrefsDialog *	tepl_prefs_dialog_get_singleton		(void);
+
+G_GNUC_INTERNAL
+void			_tepl_prefs_dialog_unref_singleton	(void);
 
 G_END_DECLS
 
