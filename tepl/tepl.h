@@ -37,6 +37,7 @@
 #include <tepl/tepl-panel.h>
 #include <tepl/tepl-pango.h>
 #include <tepl/tepl-prefs.h>
+#include <tepl/tepl-prefs-dialog.h>
 #include <tepl/tepl-progress-info-bar.h>
 #include <tepl/tepl-settings.h>
 #include <tepl/tepl-signal-group.h>

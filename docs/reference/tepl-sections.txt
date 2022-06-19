@@ -407,6 +407,21 @@ tepl_prefs_create_files_component
 </SECTION>
 
 <SECTION>
+<FILE>prefs-dialog</FILE>
+<SUBSECTION Standard>
+TEPL_IS_PREFS_DIALOG
+TEPL_IS_PREFS_DIALOG_CLASS
+TEPL_PREFS_DIALOG
+TEPL_PREFS_DIALOG_CLASS
+TEPL_PREFS_DIALOG_GET_CLASS
+TEPL_TYPE_PREFS_DIALOG
+TeplPrefsDialog
+TeplPrefsDialogClass
+TeplPrefsDialogPrivate
+tepl_prefs_dialog_get_type
+</SECTION>
+
+<SECTION>
 <FILE>progress-info-bar</FILE>
 TeplProgressInfoBar
 tepl_progress_info_bar_new
