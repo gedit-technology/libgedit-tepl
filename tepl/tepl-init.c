@@ -10,6 +10,7 @@
 #include <unicode/uclean.h>
 #include "tepl-abstract-factory.h"
 #include "tepl-metadata-manager.h"
+#include "tepl-prefs-dialog.h"
 #include "tepl-settings.h"
 
 static gchar *
@@ -96,8 +97,9 @@ tepl_finalize (void)
 
 	if (!done)
 	{
-		_tepl_metadata_manager_unref_singleton ();
 		_tepl_abstract_factory_unref_singleton ();
+		_tepl_metadata_manager_unref_singleton ();
+		_tepl_prefs_dialog_unref_singleton ();
 		_tepl_settings_unref_singleton ();
 
 		/* Since Tepl depends on Amtk and GtkSourceView, it's better to
