@@ -59,6 +59,7 @@ tepl_prefs_dialog_get_singleton (void)
 	if (singleton == NULL)
 	{
 		singleton = g_object_new (TEPL_TYPE_PREFS_DIALOG, NULL);
+		g_object_ref_sink (singleton);
 	}
 
 	return singleton;
