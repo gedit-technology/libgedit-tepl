@@ -84,9 +84,19 @@ tepl_prefs_dialog_class_init (TeplPrefsDialogClass *klass)
 static void
 tepl_prefs_dialog_init (TeplPrefsDialog *dialog)
 {
+	GtkWidget *content_area;
+
 	dialog->priv = tepl_prefs_dialog_get_instance_private (dialog);
 
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Preferences"));
+
+	content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
+
+	/* When packing a GtkNotebook inside the content area, we don't want any
+	 * margin around the GtkNotebook. More generally, we can also control
+	 * the margins that we want with what we pack into the content area.
+	 */
+	gtk_container_set_border_width (GTK_CONTAINER (content_area), 0);
 }
 
 /**
