@@ -103,8 +103,6 @@ tepl_prefs_dialog_get_singleton (void)
 		singleton = g_object_new (TEPL_TYPE_PREFS_DIALOG,
 					  "use-header-bar", TRUE,
 					  NULL);
-
-		g_object_ref_sink (singleton);
 	}
 
 	return singleton;
