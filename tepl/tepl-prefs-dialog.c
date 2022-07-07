@@ -94,6 +94,22 @@ tepl_prefs_dialog_init (TeplPrefsDialog *dialog)
 
 	gtk_window_set_title (GTK_WINDOW (dialog), _("Preferences"));
 
+	/* Ideally this should be hide-when-parent-destroyed, but it isn't
+	 * implemented by GTK. A utils function could be implemented, but it's
+	 * more code (so more chances to get it wrong), and it doesn't really
+	 * worth it.
+	 *
+	 * So, keep things simple.
+	 *
+	 * When the app has several main windows opened, but on different
+	 * workspaces, it would be strange to keep the TeplPrefsDialog visible
+	 * when its parent is closed. So it needs to be hidden or destroyed.
+	 * Hidden is slightly better because a preferences dialog usually has a
+	 * GtkNotebook inside (or something similar), so it's better to keep the
+	 * same tab when showing again the preferences dialog.
+	 */
+	gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
+
 	content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
 	/* When packing a GtkNotebook inside the content area, we don't want any
