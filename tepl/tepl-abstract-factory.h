@@ -11,6 +11,7 @@
 
 #include <gtk/gtk.h>
 #include <tepl/tepl-file.h>
+#include <tepl/tepl-prefs-dialog.h>
 #include <tepl/tepl-tab.h>
 
 G_BEGIN_DECLS
@@ -47,6 +48,9 @@ struct _TeplAbstractFactory
  * @create_metadata_manager_file: Virtual function pointer for
  *   tepl_abstract_factory_create_metadata_manager_file(). It is not implemented
  *   by default.
+ * @fill_prefs_dialog: Virtual function pointer for
+ *   tepl_abstract_factory_fill_prefs_dialog(). It is not implemented by
+ *   default.
  */
 struct _TeplAbstractFactoryClass
 {
@@ -63,6 +67,9 @@ struct _TeplAbstractFactoryClass
 	TeplFile *		(* create_file)				(TeplAbstractFactory *factory);
 
 	GFile *			(* create_metadata_manager_file)	(TeplAbstractFactory *factory);
+
+	void			(* fill_prefs_dialog)			(TeplAbstractFactory *factory,
+									 TeplPrefsDialog     *dialog);
 
 	/*< private >*/
 	gpointer padding[12];
@@ -94,6 +101,10 @@ TeplFile *		tepl_abstract_factory_create_file		(TeplAbstractFactory *factory);
 _TEPL_EXTERN
 GFile *			tepl_abstract_factory_create_metadata_manager_file
 									(TeplAbstractFactory *factory);
+
+_TEPL_EXTERN
+void			tepl_abstract_factory_fill_prefs_dialog		(TeplAbstractFactory *factory,
+									 TeplPrefsDialog     *dialog);
 
 G_GNUC_INTERNAL
 void			_tepl_abstract_factory_unref_singleton		(void);

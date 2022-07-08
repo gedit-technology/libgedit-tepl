@@ -255,3 +255,26 @@ tepl_abstract_factory_create_metadata_manager_file (TeplAbstractFactory *factory
 	g_warning ("The TeplAbstractFactory::create_metadata_manager_file vfunc is not implemented.");
 	return NULL;
 }
+
+/**
+ * tepl_abstract_factory_fill_prefs_dialog:
+ * @factory: the #TeplAbstractFactory.
+ * @dialog: a #TeplPrefsDialog.
+ *
+ * @dialog is a newly-created #TeplPrefsDialog. This function fills @dialog with
+ * the intended content.
+ *
+ * Since: 6.2
+ */
+void
+tepl_abstract_factory_fill_prefs_dialog (TeplAbstractFactory *factory,
+					 TeplPrefsDialog     *dialog)
+{
+	g_return_if_fail (TEPL_IS_ABSTRACT_FACTORY (factory));
+	g_return_if_fail (TEPL_IS_PREFS_DIALOG (dialog));
+
+	if (TEPL_ABSTRACT_FACTORY_GET_CLASS (factory)->fill_prefs_dialog != NULL)
+	{
+		TEPL_ABSTRACT_FACTORY_GET_CLASS (factory)->fill_prefs_dialog (factory, dialog);
+	}
+}
