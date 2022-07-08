@@ -5,6 +5,7 @@
 #include "config.h"
 #include "tepl-prefs-dialog.h"
 #include <glib/gi18n-lib.h>
+#include "tepl-abstract-factory.h"
 
 /**
  * SECTION:prefs-dialog
@@ -13,6 +14,9 @@
  *
  * #TeplPrefsDialog is a subclass of #GtkDialog for configuring the preferences
  * of an application.
+ *
+ * tepl_abstract_factory_fill_prefs_dialog() is called by #TeplPrefsDialog
+ * during its construction.
  */
 
 struct _TeplPrefsDialogPrivate
@@ -110,9 +114,14 @@ tepl_prefs_dialog_get_singleton (void)
 {
 	if (singleton == NULL)
 	{
+		TeplAbstractFactory *factory;
+
 		singleton = g_object_new (TEPL_TYPE_PREFS_DIALOG,
 					  "use-header-bar", TRUE,
 					  NULL);
+
+		factory = tepl_abstract_factory_get_singleton ();
+		tepl_abstract_factory_fill_prefs_dialog (factory, singleton);
 	}
 
 	return singleton;
