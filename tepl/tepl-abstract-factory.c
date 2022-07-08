@@ -23,9 +23,7 @@
  *
  * Recommendation for the subclass name: in Tepl, #TeplAbstractFactory is an
  * abstract class, but in an application it is a concrete class. So
- * “MyappAbstractFactory” is not a good name for a #TeplAbstractFactory
- * subclass. “MyappFactory” is a better name (of course change “Myapp” with the
- * application namespace).
+ * “MyappFactory” is a better name than “MyappAbstractFactory”.
  */
 
 /* API design:
