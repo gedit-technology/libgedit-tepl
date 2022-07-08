@@ -17,14 +17,14 @@
   <part id="api-reference-text-editor-support">
     <title>API Reference - Text Editor Support</title>
 
-    <chapter id="preparation">
-      <title>Preparation</title>
+    <chapter id="general">
+      <title>General</title>
       <xi:include href="xml/init.xml"/>
+      <xi:include href="xml/abstract-factory.xml"/>
     </chapter>
 
     <chapter id="framework">
       <title>Framework</title>
-      <xi:include href="xml/abstract-factory.xml"/>
       <xi:include href="xml/application.xml"/>
       <xi:include href="xml/application-window.xml"/>
       <xi:include href="xml/tab-group.xml"/>

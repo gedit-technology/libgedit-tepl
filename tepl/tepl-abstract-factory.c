@@ -10,9 +10,9 @@
  * @Short_description: Abstract factory singleton class
  * @Title: TeplAbstractFactory
  *
- * The Tepl framework uses the #TeplAbstractFactory singleton to create some
- * objects and widgets. By creating a subclass of #TeplAbstractFactory (to
- * override the desired virtual functions) and setting the instance with
+ * Tepl uses the #TeplAbstractFactory singleton to create some objects and
+ * widgets. By creating a subclass of #TeplAbstractFactory (to override the
+ * desired virtual functions) and setting the instance with
  * tepl_abstract_factory_set_singleton(), an application can tell Tepl to create
  * custom objects and widgets.
  *
