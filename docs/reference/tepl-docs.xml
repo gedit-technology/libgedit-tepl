@@ -65,7 +65,6 @@
       <title>Misc</title>
       <xi:include href="xml/goto-line-bar.xml"/>
       <xi:include href="xml/iter.xml"/>
-      <xi:include href="xml/panel.xml"/>
       <xi:include href="xml/pango.xml"/>
       <xi:include href="xml/prefs.xml"/>
       <xi:include href="xml/prefs-dialog.xml"/>
@@ -100,6 +99,7 @@
     <chapter id="gtk-extras-other">
       <title>GTK Extras - Other</title>
       <xi:include href="xml/file-chooser.xml"/>
+      <xi:include href="xml/panel.xml"/>
     </chapter>
   </part>
 
