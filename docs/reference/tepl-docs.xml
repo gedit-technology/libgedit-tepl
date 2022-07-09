@@ -71,7 +71,6 @@
       <xi:include href="xml/space-drawer-prefs.xml"/>
       <xi:include href="xml/statusbar.xml"/>
       <xi:include href="xml/style-scheme-chooser-widget.xml"/>
-      <xi:include href="xml/utils.xml"/>
     </chapter>
   </part>
 
@@ -89,11 +88,6 @@
       <xi:include href="xml/metadata-manager.xml"/>
     </chapter>
 
-    <chapter id="pango-extras">
-      <title>Pango Extras</title>
-      <xi:include href="xml/pango.xml"/>
-    </chapter>
-
     <chapter id="gtk-extras-info-bars">
       <title>GTK Extras - Info Bars</title>
       <xi:include href="xml/info-bar.xml"/>
@@ -104,6 +98,12 @@
       <title>GTK Extras - Other</title>
       <xi:include href="xml/file-chooser.xml"/>
       <xi:include href="xml/panel.xml"/>
+    </chapter>
+
+    <chapter id="other-extras">
+      <title>Other Extras</title>
+      <xi:include href="xml/pango.xml"/>
+      <xi:include href="xml/utils.xml"/>
     </chapter>
   </part>
 
