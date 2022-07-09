@@ -65,7 +65,6 @@
       <title>Misc</title>
       <xi:include href="xml/goto-line-bar.xml"/>
       <xi:include href="xml/iter.xml"/>
-      <xi:include href="xml/pango.xml"/>
       <xi:include href="xml/prefs.xml"/>
       <xi:include href="xml/prefs-dialog.xml"/>
       <xi:include href="xml/settings.xml"/>
@@ -88,6 +87,11 @@
       <title>GIO Extras - File Metadata</title>
       <xi:include href="xml/metadata.xml"/>
       <xi:include href="xml/metadata-manager.xml"/>
+    </chapter>
+
+    <chapter id="pango-extras">
+      <title>Pango Extras</title>
+      <xi:include href="xml/pango.xml"/>
     </chapter>
 
     <chapter id="gtk-extras-info-bars">
