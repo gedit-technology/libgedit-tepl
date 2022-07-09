@@ -215,7 +215,13 @@ tepl_panel_add_component (TeplPanel   *panel,
  *
  * This function just stores @settings and @setting_key for further use by
  * tepl_panel_restore_state_from_gsettings() and
- * tepl_panel_save_state_to_gsettings().
+ * tepl_panel_save_state_to_gsettings(). It doesn't bind the #GSettings key to
+ * the property, because each main window containing a #TeplPanel needs to be
+ * able to have a different state, and have more control over when that state is
+ * restored and saved. Once a #TeplPanel is created and fully populated, the
+ * setting can be restored. The setting can be saved according to the current
+ * main window before creating a new main window, and of course on application
+ * exit.
  *
  * Note that only one @settings/@setting_key pair is stored by @panel for
  * further use, if you call this function twice on the same @panel, the second
