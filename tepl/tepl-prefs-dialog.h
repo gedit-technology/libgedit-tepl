@@ -48,6 +48,10 @@ TeplPrefsDialog *	tepl_prefs_dialog_get_singleton		(void);
 G_GNUC_INTERNAL
 void			_tepl_prefs_dialog_unref_singleton	(void);
 
+_TEPL_EXTERN
+void			tepl_prefs_dialog_show_for_parent	(TeplPrefsDialog *dialog,
+								 GtkWindow       *parent_window);
+
 G_END_DECLS
 
 #endif /* TEPL_PREFS_DIALOG_H */

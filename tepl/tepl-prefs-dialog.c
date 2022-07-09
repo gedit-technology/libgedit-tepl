@@ -151,3 +151,24 @@ _tepl_prefs_dialog_unref_singleton (void)
 		gtk_widget_destroy (GTK_WIDGET (singleton));
 	}
 }
+
+/**
+ * tepl_prefs_dialog_show_for_parent:
+ * @dialog: a #TeplPrefsDialog.
+ * @parent_window: the parent #GtkWindow.
+ *
+ * This function sets the #GtkWindow:transient-for property and presents
+ * @dialog.
+ *
+ * Since: 6.2
+ */
+void
+tepl_prefs_dialog_show_for_parent (TeplPrefsDialog *dialog,
+				   GtkWindow       *parent_window)
+{
+	g_return_if_fail (TEPL_IS_PREFS_DIALOG (dialog));
+	g_return_if_fail (GTK_IS_WINDOW (parent_window));
+
+	gtk_window_set_transient_for (GTK_WINDOW (dialog), parent_window);
+	gtk_window_present (GTK_WINDOW (dialog));
+}

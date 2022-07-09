@@ -410,6 +410,7 @@ tepl_prefs_create_files_component
 <SECTION>
 <FILE>prefs-dialog</FILE>
 tepl_prefs_dialog_get_singleton
+tepl_prefs_dialog_show_for_parent
 <SUBSECTION Standard>
 TEPL_IS_PREFS_DIALOG
 TEPL_IS_PREFS_DIALOG_CLASS
