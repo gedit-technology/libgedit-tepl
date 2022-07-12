@@ -1,3 +1,11 @@
+News in 6.1.2, 2022-07-12
+-------------------------
+* API stability is no longer guaranteed.
+
+* New features / API: see the index of new symbols in the reference
+  documentation (generated with gtk-doc).
+* Documentation improvements.
+
 News in 6.1.1, 2022-06-10
 -------------------------
 * New features / API: see the index of new symbols in the reference
