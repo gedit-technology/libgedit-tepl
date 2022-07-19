@@ -1149,24 +1149,6 @@ tepl_utils_override_font_string (GtkWidget   *widget,
 }
 
 /**
- * tepl_utils_override_font:
- * @widget: a #GtkWidget.
- * @font_str: (nullable): a string representation of a #PangoFontDescription, or
- *   %NULL to undo the effect of previous calls to this function on @widget.
- *
- * The old name for tepl_utils_override_font_string().
- *
- * Since: 6.0
- * Deprecated: 6.2
- */
-void
-tepl_utils_override_font (GtkWidget   *widget,
-			  const gchar *font_str)
-{
-	tepl_utils_override_font_string (widget, font_str);
-}
-
-/**
  * tepl_utils_get_titled_component:
  * @title: the title.
  * @component: a #GtkWidget.

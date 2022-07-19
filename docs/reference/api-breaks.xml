@@ -209,4 +209,20 @@
       </listitem>
     </itemizedlist>
   </chapter>
+
+  <chapter id="api-breaks-during-tepl-6">
+    <title>API breaks during Tepl 6</title>
+
+    <para>
+      Tepl 6.0 to Tepl 6.2:
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          The <code>tepl_utils_override_font()</code> function has been renamed
+          to <link linkend="tepl-utils-override-font-string">tepl_utils_override_font_string()</link>.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </chapter>
 </part>

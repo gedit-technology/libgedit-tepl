@@ -151,12 +151,6 @@ gboolean	tepl_utils_binding_transform_func_smart_bool	(GBinding     *binding,
 								 GValue       *to_value,
 								 gpointer      user_data);
 
-/* Deprecated */
-
-_TEPL_EXTERN
-void tepl_utils_override_font (GtkWidget   *widget,
-			       const gchar *font_str) G_GNUC_DEPRECATED_FOR (tepl_utils_override_font_string);
-
 G_END_DECLS
 
 #endif /* TEPL_UTILS_H */
