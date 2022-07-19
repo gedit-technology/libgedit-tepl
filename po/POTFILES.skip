@@ -1,2 +1,2 @@
 tepl/tepl-io-error-info-bar.c
-testsuite/test-file.c
+tests/unit-tests/test-file.c
