@@ -634,6 +634,7 @@ tepl_utils_override_font_description
 tepl_utils_override_font_string
 tepl_utils_get_titled_component
 tepl_utils_binding_transform_func_smart_bool
+tepl_utils_can_use_gsettings_schema
 </SECTION>
 
 <SECTION>

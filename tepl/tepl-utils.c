@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: 2000, 2002 - Chema Celorio, Paolo Maggi
  * SPDX-FileCopyrightText: 2003-2005 - Paolo Maggi
  *
- * SPDX-FileCopyrightText: 2016-2020 - Sébastien Wilmet <swilmet@gnome.org>
+ * SPDX-FileCopyrightText: 2016-2022 - Sébastien Wilmet <swilmet@gnome.org>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
@@ -1261,4 +1261,41 @@ tepl_utils_binding_transform_func_smart_bool (GBinding     *binding,
 	}
 
 	return FALSE;
+}
+
+/**
+ * tepl_utils_can_use_gsettings_schema:
+ * @schema_id: a #GSettings schema ID.
+ *
+ * Checks that a #GSettings schema exists.
+ *
+ * Especially useful for external #GSettings (provided by another application
+ * for instance).
+ *
+ * Returns: %TRUE if a #GSettings instance can be created with @schema_id.
+ *   %FALSE otherwise (in that case the program would crash).
+ * Since: 6.2
+ */
+gboolean
+tepl_utils_can_use_gsettings_schema (const gchar *schema_id)
+{
+	GSettingsSchemaSource *source;
+	GSettingsSchema *schema;
+
+	g_return_val_if_fail (schema_id != NULL, FALSE);
+
+	source = g_settings_schema_source_get_default ();
+	if (source == NULL)
+	{
+		return FALSE;
+	}
+
+	schema = g_settings_schema_source_lookup (source, schema_id, TRUE);
+	if (schema == NULL)
+	{
+		return FALSE;
+	}
+
+	g_settings_schema_unref (schema);
+	return TRUE;
 }

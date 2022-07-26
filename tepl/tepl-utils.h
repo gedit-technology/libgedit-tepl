@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2016-2020 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2016-2022 - Sébastien Wilmet <swilmet@gnome.org>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
@@ -150,6 +150,9 @@ gboolean	tepl_utils_binding_transform_func_smart_bool	(GBinding     *binding,
 								 const GValue *from_value,
 								 GValue       *to_value,
 								 gpointer      user_data);
+
+_TEPL_EXTERN
+gboolean	tepl_utils_can_use_gsettings_schema		(const gchar *schema_id);
 
 G_END_DECLS
 
