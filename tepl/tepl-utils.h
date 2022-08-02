@@ -154,6 +154,10 @@ gboolean	tepl_utils_binding_transform_func_smart_bool	(GBinding     *binding,
 _TEPL_EXTERN
 gboolean	tepl_utils_can_use_gsettings_schema		(const gchar *schema_id);
 
+_TEPL_EXTERN
+gboolean	tepl_utils_can_use_gsettings_key		(GSettings   *settings,
+								 const gchar *key);
+
 G_END_DECLS
 
 #endif /* TEPL_UTILS_H */

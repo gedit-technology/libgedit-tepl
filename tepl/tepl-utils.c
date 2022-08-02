@@ -1299,3 +1299,39 @@ tepl_utils_can_use_gsettings_schema (const gchar *schema_id)
 	g_settings_schema_unref (schema);
 	return TRUE;
 }
+
+/**
+ * tepl_utils_can_use_gsettings_key:
+ * @settings: a #GSettings object.
+ * @key: the key to introspect.
+ *
+ * Especially useful for external #GSettings (provided by another application
+ * for instance).
+ *
+ * See also: tepl_utils_can_use_gsettings_schema() which is typically used
+ * before this function.
+ *
+ * Returns: whether the #GSettings key exists.
+ * Since: 6.2
+ */
+gboolean
+tepl_utils_can_use_gsettings_key (GSettings   *settings,
+				  const gchar *key)
+{
+	GSettingsSchema *schema = NULL;
+	gboolean can_use;
+
+	g_return_val_if_fail (G_IS_SETTINGS (settings), FALSE);
+	g_return_val_if_fail (key != NULL, FALSE);
+
+	g_object_get (settings,
+		      "settings-schema", &schema,
+		      NULL);
+
+	g_return_val_if_fail (schema != NULL, FALSE);
+
+	can_use = g_settings_schema_has_key (schema, key);
+
+	g_settings_schema_unref (schema);
+	return can_use;
+}
