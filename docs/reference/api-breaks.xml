@@ -214,6 +214,11 @@
     <title>API breaks during Tepl 6</title>
 
     <para>
+      There are also ABI breaks not affecting the API, so just re-compiling the
+      program is sufficient in that case.
+    </para>
+
+    <para>
       Tepl 6.0 to Tepl 6.2:
     </para>
     <itemizedlist>
