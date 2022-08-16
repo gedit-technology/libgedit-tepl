@@ -6,7 +6,7 @@
 project(
   'tepl', 'c',
   meson_version: '>= 0.53',
-  version: '6.1.3',
+  version: '6.1.3', # Don't forget to increment lt_current too.
   default_options: ['warning_level=2']
 )
 
@@ -14,29 +14,17 @@ GNOME = import('gnome')
 PKG_CONFIG = import('pkgconfig')
 I18N = import('i18n')
 
-# Libtool versioning
+# Libtool versioning (for the soname).
+# See https://www.gnu.org/software/libtool/manual/html_node/Versioning.html for
+# the official docs.
 #
-# For development releases (if the minor package version is odd), keep the same
-# Libtool version.
+# For Tepl needs and to keep things simple, for *each* release (each release is
+# now only a development snapshot):
 #
-# For a new minor stable release (when incrementing the minor package version
-# to an even number), apply the following algorithm step by step:
-# 1. If the library source code has changed at all since the last
-#    update, then increment REVISION.
-# 2. If any exported functions or data have been added, removed, or
-#    changed since the last update, increment CURRENT and set REVISION
-#    to 0.
-# 3. If any exported functions or data have been added since the last
-#    public release, increment AGE.
-# 4. If any exported functions or data have been removed since the last
-#    public release, set AGE to 0.
-#
-# When incrementing the API version (usually for a new major package version),
-# set CURRENT, REVISION and AGE to 0 since it's like a new library.
-lt_current = 0
-lt_revision = 0
-lt_age = 0
-TEPL_LT_VERSION = '@0@.@1@.@2@'.format(lt_current, lt_revision, lt_age)
+# Just increment CURRENT.
+# REVISION and AGE are kept to 0.
+lt_current = 1
+TEPL_LT_VERSION = '@0@.0.0'.format(lt_current)
 
 # API version, used for parallel installability.
 TEPL_API_VERSION = '6'
