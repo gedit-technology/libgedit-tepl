@@ -8,6 +8,8 @@ The API is now **constantly unstable**, there can be API breaks for new
 versions. As a consequence, it is highly recommended to **bundle** Tepl with the
 program, and for the program to depend on a precise version of Tepl.
 
+The library soname is adapted for each release.
+
 Dependencies
 ------------
 

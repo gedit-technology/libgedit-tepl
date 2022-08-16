@@ -96,7 +96,8 @@
   <refsect1>
     <title>API stability</title>
     <para>
-      The API is now constantly unstable.
+      The API is now constantly unstable. The library soname is adapted for each
+      release.
     </para>
 
     <para>
