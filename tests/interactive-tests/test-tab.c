@@ -1,9 +1,8 @@
-/* SPDX-FileCopyrightText: 2016, 2020 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2016-2022 - Sébastien Wilmet <swilmet@gnome.org>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
 #include <tepl/tepl.h>
-#include "tepl/tepl-io-error-info-bar.h"
 #include <stdlib.h>
 
 static void
@@ -68,77 +67,12 @@ progress_cb (GtkButton *button,
 	gtk_widget_show (GTK_WIDGET (info_bar));
 }
 
-static void
-add_io_loading_error_info_bar (TeplTab *tab,
-			       GError  *error)
-{
-	GFile *location;
-	GtkSourceFile *file;
-	GtkSourceBuffer *buffer;
-	GtkSourceFileLoader *loader;
-	TeplIoErrorInfoBar *info_bar;
-
-	location = g_file_new_for_path ("/home/seb/test.c");
-	file = gtk_source_file_new ();
-	gtk_source_file_set_location (file, location);
-	buffer = gtk_source_buffer_new (NULL);
-	loader = gtk_source_file_loader_new (buffer, file);
-
-	info_bar = _tepl_io_error_info_bar_new ();
-	_tepl_io_error_info_bar_set_loading_error (info_bar, loader, error);
-
-	g_signal_connect (info_bar,
-			  "response",
-			  G_CALLBACK (info_bar_response_cb),
-			  NULL);
-
-	tepl_tab_add_info_bar (tab, GTK_INFO_BAR (info_bar));
-	gtk_widget_show (GTK_WIDGET (info_bar));
-
-	g_object_unref (location);
-	g_object_unref (file);
-	g_object_unref (buffer);
-	g_object_unref (loader);
-}
-
-static void
-permission_denied_cb (GtkButton *button,
-		      TeplTab   *tab)
-{
-	GError *error = g_error_new (G_IO_ERROR, G_IO_ERROR_PERMISSION_DENIED, "blah");
-	add_io_loading_error_info_bar (tab, error);
-	g_error_free (error);
-}
-
-static void
-not_found_cb (GtkButton *button,
-	      TeplTab   *tab)
-{
-	GError *error = g_error_new (G_IO_ERROR, G_IO_ERROR_NOT_FOUND, "blah");
-	add_io_loading_error_info_bar (tab, error);
-	g_error_free (error);
-}
-
-static void
-conversion_fallback_cb (GtkButton *button,
-			TeplTab   *tab)
-{
-	GError *error = g_error_new (GTK_SOURCE_FILE_LOADER_ERROR,
-				     GTK_SOURCE_FILE_LOADER_ERROR_CONVERSION_FALLBACK,
-				     "blah");
-	add_io_loading_error_info_bar (tab, error);
-	g_error_free (error);
-}
-
 static GtkWidget *
 create_side_panel (TeplTab *tab)
 {
 	GtkGrid *vgrid;
 	GtkWidget *basic;
 	GtkWidget *progress;
-	GtkWidget *permission_denied;
-	GtkWidget *not_found;
-	GtkWidget *conversion_fallback;
 
 	vgrid = GTK_GRID (gtk_grid_new ());
 	gtk_orientable_set_orientation (GTK_ORIENTABLE (vgrid), GTK_ORIENTATION_VERTICAL);
@@ -157,30 +91,6 @@ create_side_panel (TeplTab *tab)
 	g_signal_connect_object (progress,
 				 "clicked",
 				 G_CALLBACK (progress_cb),
-				 tab,
-				 0);
-
-	permission_denied = gtk_button_new_with_label ("Permission denied");
-	gtk_container_add (GTK_CONTAINER (vgrid), permission_denied);
-	g_signal_connect_object (permission_denied,
-				 "clicked",
-				 G_CALLBACK (permission_denied_cb),
-				 tab,
-				 0);
-
-	not_found = gtk_button_new_with_label ("Not found");
-	gtk_container_add (GTK_CONTAINER (vgrid), not_found);
-	g_signal_connect_object (not_found,
-				 "clicked",
-				 G_CALLBACK (not_found_cb),
-				 tab,
-				 0);
-
-	conversion_fallback = gtk_button_new_with_label ("Conversion fallback");
-	gtk_container_add (GTK_CONTAINER (vgrid), conversion_fallback);
-	g_signal_connect_object (conversion_fallback,
-				 "clicked",
-				 G_CALLBACK (conversion_fallback_cb),
 				 tab,
 				 0);
 
@@ -212,9 +122,9 @@ create_window_content (void)
 	return GTK_WIDGET (hgrid);
 }
 
-gint
-main (gint    argc,
-      gchar **argv)
+int
+main (int    argc,
+      char **argv)
 {
 	GtkWidget *window;
 
