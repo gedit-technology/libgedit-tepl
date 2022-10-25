@@ -1,11 +1,12 @@
 /* SPDX-FileCopyrightText: 2005 - Paolo Maggi
- * SPDX-FileCopyrightText: 2020 - Sébastien Wilmet <swilmet@gnome.org>
+ * SPDX-FileCopyrightText: 2020-2022 - Sébastien Wilmet <swilmet@gnome.org>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
 #include "config.h"
 #include "tepl-io-error-info-bars.h"
 #include <glib/gi18n-lib.h>
+#include "tepl-utils.h"
 
 /**
  * SECTION:io-error-info-bars
@@ -14,6 +15,19 @@
  *
  * Verbose error reporting for file I/O operations.
  */
+
+static gchar *
+get_filename_for_display (GFile *location)
+{
+	gchar *parse_name;
+	gchar *filename_for_display;
+
+	parse_name = g_file_get_parse_name (location);
+	filename_for_display = tepl_utils_replace_home_dir_with_tilde (parse_name);
+
+	g_free (parse_name);
+	return filename_for_display;
+}
 
 /**
  * tepl_io_error_info_bar_file_already_open:
@@ -31,31 +45,66 @@ TeplInfoBar *
 tepl_io_error_info_bar_file_already_open (GFile *location)
 {
 	TeplInfoBar *info_bar;
-	gchar *uri;
-	gchar *primary_msg;
+	gchar *filename;
+	gchar *filename_in_italic;
+	gchar *app_name_escaped;
+	gchar *primary_text;
+	gchar *primary_text_in_bold;
+	GtkLabel *primary_label;
+	gchar *secondary_msg;
 
 	g_return_val_if_fail (G_IS_FILE (location), NULL);
+	g_return_val_if_fail (g_get_application_name () != NULL, NULL);
 
 	info_bar = tepl_info_bar_new ();
+	gtk_info_bar_set_message_type (GTK_INFO_BAR (info_bar), GTK_MESSAGE_WARNING);
+	tepl_info_bar_set_icon_from_message_type (info_bar, TRUE);
+
+	/* Note that below the markup plus translatable strings is not handled
+	 * perfectly. But "perfect is the enemy of good". This should be:
+	 * "foo%sbar" with foo and bar both escaped.
+	 */
+
+	filename = get_filename_for_display (location);
+	filename_in_italic = g_markup_printf_escaped ("<i>%s</i>", filename);
+
+	app_name_escaped = tepl_utils_markup_escape_text (g_get_application_name ());
+
+	/* Translators: the first %s is a filename and the second %s is an
+	 * application name.
+	 */
+	primary_text = g_strdup_printf (_("This file (%s) is already open in another %s window."),
+					filename_in_italic,
+					app_name_escaped);
+	primary_text_in_bold = g_strdup_printf ("<b>%s</b>", primary_text);
+
+	primary_label = tepl_info_bar_create_label ();
+	gtk_label_set_markup (primary_label, primary_text_in_bold);
+	gtk_widget_show (GTK_WIDGET (primary_label));
+
+	tepl_info_bar_add_content_widget (info_bar,
+					  GTK_WIDGET (primary_label),
+					  TEPL_INFO_BAR_LOCATION_ALONGSIDE_ICON);
+
+	secondary_msg = g_strdup_printf (_("%s opened this instance of the file in a non-editable way. "
+					   "Do you want to edit it anyway?"),
+					 g_get_application_name ());
+	tepl_info_bar_add_secondary_message (info_bar, secondary_msg);
 
 	gtk_info_bar_add_button (GTK_INFO_BAR (info_bar),
 				 _("_Edit Anyway"),
 				 GTK_RESPONSE_YES);
 
 	gtk_info_bar_add_button (GTK_INFO_BAR (info_bar),
-				 _("_Don’t Edit"),
+				 _("_Keep Read-Only"),
 				 GTK_RESPONSE_CANCEL);
 
-	gtk_info_bar_set_message_type (GTK_INFO_BAR (info_bar), GTK_MESSAGE_WARNING);
-
-	uri = g_file_get_parse_name (location);
-	primary_msg = g_strdup_printf (_("This file “%s” is already open in another window."), uri);
-	tepl_info_bar_add_primary_message (info_bar, primary_msg);
-	g_free (uri);
-	g_free (primary_msg);
-
-	tepl_info_bar_add_secondary_message (info_bar, _("Do you want to edit it anyway?"));
-
+	g_free (filename);
+	g_free (filename_in_italic);
+	g_free (app_name_escaped);
+	g_free (primary_text);
+	g_free (primary_text_in_bold);
+	g_free (secondary_msg);
 	return info_bar;
 }
 
