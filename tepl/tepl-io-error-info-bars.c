@@ -245,33 +245,34 @@ TeplInfoBar *
 tepl_io_error_info_bar_invalid_characters (GFile *location)
 {
 	TeplInfoBar *info_bar;
-	gchar *uri;
+	gchar *filename;
 	gchar *primary_msg;
 	const gchar *secondary_msg;
 
 	g_return_val_if_fail (G_IS_FILE (location), NULL);
 
 	info_bar = tepl_info_bar_new ();
-
-	gtk_info_bar_add_button (GTK_INFO_BAR (info_bar),
-				 _("S_ave Anyway"),
-				 GTK_RESPONSE_YES);
-
-	gtk_info_bar_add_button (GTK_INFO_BAR (info_bar),
-				 _("_Don’t Save"),
-				 GTK_RESPONSE_CANCEL);
-
 	gtk_info_bar_set_message_type (GTK_INFO_BAR (info_bar), GTK_MESSAGE_WARNING);
+	tepl_info_bar_set_icon_from_message_type (info_bar, TRUE);
 
-	uri = g_file_get_parse_name (location);
-	primary_msg = g_strdup_printf (_("Some invalid characters have been detected while saving “%s”."), uri);
+	filename = get_filename_for_display (location);
+	primary_msg = g_strdup_printf (_("Some invalid characters have been detected while saving “%s”."),
+				       filename);
 	tepl_info_bar_add_primary_message (info_bar, primary_msg);
-	g_free (uri);
+	g_free (filename);
 	g_free (primary_msg);
 
 	secondary_msg = _("If you continue saving this file you can corrupt the document. "
 			  "Save anyway?");
 	tepl_info_bar_add_secondary_message (info_bar, secondary_msg);
+
+	gtk_info_bar_add_button (GTK_INFO_BAR (info_bar),
+				 _("_Save Anyway"),
+				 GTK_RESPONSE_YES);
+
+	gtk_info_bar_add_button (GTK_INFO_BAR (info_bar),
+				 _("_Don’t Save"),
+				 GTK_RESPONSE_CANCEL);
 
 	return info_bar;
 }
