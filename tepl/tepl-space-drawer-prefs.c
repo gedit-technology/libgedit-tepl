@@ -5,6 +5,7 @@
 #include "config.h"
 #include "tepl-space-drawer-prefs.h"
 #include <glib/gi18n-lib.h>
+#include "tepl-utils.h"
 
 /**
  * SECTION:space-drawer-prefs
@@ -204,7 +205,7 @@ create_subtitle_label (const gchar *str)
 	gchar *str_in_bold;
 	GtkWidget *label;
 
-	str_escaped = g_markup_escape_text (str, -1);
+	str_escaped = tepl_utils_markup_escape_text (str);
 	str_in_bold = g_strdup_printf ("<b>%s</b>", str_escaped);
 
 	label = gtk_label_new (str_in_bold);
