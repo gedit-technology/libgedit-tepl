@@ -121,13 +121,12 @@ tepl_io_error_info_bar_file_already_open (GFile *location)
  * Returns: (transfer floating): the newly created #TeplInfoBar.
  * Since: 5.0
  */
-/* TODO add another possible action: save as? */
 TeplInfoBar *
 tepl_io_error_info_bar_cant_create_backup (GFile        *location,
 					   const GError *error)
 {
 	TeplInfoBar *info_bar;
-	gchar *uri;
+	gchar *filename;
 	gchar *primary_msg;
 	const gchar *secondary_msg;
 
@@ -135,21 +134,13 @@ tepl_io_error_info_bar_cant_create_backup (GFile        *location,
 	g_return_val_if_fail (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANT_CREATE_BACKUP), NULL);
 
 	info_bar = tepl_info_bar_new ();
-
-	gtk_info_bar_add_button (GTK_INFO_BAR (info_bar),
-				 _("S_ave Anyway"),
-				 GTK_RESPONSE_YES);
-
-	gtk_info_bar_add_button (GTK_INFO_BAR (info_bar),
-				 _("_Don’t Save"),
-				 GTK_RESPONSE_CANCEL);
-
 	gtk_info_bar_set_message_type (GTK_INFO_BAR (info_bar), GTK_MESSAGE_WARNING);
+	tepl_info_bar_set_icon_from_message_type (info_bar, TRUE);
 
-	uri = g_file_get_parse_name (location);
-	primary_msg = g_strdup_printf (_("Could not create a backup file while saving “%s”"), uri);
+	filename = get_filename_for_display (location);
+	primary_msg = g_strdup_printf (_("Could not create a backup file while saving “%s”."), filename);
 	tepl_info_bar_add_primary_message (info_bar, primary_msg);
-	g_free (uri);
+	g_free (filename);
 	g_free (primary_msg);
 
 	secondary_msg = _("Could not back up the old copy of the file before saving the new one. "
@@ -165,6 +156,14 @@ tepl_io_error_info_bar_cant_create_backup (GFile        *location,
 		tepl_info_bar_add_secondary_message (info_bar, error_msg);
 		g_free (error_msg);
 	}
+
+	gtk_info_bar_add_button (GTK_INFO_BAR (info_bar),
+				 _("_Save Anyway"),
+				 GTK_RESPONSE_YES);
+
+	gtk_info_bar_add_button (GTK_INFO_BAR (info_bar),
+				 _("_Don’t Save"),
+				 GTK_RESPONSE_CANCEL);
 
 	return info_bar;
 }
