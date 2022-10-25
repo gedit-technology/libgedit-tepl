@@ -88,6 +88,30 @@ already_open_cb (GtkButton *button,
 	g_object_unref (location);
 }
 
+static void
+cant_create_backup_cb (GtkButton *button,
+		       TeplTab   *tab)
+{
+	GFile *location;
+	GError *error;
+	TeplInfoBar *info_bar;
+
+	location = g_file_new_for_path ("/home/user/file");
+	error = g_error_new_literal (G_IO_ERROR, G_IO_ERROR_CANT_CREATE_BACKUP, "error message");
+	info_bar = tepl_io_error_info_bar_cant_create_backup (location, error);
+
+	g_signal_connect (info_bar,
+			  "response",
+			  G_CALLBACK (info_bar_response_cb),
+			  NULL);
+
+	tepl_tab_add_info_bar (tab, GTK_INFO_BAR (info_bar));
+	gtk_widget_show (GTK_WIDGET (info_bar));
+
+	g_object_unref (location);
+	g_error_free (error);
+}
+
 static GtkWidget *
 create_side_panel (TeplTab *tab)
 {
@@ -95,6 +119,7 @@ create_side_panel (TeplTab *tab)
 	GtkWidget *basic;
 	GtkWidget *progress;
 	GtkWidget *already_open;
+	GtkWidget *cant_create_backup;
 
 	vgrid = GTK_GRID (gtk_grid_new ());
 	gtk_orientable_set_orientation (GTK_ORIENTABLE (vgrid), GTK_ORIENTATION_VERTICAL);
@@ -121,6 +146,14 @@ create_side_panel (TeplTab *tab)
 	g_signal_connect_object (already_open,
 				 "clicked",
 				 G_CALLBACK (already_open_cb),
+				 tab,
+				 0);
+
+	cant_create_backup = gtk_button_new_with_label ("Can't create backup");
+	gtk_container_add (GTK_CONTAINER (vgrid), cant_create_backup);
+	g_signal_connect_object (cant_create_backup,
+				 "clicked",
+				 G_CALLBACK (cant_create_backup_cb),
 				 tab,
 				 0);
 
