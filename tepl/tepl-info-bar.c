@@ -3,6 +3,7 @@
  */
 
 #include "tepl-info-bar.h"
+#include "tepl-utils.h"
 
 /**
  * SECTION:info-bar
@@ -492,7 +493,7 @@ tepl_info_bar_add_primary_message (TeplInfoBar *info_bar,
 	g_return_if_fail (TEPL_IS_INFO_BAR (info_bar));
 	g_return_if_fail (primary_msg != NULL);
 
-	primary_msg_escaped = g_markup_escape_text (primary_msg, -1);
+	primary_msg_escaped = tepl_utils_markup_escape_text (primary_msg);
 	primary_markup = g_strdup_printf ("<b>%s</b>", primary_msg_escaped);
 	primary_label = tepl_info_bar_create_label ();
 	gtk_label_set_markup (primary_label, primary_markup);
@@ -525,7 +526,7 @@ tepl_info_bar_add_secondary_message (TeplInfoBar *info_bar,
 	g_return_if_fail (TEPL_IS_INFO_BAR (info_bar));
 	g_return_if_fail (secondary_msg != NULL);
 
-	secondary_msg_escaped = g_markup_escape_text (secondary_msg, -1);
+	secondary_msg_escaped = tepl_utils_markup_escape_text (secondary_msg);
 	secondary_markup = g_strdup_printf ("<small>%s</small>", secondary_msg_escaped);
 	secondary_label = tepl_info_bar_create_label ();
 	gtk_label_set_markup (secondary_label, secondary_markup);
