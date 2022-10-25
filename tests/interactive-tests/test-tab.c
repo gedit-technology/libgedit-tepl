@@ -67,12 +67,34 @@ progress_cb (GtkButton *button,
 	gtk_widget_show (GTK_WIDGET (info_bar));
 }
 
+static void
+already_open_cb (GtkButton *button,
+		 TeplTab   *tab)
+{
+	GFile *location;
+	TeplInfoBar *info_bar;
+
+	location = g_file_new_for_path ("/home/user/file");
+	info_bar = tepl_io_error_info_bar_file_already_open (location);
+
+	g_signal_connect (info_bar,
+			  "response",
+			  G_CALLBACK (info_bar_response_cb),
+			  NULL);
+
+	tepl_tab_add_info_bar (tab, GTK_INFO_BAR (info_bar));
+	gtk_widget_show (GTK_WIDGET (info_bar));
+
+	g_object_unref (location);
+}
+
 static GtkWidget *
 create_side_panel (TeplTab *tab)
 {
 	GtkGrid *vgrid;
 	GtkWidget *basic;
 	GtkWidget *progress;
+	GtkWidget *already_open;
 
 	vgrid = GTK_GRID (gtk_grid_new ());
 	gtk_orientable_set_orientation (GTK_ORIENTABLE (vgrid), GTK_ORIENTATION_VERTICAL);
@@ -91,6 +113,14 @@ create_side_panel (TeplTab *tab)
 	g_signal_connect_object (progress,
 				 "clicked",
 				 G_CALLBACK (progress_cb),
+				 tab,
+				 0);
+
+	already_open = gtk_button_new_with_label ("Already open");
+	gtk_container_add (GTK_CONTAINER (vgrid), already_open);
+	g_signal_connect_object (already_open,
+				 "clicked",
+				 G_CALLBACK (already_open_cb),
 				 tab,
 				 0);
 
