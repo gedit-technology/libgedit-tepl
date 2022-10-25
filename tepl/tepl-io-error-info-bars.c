@@ -178,7 +178,7 @@ tepl_io_error_info_bar_cant_create_backup (GFile        *location,
  * actions:
  * - Depending on @document_modified, "Reload" or "Drop changes and reload":
  *   %GTK_RESPONSE_OK.
- * - A close button as added with gtk_info_bar_set_show_close_button().
+ * - Ignore: %GTK_RESPONSE_CLOSE.
  *
  * Returns: (transfer floating): the newly created #TeplInfoBar.
  * Since: 5.0
@@ -188,27 +188,43 @@ tepl_io_error_info_bar_externally_modified (GFile    *location,
 					    gboolean  document_modified)
 {
 	TeplInfoBar *info_bar;
-	gchar *uri;
+	gchar *filename;
 	gchar *primary_msg;
+	const gchar *secondary_msg;
 	const gchar *button_text;
 
 	g_return_val_if_fail (G_IS_FILE (location), NULL);
 
 	info_bar = tepl_info_bar_new ();
+	gtk_info_bar_set_message_type (GTK_INFO_BAR (info_bar), GTK_MESSAGE_WARNING);
+	tepl_info_bar_set_icon_from_message_type (info_bar, TRUE);
 
-	uri = g_file_get_parse_name (location);
-	primary_msg = g_strdup_printf (_("The file “%s” changed on disk."), uri);
+	filename = get_filename_for_display (location);
+	primary_msg = g_strdup_printf (_("The file “%s” changed on disk."), filename);
 	tepl_info_bar_add_primary_message (info_bar, primary_msg);
-	g_free (uri);
+	g_free (filename);
 	g_free (primary_msg);
+
+	if (document_modified)
+	{
+		secondary_msg = _("This document has unsaved modifications. "
+				  "Do you want to drop your changes and reload the file?");
+	}
+	else
+	{
+		secondary_msg = _("Do you want to reload the file?");
+	}
+
+	tepl_info_bar_add_secondary_message (info_bar, secondary_msg);
 
 	button_text = document_modified ? _("Drop Changes and _Reload") : _("_Reload");
 	gtk_info_bar_add_button (GTK_INFO_BAR (info_bar),
 				 button_text,
 				 GTK_RESPONSE_OK);
 
-	gtk_info_bar_set_show_close_button (GTK_INFO_BAR (info_bar), TRUE);
-	gtk_info_bar_set_message_type (GTK_INFO_BAR (info_bar), GTK_MESSAGE_WARNING);
+	gtk_info_bar_add_button (GTK_INFO_BAR (info_bar),
+				 _("_Ignore"),
+				 GTK_RESPONSE_CLOSE);
 
 	return info_bar;
 }
