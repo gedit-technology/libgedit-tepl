@@ -711,9 +711,7 @@ tepl_info_bar_create_label (void)
 	 * See:
 	 * https://wiki.gnome.org/HowDoI/Labels
 	 *
-	 * There is also a safety net in tepl_tab_add_info_bar() which calls
-	 * gtk_widget_set_size_request() on the GtkInfoBar, to set a minimum
-	 * width.
+	 * There is also a safety net with _tepl_info_bar_set_size_request().
 	 */
 	gtk_label_set_width_chars (label, 30);
 
