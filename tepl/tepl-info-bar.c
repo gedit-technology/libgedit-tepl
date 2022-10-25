@@ -501,8 +501,9 @@ tepl_info_bar_add_primary_message (TeplInfoBar *info_bar,
 	g_free (primary_msg_escaped);
 
 	gtk_widget_show (GTK_WIDGET (primary_label));
-	gtk_container_add (GTK_CONTAINER (info_bar->priv->vgrid_alongside_icon),
-			   GTK_WIDGET (primary_label));
+	tepl_info_bar_add_content_widget (info_bar,
+					  GTK_WIDGET (primary_label),
+					  TEPL_INFO_BAR_LOCATION_ALONGSIDE_ICON);
 }
 
 /**
@@ -534,8 +535,9 @@ tepl_info_bar_add_secondary_message (TeplInfoBar *info_bar,
 	g_free (secondary_msg_escaped);
 
 	gtk_widget_show (GTK_WIDGET (secondary_label));
-	gtk_container_add (GTK_CONTAINER (info_bar->priv->vgrid_alongside_icon),
-			   GTK_WIDGET (secondary_label));
+	tepl_info_bar_add_content_widget (info_bar,
+					  GTK_WIDGET (secondary_label),
+					  TEPL_INFO_BAR_LOCATION_ALONGSIDE_ICON);
 }
 
 /**
