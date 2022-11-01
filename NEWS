@@ -1,3 +1,9 @@
+News in 6.2.0, 2022-11-02
+-------------------------
+* Remove deprecated API.
+* Add some new API (see the reference documentation).
+* Small improvements.
+
 News in 6.1.2, 2022-07-12
 -------------------------
 * API stability is no longer guaranteed.
