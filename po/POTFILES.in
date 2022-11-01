@@ -19,6 +19,7 @@ tepl/tepl-language-chooser.c
 tepl/tepl-language-chooser-dialog.c
 tepl/tepl-language-chooser-widget.c
 tepl/tepl-menu-shell.c
+tepl/tepl-menu-stack-switcher.c
 tepl/tepl-metadata-attic.c
 tepl/tepl-metadata.c
 tepl/tepl-metadata-manager.c
