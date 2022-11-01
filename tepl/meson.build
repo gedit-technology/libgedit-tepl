@@ -86,6 +86,7 @@ tepl_public_c_files = [
 
 TEPL_PRIVATE_HEADERS = [
   'tepl-close-confirm-dialog-single.h',
+  'tepl-container-helper.h',
   'tepl-icu.h',
   'tepl-metadata-attic.h',
   'tepl-metadata-parser.h',
@@ -96,6 +97,7 @@ TEPL_PRIVATE_HEADERS = [
 
 tepl_private_c_files = [
   'tepl-close-confirm-dialog-single.c',
+  'tepl-container-helper.c',
   'tepl-icu.c',
   'tepl-metadata-attic.c',
   'tepl-metadata-parser.c',

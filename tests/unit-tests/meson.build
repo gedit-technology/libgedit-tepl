@@ -1,4 +1,5 @@
 unit_tests = [
+  'test-container-helper',
   'test-file',
   'test-file-loader',
   'test-file-saver',
