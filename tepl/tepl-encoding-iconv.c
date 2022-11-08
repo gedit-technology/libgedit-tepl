@@ -369,9 +369,11 @@ tepl_encoding_iconv_get_charset (const TeplEncodingIconv *enc)
  * tepl_encoding_iconv_to_string:
  * @enc: a #TeplEncodingIconv.
  *
- * Returns the encoding name with the charset in parenthesis, for example
- * "Unicode (UTF-8)". If the name is unknown, just the charset is returned. The
- * name is translated by gettext.
+ * Returns the encoding category name with the charset in parenthesis, for
+ * example "Unicode (UTF-8)". If the category name is unknown, just the charset
+ * is returned.
+ *
+ * The category name is localized (translated).
  *
  * Returns: a string representation. Free with g_free() when no longer needed.
  * Since: 2.0
