@@ -295,6 +295,54 @@ connect_stack_signals (TeplMenuStackSwitcher *switcher)
 }
 
 static void
+create_menu_button_title (TeplMenuStackSwitcher *switcher)
+{
+	GtkGrid *hgrid;
+	GtkStyleContext *style_context;
+	GtkWidget *down_arrow;
+
+	hgrid = GTK_GRID (gtk_grid_new ());
+	gtk_grid_set_column_spacing (hgrid, 6);
+
+	switcher->priv->title = GTK_LABEL (gtk_label_new (NULL));
+	gtk_container_add (GTK_CONTAINER (hgrid),
+			   GTK_WIDGET (switcher->priv->title));
+
+	/* To use a TeplMenuStackSwitcher in a GtkHeaderBar.
+	 * If we want to use it outside an headerbar, this should be made
+	 * configurable with additional API.
+	 */
+	style_context = gtk_widget_get_style_context (GTK_WIDGET (switcher->priv->title));
+	gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_TITLE);
+
+	down_arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
+	gtk_container_add (GTK_CONTAINER (hgrid), down_arrow);
+
+	gtk_widget_set_valign (GTK_WIDGET (hgrid), GTK_ALIGN_CENTER);
+	gtk_widget_show_all (GTK_WIDGET (hgrid));
+	gtk_container_add (GTK_CONTAINER (switcher),
+			   GTK_WIDGET (hgrid));
+}
+
+static void
+create_popover (TeplMenuStackSwitcher *switcher)
+{
+	GtkPopover *popover;
+
+	popover = GTK_POPOVER (gtk_popover_new (GTK_WIDGET (switcher)));
+	gtk_popover_set_position (popover, GTK_POS_BOTTOM);
+
+	switcher->priv->button_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+	gtk_widget_show (switcher->priv->button_box);
+	gtk_container_add (GTK_CONTAINER (popover), switcher->priv->button_box);
+
+	switcher->priv->buttons = g_hash_table_new (g_direct_hash, g_direct_equal);
+
+	gtk_menu_button_set_popover (GTK_MENU_BUTTON (switcher),
+				     GTK_WIDGET (popover));
+}
+
+static void
 tepl_menu_stack_switcher_get_property (GObject    *object,
 				       guint       prop_id,
 				       GValue     *value,
@@ -382,54 +430,6 @@ tepl_menu_stack_switcher_class_init (TeplMenuStackSwitcherClass *klass)
 				     G_PARAM_STATIC_STRINGS);
 
 	g_object_class_install_properties (object_class, N_PROPERTIES, properties);
-}
-
-static void
-create_menu_button_title (TeplMenuStackSwitcher *switcher)
-{
-	GtkGrid *hgrid;
-	GtkStyleContext *style_context;
-	GtkWidget *down_arrow;
-
-	hgrid = GTK_GRID (gtk_grid_new ());
-	gtk_grid_set_column_spacing (hgrid, 6);
-
-	switcher->priv->title = GTK_LABEL (gtk_label_new (NULL));
-	gtk_container_add (GTK_CONTAINER (hgrid),
-			   GTK_WIDGET (switcher->priv->title));
-
-	/* To use a TeplMenuStackSwitcher in a GtkHeaderBar.
-	 * If we want to use it outside an headerbar, this should be made
-	 * configurable with additional API.
-	 */
-	style_context = gtk_widget_get_style_context (GTK_WIDGET (switcher->priv->title));
-	gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_TITLE);
-
-	down_arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
-	gtk_container_add (GTK_CONTAINER (hgrid), down_arrow);
-
-	gtk_widget_set_valign (GTK_WIDGET (hgrid), GTK_ALIGN_CENTER);
-	gtk_widget_show_all (GTK_WIDGET (hgrid));
-	gtk_container_add (GTK_CONTAINER (switcher),
-			   GTK_WIDGET (hgrid));
-}
-
-static void
-create_popover (TeplMenuStackSwitcher *switcher)
-{
-	GtkPopover *popover;
-
-	popover = GTK_POPOVER (gtk_popover_new (GTK_WIDGET (switcher)));
-	gtk_popover_set_position (popover, GTK_POS_BOTTOM);
-
-	switcher->priv->button_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-	gtk_widget_show (switcher->priv->button_box);
-	gtk_container_add (GTK_CONTAINER (popover), switcher->priv->button_box);
-
-	switcher->priv->buttons = g_hash_table_new (g_direct_hash, g_direct_equal);
-
-	gtk_menu_button_set_popover (GTK_MENU_BUTTON (switcher),
-				     GTK_WIDGET (popover));
 }
 
 static void
