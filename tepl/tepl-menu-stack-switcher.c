@@ -35,15 +35,15 @@ clear_button_box (TeplMenuStackSwitcher *switcher)
 }
 
 static void
-on_button_clicked (GtkWidget             *widget,
+on_button_clicked (GtkButton             *button,
                    TeplMenuStackSwitcher *switcher)
 {
 	if (!switcher->priv->in_child_changed)
 	{
-		GtkWidget *child;
+		GtkWidget *stack_child;
 
-		child = g_object_get_data (G_OBJECT (widget), "stack-child");
-		gtk_stack_set_visible_child (switcher->priv->stack, child);
+		stack_child = g_object_get_data (G_OBJECT (button), "stack-child");
+		gtk_stack_set_visible_child (switcher->priv->stack, stack_child);
 		gtk_widget_hide (switcher->priv->popover);
 	}
 }
