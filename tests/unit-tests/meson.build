@@ -8,7 +8,8 @@ unit_tests = [
   'test-metadata',
   'test-metadata-manager',
   'test-notebook',
-  'test-utils'
+  'test-utils',
+  'test-view',
 ]
 
 foreach test_name : unit_tests
