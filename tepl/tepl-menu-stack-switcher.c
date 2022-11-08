@@ -8,7 +8,12 @@
 struct _TeplMenuStackSwitcherPrivate
 {
 	GtkStack *stack;
-	GtkLabel *label;
+
+	/* The title of the GtkMenuButton (the title of the currently visible
+	 * child of the stack).
+	 */
+	GtkLabel *title;
+
 	GtkWidget *button_box;
 	GtkWidget *popover;
 	GHashTable *buttons;
@@ -43,7 +48,7 @@ update_title_label (TeplMenuStackSwitcher *switcher)
 					 NULL);
 	}
 
-	gtk_label_set_label (switcher->priv->label, title);
+	gtk_label_set_label (switcher->priv->title, title);
 	g_free (title);
 }
 
@@ -201,7 +206,7 @@ on_child_changed (GtkWidget             *widget,
 					 "title", &title,
 					 NULL);
 
-		gtk_label_set_label (switcher->priv->label, title);
+		gtk_label_set_label (switcher->priv->title, title);
 		g_free (title);
 	}
 
@@ -369,14 +374,14 @@ tepl_menu_stack_switcher_init (TeplMenuStackSwitcher *switcher)
 	gtk_box_pack_end (GTK_BOX (box), arrow, FALSE, TRUE, 0);
 	gtk_widget_set_valign (arrow, GTK_ALIGN_BASELINE);
 
-	switcher->priv->label = GTK_LABEL (gtk_label_new (NULL));
-	gtk_widget_set_valign (GTK_WIDGET (switcher->priv->label), GTK_ALIGN_BASELINE);
-	gtk_box_pack_start (GTK_BOX (box), GTK_WIDGET (switcher->priv->label), TRUE, TRUE, 6);
+	switcher->priv->title = GTK_LABEL (gtk_label_new (NULL));
+	gtk_widget_set_valign (GTK_WIDGET (switcher->priv->title), GTK_ALIGN_BASELINE);
+	gtk_box_pack_start (GTK_BOX (box), GTK_WIDGET (switcher->priv->title), TRUE, TRUE, 6);
 
 	// FIXME: this is not correct if this widget becomes more generic
 	// and used also outside the header bar, but for now we just want
 	// the same style as title labels
-	context = gtk_widget_get_style_context (GTK_WIDGET (switcher->priv->label));
+	context = gtk_widget_get_style_context (GTK_WIDGET (switcher->priv->title));
 	gtk_style_context_add_class (context, "title");
 
 	gtk_widget_show_all (box);
