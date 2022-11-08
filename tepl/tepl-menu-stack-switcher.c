@@ -31,9 +31,6 @@ struct _TeplMenuStackSwitcherPrivate
 
 	/* Part of the GtkPopover. */
 	GtkWidget *button_box;
-	GHashTable *buttons;
-
-	guint in_visible_child_notify : 1;
 };
 
 enum
@@ -94,17 +91,14 @@ static void
 on_button_clicked (GtkButton             *button,
                    TeplMenuStackSwitcher *switcher)
 {
-	if (!switcher->priv->in_visible_child_notify)
-	{
-		GtkWidget *stack_child;
-		GtkPopover *popover;
+	GtkWidget *stack_child;
+	GtkPopover *popover;
 
-		stack_child = g_object_get_data (G_OBJECT (button), STACK_CHILD_KEY);
-		gtk_stack_set_visible_child (switcher->priv->stack, stack_child);
+	stack_child = g_object_get_data (G_OBJECT (button), STACK_CHILD_KEY);
+	gtk_stack_set_visible_child (switcher->priv->stack, stack_child);
 
-		popover = gtk_menu_button_get_popover (GTK_MENU_BUTTON (switcher));
-		gtk_widget_hide (GTK_WIDGET (popover));
-	}
+	popover = gtk_menu_button_get_popover (GTK_MENU_BUTTON (switcher));
+	gtk_widget_hide (GTK_WIDGET (popover));
 }
 
 static void
@@ -143,38 +137,6 @@ update_button (TeplMenuStackSwitcher *switcher,
 }
 
 static void
-on_title_visible_updated (GtkWidget             *stack_child,
-			  GParamSpec            *pspec,
-			  TeplMenuStackSwitcher *switcher)
-{
-	GtkButton *button;
-
-	button = g_hash_table_lookup (switcher->priv->buttons, stack_child);
-	update_button (switcher, stack_child, button);
-}
-
-static void
-on_position_updated (GtkWidget             *stack_child,
-		     GParamSpec            *pspec,
-		     TeplMenuStackSwitcher *switcher)
-{
-	GtkWidget *button;
-	gint position;
-
-	button = g_hash_table_lookup (switcher->priv->buttons, stack_child);
-
-	gtk_container_child_get (GTK_CONTAINER (switcher->priv->stack),
-				 stack_child,
-				 "position", &position,
-				 NULL);
-
-	/* TODO: fix bug with the position not taken into account *initially*
-	 * when populating the button_box.
-	 */
-	gtk_box_reorder_child (GTK_BOX (switcher->priv->button_box), button, position);
-}
-
-static void
 add_child (TeplMenuStackSwitcher *switcher,
 	   GtkWidget             *stack_child)
 {
@@ -199,11 +161,6 @@ add_child (TeplMenuStackSwitcher *switcher,
 
 	g_object_set_data (G_OBJECT (button), STACK_CHILD_KEY, stack_child);
 	g_signal_connect (button, "clicked", G_CALLBACK (on_button_clicked), switcher);
-	g_signal_connect (stack_child, "notify::visible", G_CALLBACK (on_title_visible_updated), switcher);
-	g_signal_connect (stack_child, "child-notify::title", G_CALLBACK (on_title_visible_updated), switcher);
-	g_signal_connect (stack_child, "child-notify::position", G_CALLBACK (on_position_updated), switcher);
-
-	g_hash_table_insert (switcher->priv->buttons, stack_child, button);
 }
 
 static void
@@ -220,86 +177,6 @@ populate_button_box (TeplMenuStackSwitcher *switcher)
 		add_child (switcher, stack_child);
 	}
 	g_list_free (children);
-}
-
-static void
-stack_visible_child_notify_cb (GtkStack              *stack,
-			       GParamSpec            *pspec,
-			       TeplMenuStackSwitcher *switcher)
-{
-	GtkWidget *visible_child;
-	GtkToggleButton *button;
-
-	visible_child = gtk_stack_get_visible_child (stack);
-	if (visible_child == NULL)
-	{
-		return;
-	}
-
-	button = g_hash_table_lookup (switcher->priv->buttons, visible_child);
-	if (button != NULL)
-	{
-		switcher->priv->in_visible_child_notify = TRUE;
-		gtk_toggle_button_set_active (button, TRUE);
-		switcher->priv->in_visible_child_notify = FALSE;
-	}
-}
-
-static void
-on_stack_child_added (GtkStack              *stack,
-		      GtkWidget             *stack_child,
-		      TeplMenuStackSwitcher *switcher)
-{
-	add_child (switcher, stack_child);
-}
-
-static void
-on_stack_child_removed (GtkStack              *stack,
-			GtkWidget             *stack_child,
-			TeplMenuStackSwitcher *switcher)
-{
-	GtkButton *button;
-
-	g_signal_handlers_disconnect_by_func (stack_child, on_title_visible_updated, switcher);
-	g_signal_handlers_disconnect_by_func (stack_child, on_position_updated, switcher);
-
-	button = g_hash_table_lookup (switcher->priv->buttons, stack_child);
-	gtk_container_remove (GTK_CONTAINER (switcher->priv->button_box),
-			      GTK_WIDGET (button));
-	g_hash_table_remove (switcher->priv->buttons, stack_child);
-}
-
-static void
-disconnect_stack_signals (TeplMenuStackSwitcher *switcher)
-{
-	g_signal_handlers_disconnect_by_func (switcher->priv->stack, on_stack_child_added, switcher);
-	g_signal_handlers_disconnect_by_func (switcher->priv->stack, on_stack_child_removed, switcher);
-	g_signal_handlers_disconnect_by_func (switcher->priv->stack, stack_visible_child_notify_cb, switcher);
-	g_signal_handlers_disconnect_by_func (switcher->priv->stack, disconnect_stack_signals, switcher);
-}
-
-static void
-connect_stack_signals (TeplMenuStackSwitcher *switcher)
-{
-	g_signal_connect (switcher->priv->stack,
-			  "add",
-			  G_CALLBACK (on_stack_child_added),
-			  switcher);
-
-	g_signal_connect (switcher->priv->stack,
-			  "remove",
-			  G_CALLBACK (on_stack_child_removed),
-			  switcher);
-
-	g_signal_connect (switcher->priv->stack,
-			  "notify::visible-child",
-			  G_CALLBACK (stack_visible_child_notify_cb),
-			  switcher);
-
-	g_signal_connect_swapped (switcher->priv->stack,
-				  "destroy",
-				  G_CALLBACK (disconnect_stack_signals),
-				  switcher);
 }
 
 static void
@@ -343,7 +220,6 @@ create_popover (TeplMenuStackSwitcher *switcher)
 				     GTK_WIDGET (popover));
 
 	create_button_box (switcher);
-	switcher->priv->buttons = g_hash_table_new (g_direct_hash, g_direct_equal);
 }
 
 static void
@@ -351,6 +227,8 @@ stack_changed_cb (TeplStackHelper       *stack_helper,
 		  TeplMenuStackSwitcher *switcher)
 {
 	update_title_label (switcher);
+	clear_popover (switcher);
+	populate_button_box (switcher);
 }
 
 static void
@@ -428,16 +306,6 @@ tepl_menu_stack_switcher_dispose (GObject *object)
 }
 
 static void
-tepl_menu_stack_switcher_finalize (GObject *object)
-{
-	TeplMenuStackSwitcher *switcher = TEPL_MENU_STACK_SWITCHER (object);
-
-	g_hash_table_destroy (switcher->priv->buttons);
-
-	G_OBJECT_CLASS (tepl_menu_stack_switcher_parent_class)->finalize (object);
-}
-
-static void
 tepl_menu_stack_switcher_class_init (TeplMenuStackSwitcherClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -445,7 +313,6 @@ tepl_menu_stack_switcher_class_init (TeplMenuStackSwitcherClass *klass)
 	object_class->get_property = tepl_menu_stack_switcher_get_property;
 	object_class->set_property = tepl_menu_stack_switcher_set_property;
 	object_class->dispose = tepl_menu_stack_switcher_dispose;
-	object_class->finalize = tepl_menu_stack_switcher_finalize;
 
 	/**
 	 * TeplMenuStackSwitcher:stack:
@@ -508,22 +375,18 @@ tepl_menu_stack_switcher_set_stack (TeplMenuStackSwitcher *switcher,
 		return;
 	}
 
-	if (switcher->priv->stack != NULL)
-	{
-		disconnect_stack_signals (switcher);
-		clear_popover (switcher);
-		g_clear_object (&switcher->priv->stack);
-	}
+	g_clear_object (&switcher->priv->stack);
 
 	if (stack != NULL)
 	{
 		switcher->priv->stack = g_object_ref_sink (stack);
-		populate_button_box (switcher);
-		connect_stack_signals (switcher);
 	}
 
 	update_stack_helper (switcher);
+
 	update_title_label (switcher);
+	clear_popover (switcher);
+	populate_button_box (switcher);
 
 	/* TODO: look if it is really necessary, since the widgets inside anyway
 	 * change.
