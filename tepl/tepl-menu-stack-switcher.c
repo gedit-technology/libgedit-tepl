@@ -81,13 +81,6 @@ create_button_box (TeplMenuStackSwitcher *switcher)
 }
 
 static void
-clear_popover (TeplMenuStackSwitcher *switcher)
-{
-	gtk_widget_destroy (switcher->priv->button_box);
-	create_button_box (switcher);
-}
-
-static void
 on_button_clicked (GtkButton             *button,
                    TeplMenuStackSwitcher *switcher)
 {
@@ -180,6 +173,14 @@ populate_button_box (TeplMenuStackSwitcher *switcher)
 }
 
 static void
+update_popover (TeplMenuStackSwitcher *switcher)
+{
+	gtk_widget_destroy (switcher->priv->button_box);
+	create_button_box (switcher);
+	populate_button_box (switcher);
+}
+
+static void
 create_menu_button_title (TeplMenuStackSwitcher *switcher)
 {
 	GtkGrid *hgrid;
@@ -227,8 +228,7 @@ stack_changed_cb (TeplStackHelper       *stack_helper,
 		  TeplMenuStackSwitcher *switcher)
 {
 	update_title_label (switcher);
-	clear_popover (switcher);
-	populate_button_box (switcher);
+	update_popover (switcher);
 }
 
 static void
@@ -383,10 +383,8 @@ tepl_menu_stack_switcher_set_stack (TeplMenuStackSwitcher *switcher,
 	}
 
 	update_stack_helper (switcher);
-
 	update_title_label (switcher);
-	clear_popover (switcher);
-	populate_button_box (switcher);
+	update_popover (switcher);
 
 	g_object_notify_by_pspec (G_OBJECT (switcher), properties[PROP_STACK]);
 }
