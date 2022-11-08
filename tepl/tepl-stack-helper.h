@@ -32,8 +32,10 @@ struct _TeplStackHelperClass
 	GObjectClass parent_class;
 };
 
+G_GNUC_INTERNAL
 GType			_tepl_stack_helper_get_type	(void);
 
+G_GNUC_INTERNAL
 TeplStackHelper *	_tepl_stack_helper_new		(GtkStack *stack);
 
 G_END_DECLS
