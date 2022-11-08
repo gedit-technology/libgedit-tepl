@@ -116,9 +116,9 @@ update_button (TeplMenuStackSwitcher *switcher,
 }
 
 static void
-on_title_icon_visible_updated (GtkWidget             *stack_child,
-			       GParamSpec            *pspec,
-			       TeplMenuStackSwitcher *switcher)
+on_title_visible_updated (GtkWidget             *stack_child,
+			  GParamSpec            *pspec,
+			  TeplMenuStackSwitcher *switcher)
 {
 	GtkButton *button;
 
@@ -172,9 +172,8 @@ add_child (TeplMenuStackSwitcher *switcher,
 
 	g_object_set_data (G_OBJECT (button), STACK_CHILD_KEY, stack_child);
 	g_signal_connect (button, "clicked", G_CALLBACK (on_button_clicked), switcher);
-	g_signal_connect (stack_child, "notify::visible", G_CALLBACK (on_title_icon_visible_updated), switcher);
-	g_signal_connect (stack_child, "child-notify::title", G_CALLBACK (on_title_icon_visible_updated), switcher);
-	g_signal_connect (stack_child, "child-notify::icon-name", G_CALLBACK (on_title_icon_visible_updated), switcher);
+	g_signal_connect (stack_child, "notify::visible", G_CALLBACK (on_title_visible_updated), switcher);
+	g_signal_connect (stack_child, "child-notify::title", G_CALLBACK (on_title_visible_updated), switcher);
 	g_signal_connect (stack_child, "child-notify::position", G_CALLBACK (on_position_updated), switcher);
 
 	g_hash_table_insert (switcher->priv->buttons, stack_child, button);
@@ -240,9 +239,8 @@ on_stack_child_removed (GtkStack              *stack,
 {
 	GtkWidget *button;
 
-	g_signal_handlers_disconnect_by_func (widget, on_title_icon_visible_updated, switcher);
-	g_signal_handlers_disconnect_by_func (widget, on_title_icon_visible_updated, switcher);
-	g_signal_handlers_disconnect_by_func (widget, on_title_icon_visible_updated, switcher);
+	g_signal_handlers_disconnect_by_func (widget, on_title_visible_updated, switcher);
+	g_signal_handlers_disconnect_by_func (widget, on_title_visible_updated, switcher);
 	g_signal_handlers_disconnect_by_func (widget, on_position_updated, switcher);
 
 	button = g_hash_table_lookup (switcher->priv->buttons, widget);
