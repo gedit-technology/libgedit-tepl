@@ -34,7 +34,7 @@ struct _TeplStackHelperClass
 
 GType			_tepl_stack_helper_get_type	(void);
 
-TeplStackHelper *	_tepl_stack_helper_new		(GtkContainer *container);
+TeplStackHelper *	_tepl_stack_helper_new		(GtkStack *stack);
 
 G_END_DECLS
 

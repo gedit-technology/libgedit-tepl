@@ -5,8 +5,8 @@
 #include "tepl/tepl-stack-helper.h"
 
 static void
-children_changed_cb (TeplStackHelper *stack_helper,
-		     gboolean        *signal_received)
+stack_changed_cb (TeplStackHelper *stack_helper,
+		  gboolean        *signal_received)
 {
 	*signal_received = TRUE;
 }
@@ -21,10 +21,10 @@ test_add_child (void)
 	stack = GTK_STACK (gtk_stack_new ());
 	g_object_ref_sink (stack);
 
-	stack_helper = _tepl_stack_helper_new (GTK_CONTAINER (stack));
+	stack_helper = _tepl_stack_helper_new (stack);
 	g_signal_connect (stack_helper,
-			  "children-changed",
-			  G_CALLBACK (children_changed_cb),
+			  "changed",
+			  G_CALLBACK (stack_changed_cb),
 			  &signal_received);
 
 	g_assert_false (signal_received);
@@ -49,10 +49,10 @@ test_remove_child (void)
 	stack = GTK_STACK (gtk_stack_new ());
 	g_object_ref_sink (stack);
 
-	stack_helper = _tepl_stack_helper_new (GTK_CONTAINER (stack));
+	stack_helper = _tepl_stack_helper_new (stack);
 	g_signal_connect (stack_helper,
-			  "children-changed",
-			  G_CALLBACK (children_changed_cb),
+			  "changed",
+			  G_CALLBACK (stack_changed_cb),
 			  &signal_received);
 
 	label = gtk_label_new (NULL);
@@ -77,10 +77,10 @@ test_change_child (void)
 	stack = GTK_STACK (gtk_stack_new ());
 	g_object_ref_sink (stack);
 
-	stack_helper = _tepl_stack_helper_new (GTK_CONTAINER (stack));
+	stack_helper = _tepl_stack_helper_new (stack);
 	g_signal_connect (stack_helper,
-			  "children-changed",
-			  G_CALLBACK (children_changed_cb),
+			  "changed",
+			  G_CALLBACK (stack_changed_cb),
 			  &signal_received);
 
 	label = gtk_label_new (NULL);
@@ -112,10 +112,10 @@ test_change_initially_present_child (void)
 	gtk_stack_add_titled (stack, label, "label", "Label");
 
 	/* We create the TeplStackHelper *after* adding the child. */
-	stack_helper = _tepl_stack_helper_new (GTK_CONTAINER (stack));
+	stack_helper = _tepl_stack_helper_new (stack);
 	g_signal_connect (stack_helper,
-			  "children-changed",
-			  G_CALLBACK (children_changed_cb),
+			  "changed",
+			  G_CALLBACK (stack_changed_cb),
 			  &signal_received);
 
 	/* Now we change one of the GtkContainer child properties. */
