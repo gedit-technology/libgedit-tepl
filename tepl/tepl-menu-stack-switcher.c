@@ -149,34 +149,35 @@ on_position_updated (GtkWidget             *stack_child,
 
 static void
 add_child (TeplMenuStackSwitcher *switcher,
-	   GtkWidget             *widget)
+	   GtkWidget             *stack_child)
 {
-	GtkWidget *button;
+	GtkRadioButton *button;
 	GList *group;
 
-	button = gtk_radio_button_new (NULL);
+	button = GTK_RADIO_BUTTON (gtk_radio_button_new (NULL));
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (button), FALSE);
-	gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+	gtk_widget_set_valign (GTK_WIDGET (button), GTK_ALIGN_CENTER);
 
-	update_button (switcher, widget, GTK_BUTTON (button));
+	update_button (switcher, stack_child, GTK_BUTTON (button));
 
 	group = gtk_container_get_children (GTK_CONTAINER (switcher->priv->button_box));
 	if (group != NULL)
 	{
-		gtk_radio_button_join_group (GTK_RADIO_BUTTON (button), GTK_RADIO_BUTTON (group->data));
+		gtk_radio_button_join_group (button, GTK_RADIO_BUTTON (group->data));
 		g_list_free (group);
 	}
 
-	gtk_container_add (GTK_CONTAINER (switcher->priv->button_box), button);
+	gtk_container_add (GTK_CONTAINER (switcher->priv->button_box),
+			   GTK_WIDGET (button));
 
-	g_object_set_data (G_OBJECT (button), STACK_CHILD_KEY, widget);
+	g_object_set_data (G_OBJECT (button), STACK_CHILD_KEY, stack_child);
 	g_signal_connect (button, "clicked", G_CALLBACK (on_button_clicked), switcher);
-	g_signal_connect (widget, "notify::visible", G_CALLBACK (on_title_icon_visible_updated), switcher);
-	g_signal_connect (widget, "child-notify::title", G_CALLBACK (on_title_icon_visible_updated), switcher);
-	g_signal_connect (widget, "child-notify::icon-name", G_CALLBACK (on_title_icon_visible_updated), switcher);
-	g_signal_connect (widget, "child-notify::position", G_CALLBACK (on_position_updated), switcher);
+	g_signal_connect (stack_child, "notify::visible", G_CALLBACK (on_title_icon_visible_updated), switcher);
+	g_signal_connect (stack_child, "child-notify::title", G_CALLBACK (on_title_icon_visible_updated), switcher);
+	g_signal_connect (stack_child, "child-notify::icon-name", G_CALLBACK (on_title_icon_visible_updated), switcher);
+	g_signal_connect (stack_child, "child-notify::position", G_CALLBACK (on_position_updated), switcher);
 
-	g_hash_table_insert (switcher->priv->buttons, widget, button);
+	g_hash_table_insert (switcher->priv->buttons, stack_child, button);
 }
 
 static void
