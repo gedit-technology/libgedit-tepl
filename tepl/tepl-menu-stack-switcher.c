@@ -395,16 +395,12 @@ create_menu_button_title (TeplMenuStackSwitcher *switcher)
 static void
 tepl_menu_stack_switcher_init (TeplMenuStackSwitcher *switcher)
 {
-	GtkStyleContext *context;
-
 	switcher->priv = tepl_menu_stack_switcher_get_instance_private (switcher);
 
 	create_menu_button_title (switcher);
 
 	switcher->priv->popover = gtk_popover_new (GTK_WIDGET (switcher));
 	gtk_popover_set_position (GTK_POPOVER (switcher->priv->popover), GTK_POS_BOTTOM);
-	context = gtk_widget_get_style_context (switcher->priv->popover);
-	gtk_style_context_add_class (context, "tepl-menu-stack-switcher");
 
 	switcher->priv->button_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
 	gtk_widget_show (switcher->priv->button_box);
