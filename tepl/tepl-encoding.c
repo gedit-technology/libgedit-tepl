@@ -8,7 +8,7 @@
 #include "tepl-encoding-private.h"
 #include <glib/gi18n-lib.h>
 
-/**
+/*
  * SECTION:encoding
  * @Short_description: Character encoding
  * @Title: TeplEncoding
