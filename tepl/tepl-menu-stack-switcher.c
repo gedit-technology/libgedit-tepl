@@ -26,6 +26,8 @@ static GParamSpec *properties[N_PROPERTIES];
 
 G_DEFINE_TYPE_WITH_PRIVATE (TeplMenuStackSwitcher, tepl_menu_stack_switcher, GTK_TYPE_MENU_BUTTON)
 
+#define STACK_CHILD_KEY "stack-child-key"
+
 static void
 clear_button_box (TeplMenuStackSwitcher *switcher)
 {
@@ -42,7 +44,7 @@ on_button_clicked (GtkButton             *button,
 	{
 		GtkWidget *stack_child;
 
-		stack_child = g_object_get_data (G_OBJECT (button), "stack-child");
+		stack_child = g_object_get_data (G_OBJECT (button), STACK_CHILD_KEY);
 		gtk_stack_set_visible_child (switcher->priv->stack, stack_child);
 		gtk_widget_hide (switcher->priv->popover);
 	}
@@ -132,7 +134,7 @@ add_child (TeplMenuStackSwitcher *switcher,
 
 	gtk_container_add (GTK_CONTAINER (switcher->priv->button_box), button);
 
-	g_object_set_data (G_OBJECT (button), "stack-child", widget);
+	g_object_set_data (G_OBJECT (button), STACK_CHILD_KEY, widget);
 	g_signal_connect (button, "clicked", G_CALLBACK (on_button_clicked), switcher);
 	g_signal_connect (widget, "notify::visible", G_CALLBACK (on_title_icon_visible_updated), switcher);
 	g_signal_connect (widget, "child-notify::title", G_CALLBACK (on_title_icon_visible_updated), switcher);
