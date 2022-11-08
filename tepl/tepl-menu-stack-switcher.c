@@ -361,13 +361,11 @@ tepl_menu_stack_switcher_class_init (TeplMenuStackSwitcherClass *klass)
 }
 
 static void
-tepl_menu_stack_switcher_init (TeplMenuStackSwitcher *switcher)
+create_menu_button_title (TeplMenuStackSwitcher *switcher)
 {
 	GtkWidget *box;
 	GtkWidget *arrow;
 	GtkStyleContext *context;
-
-	switcher->priv = tepl_menu_stack_switcher_get_instance_private (switcher);
 
 	box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
 
@@ -387,6 +385,16 @@ tepl_menu_stack_switcher_init (TeplMenuStackSwitcher *switcher)
 
 	gtk_widget_show_all (box);
 	gtk_container_add (GTK_CONTAINER (switcher), box);
+}
+
+static void
+tepl_menu_stack_switcher_init (TeplMenuStackSwitcher *switcher)
+{
+	GtkStyleContext *context;
+
+	switcher->priv = tepl_menu_stack_switcher_get_instance_private (switcher);
+
+	create_menu_button_title (switcher);
 
 	switcher->priv->popover = gtk_popover_new (GTK_WIDGET (switcher));
 	gtk_popover_set_position (GTK_POPOVER (switcher->priv->popover), GTK_POS_BOTTOM);
