@@ -8,13 +8,13 @@
 #include "tepl-encoding-iconv-private.h"
 #include <glib/gi18n-lib.h>
 
-/*
+/**
  * SECTION:encoding-iconv
  * @Short_description: Character encoding for iconv
  * @Title: TeplEncodingIconv
  *
- * The #TeplEncodingIconv type represents a character encoding, with support for
- * iconv in mind (although #TeplEncodingIconv doesn't use iconv by itself).
+ * #TeplEncodingIconv implements the #TeplEncoding interface, for use with iconv
+ * in mind.
  */
 
 /* API design:
@@ -215,6 +215,16 @@ _tepl_encoding_iconv_new_full (const gchar *charset,
 	return enc;
 }
 
+/**
+ * tepl_encoding_iconv_to_base_type:
+ * @enc: a #TeplEncodingIconv object.
+ *
+ * Returns: the #TeplEncoding object of @enc.
+ * Since: 6.4
+ */
+/* This is for type safety, and also because implementing the interface could be
+ * done differently.
+ */
 const TeplEncoding *
 tepl_encoding_iconv_to_base_type (const TeplEncodingIconv *enc)
 {
@@ -222,11 +232,11 @@ tepl_encoding_iconv_to_base_type (const TeplEncodingIconv *enc)
 }
 
 /**
- * tepl_encoding_iconv_copy:
+ * tepl_encoding_iconv_copy: (skip)
  * @enc: a #TeplEncodingIconv.
  *
  * Returns: (transfer full): a copy of @enc.
- * Since: 2.0
+ * Since: 6.4
  */
 TeplEncodingIconv *
 tepl_encoding_iconv_copy (const TeplEncodingIconv *enc)
@@ -241,7 +251,7 @@ tepl_encoding_iconv_copy (const TeplEncodingIconv *enc)
  * tepl_encoding_iconv_free:
  * @enc: (nullable): a #TeplEncodingIconv, or %NULL.
  *
- * Since: 2.0
+ * Since: 6.4
  */
 void
 tepl_encoding_iconv_free (TeplEncodingIconv *enc)
@@ -293,7 +303,7 @@ get_translated_category_name (const gchar *charset)
 }
 
 /**
- * tepl_encoding_iconv_new:
+ * tepl_encoding_iconv_new: (skip)
  * @charset: a character set.
  *
  * Creates a new #TeplEncodingIconv from a character set such as "UTF-8" or
@@ -303,7 +313,7 @@ get_translated_category_name (const gchar *charset)
  * the @charset passed in to this constructor.
  *
  * Returns: the new #TeplEncodingIconv. Free with tepl_encoding_iconv_free().
- * Since: 2.0
+ * Since: 6.4
  */
 TeplEncodingIconv *
 tepl_encoding_iconv_new (const gchar *charset)
@@ -318,12 +328,12 @@ tepl_encoding_iconv_new (const gchar *charset)
 }
 
 /**
- * tepl_encoding_iconv_new_utf8:
+ * tepl_encoding_iconv_new_utf8: (skip)
  *
  * Creates a new #TeplEncodingIconv with the "UTF-8" character set.
  *
  * Returns: the new #TeplEncodingIconv. Free with tepl_encoding_iconv_free().
- * Since: 2.0
+ * Since: 6.4
  */
 TeplEncodingIconv *
 tepl_encoding_iconv_new_utf8 (void)
@@ -332,13 +342,13 @@ tepl_encoding_iconv_new_utf8 (void)
 }
 
 /**
- * tepl_encoding_iconv_new_from_locale:
+ * tepl_encoding_iconv_new_from_locale: (skip)
  *
  * Creates a new #TeplEncodingIconv from the current locale, as returned by
  * g_get_charset().
  *
  * Returns: the new #TeplEncodingIconv. Free with tepl_encoding_iconv_free().
- * Since: 2.0
+ * Since: 6.4
  */
 TeplEncodingIconv *
 tepl_encoding_iconv_new_from_locale (void)
@@ -361,10 +371,10 @@ tepl_encoding_iconv_new_from_locale (void)
  * example "Unicode (UTF-8)". If the category name is unknown, just the charset
  * is returned.
  *
- * The category name is localized (translated).
+ * The category name is localized (i.e., already translated).
  *
  * Returns: a string representation. Free with g_free() when no longer needed.
- * Since: 2.0
+ * Since: 6.4
  */
 gchar *
 tepl_encoding_iconv_to_string (const TeplEncodingIconv *enc)
@@ -394,7 +404,7 @@ tepl_encoding_iconv_to_string (const TeplEncodingIconv *enc)
  * function returns %TRUE for all UTF-8 variants supported by iconv.
  *
  * Returns: whether @enc is a UTF-8 encoding.
- * Since: 2.0
+ * Since: 6.4
  */
 gboolean
 tepl_encoding_iconv_is_utf8 (const TeplEncodingIconv *enc)
@@ -418,7 +428,7 @@ tepl_encoding_iconv_is_utf8 (const TeplEncodingIconv *enc)
  *   iconv-compatible charsets are case insensitive).
  *
  * Returns: whether @enc1 and @enc2 are equal.
- * Since: 2.0
+ * Since: 6.4
  */
 gboolean
 tepl_encoding_iconv_equals (const TeplEncodingIconv *enc1,
@@ -467,7 +477,7 @@ present_in_list (const GSList            *list,
  *
  * Returns: (transfer full) (element-type TeplEncodingIconv): a list of
  *   #TeplEncodingIconv's.
- * Since: 2.0
+ * Since: 6.4
  */
 GSList *
 tepl_encoding_iconv_get_all (void)
@@ -565,7 +575,7 @@ remove_duplicates_keep_last (GSList *list)
  *
  * Returns: (transfer full) (element-type TeplEncodingIconv): the new start of
  *   the #GSList.
- * Since: 2.0
+ * Since: 6.4
  */
 GSList *
 _tepl_encoding_iconv_remove_duplicates (GSList                      *list,
@@ -654,7 +664,7 @@ default_candidates_strv_to_list (const gchar * const *enc_str)
  *
  * Returns: (transfer full) (element-type TeplEncodingIconv): the list of
  *   default candidate encodings.
- * Since: 2.0
+ * Since: 6.4
  */
 /* TODO s/gtk_source_file_loader_set_candidate_encodings/tepl_.../ when the
  * latter exists.

@@ -10,6 +10,7 @@
 #endif
 
 #include <glib.h>
+#include <tepl/tepl-macros.h>
 
 G_BEGIN_DECLS
 
@@ -48,10 +49,10 @@ struct _TeplEncodingVtable
 	const gchar *	(* get_category_name)	(const TeplEncoding *enc);
 };
 
-G_GNUC_INTERNAL
+_TEPL_EXTERN
 const gchar *	tepl_encoding_get_name			(const TeplEncoding *enc);
 
-G_GNUC_INTERNAL
+_TEPL_EXTERN
 const gchar *	tepl_encoding_get_category_name		(const TeplEncoding *enc);
 
 G_END_DECLS

@@ -110,6 +110,22 @@ tepl_encoding_get_category_name
 </SECTION>
 
 <SECTION>
+<FILE>encoding-iconv</FILE>
+TeplEncodingIconv
+tepl_encoding_iconv_to_base_type
+tepl_encoding_iconv_new
+tepl_encoding_iconv_new_utf8
+tepl_encoding_iconv_new_from_locale
+tepl_encoding_iconv_copy
+tepl_encoding_iconv_free
+tepl_encoding_iconv_to_string
+tepl_encoding_iconv_is_utf8
+tepl_encoding_iconv_equals
+tepl_encoding_iconv_get_all
+tepl_encoding_iconv_get_default_candidates
+</SECTION>
+
+<SECTION>
 <FILE>file</FILE>
 TeplFile
 TeplNewlineType

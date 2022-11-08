@@ -3,7 +3,6 @@
  */
 
 #include <tepl/tepl.h>
-#include "tepl/tepl-encoding-iconv.h"
 #include "tepl/tepl-encoding-iconv-private.h"
 
 static void
