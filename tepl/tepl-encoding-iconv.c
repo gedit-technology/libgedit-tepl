@@ -63,10 +63,10 @@ struct _TeplEncodingIconv
 	/* Must never be NULL. */
 	gchar *charset;
 
-	/* The name stored here must already be translated.
+	/* The category name stored here must already be translated.
 	 * NULL if unknown.
 	 */
-	gchar *translated_name;
+	gchar *translated_category_name;
 };
 
 typedef struct _EncodingData EncodingData;
@@ -175,7 +175,7 @@ tepl_encoding_iconv_get_category_name (const TeplEncoding *enc_base_type)
 {
 	const TeplEncodingIconv *enc = (const TeplEncodingIconv *) enc_base_type;
 
-	return enc->translated_name;
+	return enc->translated_category_name;
 }
 
 static void
@@ -186,7 +186,7 @@ init_vtable (TeplEncodingVtable *vtable)
 
 static TeplEncodingIconv *
 _tepl_encoding_iconv_new_full (const gchar *charset,
-			       const gchar *translated_name)
+			       const gchar *translated_category_name)
 {
 	static TeplEncodingVtable vtable;
 	static gboolean vtable_initialized = FALSE;
@@ -203,7 +203,7 @@ _tepl_encoding_iconv_new_full (const gchar *charset,
 	enc = g_new (TeplEncodingIconv, 1);
 	enc->parent.vtable = &vtable;
 	enc->charset = g_strdup (charset);
-	enc->translated_name = g_strdup (translated_name);
+	enc->translated_category_name = g_strdup (translated_category_name);
 
 	return enc;
 }
@@ -227,7 +227,7 @@ tepl_encoding_iconv_copy (const TeplEncodingIconv *enc)
 	g_return_val_if_fail (enc != NULL, NULL);
 
 	return _tepl_encoding_iconv_new_full (enc->charset,
-					      enc->translated_name);
+					      enc->translated_category_name);
 }
 
 /**
@@ -242,7 +242,7 @@ tepl_encoding_iconv_free (TeplEncodingIconv *enc)
 	if (enc != NULL)
 	{
 		g_free (enc->charset);
-		g_free (enc->translated_name);
+		g_free (enc->translated_category_name);
 		g_free (enc);
 	}
 }
@@ -255,7 +255,7 @@ is_utf8_charset (const gchar *charset)
 }
 
 static const gchar *
-get_translated_name (const gchar *charset)
+get_translated_category_name (const gchar *charset)
 {
 	guint i;
 
@@ -301,13 +301,13 @@ get_translated_name (const gchar *charset)
 TeplEncodingIconv *
 tepl_encoding_iconv_new (const gchar *charset)
 {
-	const gchar *translated_name;
+	const gchar *translated_category_name;
 
 	g_return_val_if_fail (charset != NULL, NULL);
 
-	translated_name = get_translated_name (charset);
+	translated_category_name = get_translated_category_name (charset);
 
-	return _tepl_encoding_iconv_new_full (charset, translated_name);
+	return _tepl_encoding_iconv_new_full (charset, translated_category_name);
 }
 
 /**
@@ -382,9 +382,9 @@ tepl_encoding_iconv_to_string (const TeplEncodingIconv *enc)
 	g_return_val_if_fail (enc != NULL, NULL);
 	g_assert (enc->charset != NULL);
 
-	if (enc->translated_name != NULL)
+	if (enc->translated_category_name != NULL)
 	{
-		return g_strdup_printf ("%s (%s)", enc->translated_name, enc->charset);
+		return g_strdup_printf ("%s (%s)", enc->translated_category_name, enc->charset);
 	}
 
 	return g_strdup (enc->charset);
