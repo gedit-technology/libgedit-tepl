@@ -14,9 +14,10 @@ struct _TeplMenuStackSwitcherPrivate
 	 */
 	GtkLabel *title;
 
+	/* Part of the GtkPopover. */
 	GtkWidget *button_box;
-	GtkWidget *popover;
 	GHashTable *buttons;
+
 	guint in_visible_child_notify : 1;
 };
 
@@ -67,10 +68,13 @@ on_button_clicked (GtkButton             *button,
 	if (!switcher->priv->in_visible_child_notify)
 	{
 		GtkWidget *stack_child;
+		GtkPopover *popover;
 
 		stack_child = g_object_get_data (G_OBJECT (button), STACK_CHILD_KEY);
 		gtk_stack_set_visible_child (switcher->priv->stack, stack_child);
-		gtk_widget_hide (switcher->priv->popover);
+
+		popover = gtk_menu_button_get_popover (GTK_MENU_BUTTON (switcher));
+		gtk_widget_hide (GTK_WIDGET (popover));
 	}
 }
 
@@ -395,16 +399,19 @@ create_menu_button_title (TeplMenuStackSwitcher *switcher)
 static void
 create_popover (TeplMenuStackSwitcher *switcher)
 {
-	switcher->priv->popover = gtk_popover_new (GTK_WIDGET (switcher));
-	gtk_popover_set_position (GTK_POPOVER (switcher->priv->popover), GTK_POS_BOTTOM);
+	GtkPopover *popover;
+
+	popover = GTK_POPOVER (gtk_popover_new (GTK_WIDGET (switcher)));
+	gtk_popover_set_position (popover, GTK_POS_BOTTOM);
 
 	switcher->priv->button_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
 	gtk_widget_show (switcher->priv->button_box);
-	gtk_container_add (GTK_CONTAINER (switcher->priv->popover), switcher->priv->button_box);
+	gtk_container_add (GTK_CONTAINER (popover), switcher->priv->button_box);
 
 	switcher->priv->buttons = g_hash_table_new (g_direct_hash, g_direct_equal);
 
-	gtk_menu_button_set_popover (GTK_MENU_BUTTON (switcher), switcher->priv->popover);
+	gtk_menu_button_set_popover (GTK_MENU_BUTTON (switcher),
+				     GTK_WIDGET (popover));
 }
 
 static void
