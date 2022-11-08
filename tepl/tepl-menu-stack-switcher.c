@@ -364,24 +364,27 @@ static void
 create_menu_button_title (TeplMenuStackSwitcher *switcher)
 {
 	GtkWidget *box;
-	GtkWidget *arrow;
-	GtkStyleContext *context;
+	GtkWidget *down_arrow;
+	GtkStyleContext *style_context;
 
 	box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
 
-	arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
-	gtk_box_pack_end (GTK_BOX (box), arrow, FALSE, TRUE, 0);
-	gtk_widget_set_valign (arrow, GTK_ALIGN_BASELINE);
+	down_arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
+	gtk_box_pack_end (GTK_BOX (box), down_arrow, FALSE, TRUE, 0);
+	gtk_widget_set_valign (down_arrow, GTK_ALIGN_BASELINE);
 
 	switcher->priv->title = GTK_LABEL (gtk_label_new (NULL));
 	gtk_widget_set_valign (GTK_WIDGET (switcher->priv->title), GTK_ALIGN_BASELINE);
 	gtk_box_pack_start (GTK_BOX (box), GTK_WIDGET (switcher->priv->title), TRUE, TRUE, 6);
 
-	// FIXME: this is not correct if this widget becomes more generic
-	// and used also outside the header bar, but for now we just want
-	// the same style as title labels
-	context = gtk_widget_get_style_context (GTK_WIDGET (switcher->priv->title));
-	gtk_style_context_add_class (context, "title");
+	/* To use a TeplMenuStackSwitcher in a GtkHeaderBar.
+	 * If we want to use it outside an headerbar, this should be made
+	 * configurable with additional API.
+	 * TODO: when writing the API docs, explain that it's intended to be
+	 * used in a GtkHeaderBar.
+	 */
+	style_context = gtk_widget_get_style_context (GTK_WIDGET (switcher->priv->title));
+	gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_TITLE);
 
 	gtk_widget_show_all (box);
 	gtk_container_add (GTK_CONTAINER (switcher), box);
