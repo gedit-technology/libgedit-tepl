@@ -5,6 +5,22 @@
 #include "tepl-encoding.h"
 
 /**
+ * tepl_encoding_get_name:
+ * @enc: a #TeplEncoding.
+ *
+ * Gets the name of the #TeplEncoding, such as "UTF-8".
+ *
+ * Returns: the name of the #TeplEncoding.
+ * Since: 6.4
+ */
+const gchar *
+tepl_encoding_get_name (const TeplEncoding *enc)
+{
+	g_return_val_if_fail (enc != NULL, NULL);
+	return enc->vtable->get_name (enc);
+}
+
+/**
  * tepl_encoding_get_category_name:
  * @enc: a #TeplEncoding.
  *

@@ -24,7 +24,7 @@ main (int    argc,
 
 		g_print ("Category: '%s' ; Name: '%s'\n",
 			 tepl_encoding_get_category_name (encoding),
-			 tepl_encoding_iconv_get_charset (encoding_iconv));
+			 tepl_encoding_get_name (encoding));
 	}
 	g_slist_free_full (list, (GDestroyNotify) tepl_encoding_iconv_free);
 

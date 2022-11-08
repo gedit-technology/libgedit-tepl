@@ -171,6 +171,14 @@ static const EncodingData encodings_table[] =
 };
 
 static const gchar *
+tepl_encoding_iconv_get_name (const TeplEncoding *enc_base_type)
+{
+	const TeplEncodingIconv *enc = (const TeplEncodingIconv *) enc_base_type;
+
+	return enc->charset;
+}
+
+static const gchar *
 tepl_encoding_iconv_get_category_name (const TeplEncoding *enc_base_type)
 {
 	const TeplEncodingIconv *enc = (const TeplEncodingIconv *) enc_base_type;
@@ -181,6 +189,7 @@ tepl_encoding_iconv_get_category_name (const TeplEncoding *enc_base_type)
 static void
 init_vtable (TeplEncodingVtable *vtable)
 {
+	vtable->get_name = tepl_encoding_iconv_get_name;
 	vtable->get_category_name = tepl_encoding_iconv_get_category_name;
 }
 
@@ -292,8 +301,8 @@ get_translated_category_name (const gchar *charset)
  * Creates a new #TeplEncodingIconv from a character set such as "UTF-8" or
  * "ISO-8859-1".
  *
- * The tepl_encoding_iconv_get_charset() function will return exactly the same
- * string as the @charset passed in to this constructor.
+ * The tepl_encoding_get_name() function will return exactly the same string as
+ * the @charset passed in to this constructor.
  *
  * Returns: the new #TeplEncodingIconv. Free with tepl_encoding_iconv_free().
  * Since: 2.0
@@ -344,25 +353,6 @@ tepl_encoding_iconv_new_from_locale (void)
 	}
 
 	return tepl_encoding_iconv_new (locale_charset);
-}
-
-/**
- * tepl_encoding_iconv_get_charset:
- * @enc: a #TeplEncodingIconv.
- *
- * Gets the character set of the #TeplEncodingIconv, such as "UTF-8" or
- * "ISO-8859-1".
- *
- * Returns: the character set of the #TeplEncodingIconv.
- * Since: 2.0
- */
-const gchar *
-tepl_encoding_iconv_get_charset (const TeplEncodingIconv *enc)
-{
-	g_return_val_if_fail (enc != NULL, NULL);
-	g_assert (enc->charset != NULL);
-
-	return enc->charset;
 }
 
 /**

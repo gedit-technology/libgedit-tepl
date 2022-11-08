@@ -19,8 +19,13 @@ struct _TeplEncoding
 
 struct _TeplEncodingVtable
 {
+	const gchar *	(* get_name)		(const TeplEncoding *enc);
+
 	const gchar *	(* get_category_name)	(const TeplEncoding *enc);
 };
+
+G_GNUC_INTERNAL
+const gchar *	tepl_encoding_get_name			(const TeplEncoding *enc);
 
 G_GNUC_INTERNAL
 const gchar *	tepl_encoding_get_category_name		(const TeplEncoding *enc);
