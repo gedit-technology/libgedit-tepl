@@ -393,12 +393,8 @@ create_menu_button_title (TeplMenuStackSwitcher *switcher)
 }
 
 static void
-tepl_menu_stack_switcher_init (TeplMenuStackSwitcher *switcher)
+create_popover (TeplMenuStackSwitcher *switcher)
 {
-	switcher->priv = tepl_menu_stack_switcher_get_instance_private (switcher);
-
-	create_menu_button_title (switcher);
-
 	switcher->priv->popover = gtk_popover_new (GTK_WIDGET (switcher));
 	gtk_popover_set_position (GTK_POPOVER (switcher->priv->popover), GTK_POS_BOTTOM);
 
@@ -406,9 +402,18 @@ tepl_menu_stack_switcher_init (TeplMenuStackSwitcher *switcher)
 	gtk_widget_show (switcher->priv->button_box);
 	gtk_container_add (GTK_CONTAINER (switcher->priv->popover), switcher->priv->button_box);
 
-	gtk_menu_button_set_popover (GTK_MENU_BUTTON (switcher), switcher->priv->popover);
-
 	switcher->priv->buttons = g_hash_table_new (g_direct_hash, g_direct_equal);
+
+	gtk_menu_button_set_popover (GTK_MENU_BUTTON (switcher), switcher->priv->popover);
+}
+
+static void
+tepl_menu_stack_switcher_init (TeplMenuStackSwitcher *switcher)
+{
+	switcher->priv = tepl_menu_stack_switcher_get_instance_private (switcher);
+
+	create_menu_button_title (switcher);
+	create_popover (switcher);
 }
 
 TeplMenuStackSwitcher *
