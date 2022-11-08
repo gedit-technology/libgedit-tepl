@@ -52,8 +52,8 @@ on_button_clicked (GtkButton             *button,
 
 static void
 update_button (TeplMenuStackSwitcher *switcher,
-	       GtkWidget             *widget,
-	       GtkWidget             *button)
+	       GtkWidget             *stack_child,
+	       GtkButton             *button)
 {
 	GList *children;
 
@@ -61,19 +61,25 @@ update_button (TeplMenuStackSwitcher *switcher,
 	 * for now check the child actually exists.
 	 */
 	children = gtk_container_get_children (GTK_CONTAINER (switcher->priv->stack));
-	if (g_list_index (children, widget) >= 0)
+	if (g_list_index (children, stack_child) >= 0)
 	{
 		gchar *title;
+		gboolean visible;
 
-		gtk_container_child_get (GTK_CONTAINER (switcher->priv->stack), widget,
+		gtk_container_child_get (GTK_CONTAINER (switcher->priv->stack),
+					 stack_child,
 					 "title", &title,
 					 NULL);
 
-		gtk_button_set_label (GTK_BUTTON (button), title);
-		gtk_widget_set_visible (button, gtk_widget_get_visible (widget) && (title != NULL));
-		gtk_widget_set_size_request (button, 100, -1);
+		gtk_button_set_label (button, title);
 
-		if (widget == gtk_stack_get_visible_child (switcher->priv->stack))
+		visible = (gtk_widget_get_visible (stack_child) &&
+			   title != NULL);
+		gtk_widget_set_visible (GTK_WIDGET (button), visible);
+
+		gtk_widget_set_size_request (GTK_WIDGET (button), 100, -1);
+
+		if (stack_child == gtk_stack_get_visible_child (switcher->priv->stack))
 		{
 			gtk_label_set_label (switcher->priv->label, title);
 		}
@@ -89,7 +95,7 @@ on_title_icon_visible_updated (GtkWidget             *widget,
 			       GParamSpec            *pspec,
 			       TeplMenuStackSwitcher *switcher)
 {
-	GtkWidget *button;
+	GtkButton *button;
 
 	button = g_hash_table_lookup (switcher->priv->buttons, widget);
 	update_button (switcher, widget, button);
@@ -123,7 +129,7 @@ add_child (TeplMenuStackSwitcher *switcher,
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (button), FALSE);
 	gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
 
-	update_button (switcher, widget, button);
+	update_button (switcher, widget, GTK_BUTTON (button));
 
 	group = gtk_container_get_children (GTK_CONTAINER (switcher->priv->button_box));
 	if (group != NULL)
