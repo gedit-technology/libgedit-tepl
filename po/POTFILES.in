@@ -4,7 +4,6 @@ tepl/tepl-application.c
 tepl/tepl-application-window.c
 tepl/tepl-buffer.c
 tepl/tepl-close-confirm-dialog-single.c
-tepl/tepl-container-helper.c
 tepl/tepl-file.c
 tepl/tepl-file-chooser.c
 tepl/tepl-file-loader.c
@@ -32,6 +31,7 @@ tepl/tepl-progress-info-bar.c
 tepl/tepl-settings.c
 tepl/tepl-signal-group.c
 tepl/tepl-space-drawer-prefs.c
+tepl/tepl-stack-helper.c
 tepl/tepl-statusbar.c
 tepl/tepl-style-scheme-chooser-widget.c
 tepl/tepl-tab.c

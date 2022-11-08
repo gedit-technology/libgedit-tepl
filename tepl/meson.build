@@ -86,11 +86,11 @@ tepl_public_c_files = [
 
 TEPL_PRIVATE_HEADERS = [
   'tepl-close-confirm-dialog-single.h',
-  'tepl-container-helper.h',
   'tepl-icu.h',
   'tepl-menu-stack-switcher.h',
   'tepl-metadata-attic.h',
   'tepl-metadata-parser.h',
+  'tepl-stack-helper.h',
   'tepl-window-actions-edit.h',
   'tepl-window-actions-file.h',
   'tepl-window-actions-search.h'
@@ -98,11 +98,11 @@ TEPL_PRIVATE_HEADERS = [
 
 tepl_private_c_files = [
   'tepl-close-confirm-dialog-single.c',
-  'tepl-container-helper.c',
   'tepl-icu.c',
   'tepl-menu-stack-switcher.c',
   'tepl-metadata-attic.c',
   'tepl-metadata-parser.c',
+  'tepl-stack-helper.c',
   'tepl-window-actions-edit.c',
   'tepl-window-actions-file.c',
   'tepl-window-actions-search.c'

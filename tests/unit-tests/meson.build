@@ -1,5 +1,4 @@
 unit_tests = [
-  'test-container-helper',
   'test-file',
   'test-file-loader',
   'test-file-saver',
@@ -9,6 +8,7 @@ unit_tests = [
   'test-metadata',
   'test-metadata-manager',
   'test-notebook',
+  'test-stack-helper',
   'test-utils'
 ]
 

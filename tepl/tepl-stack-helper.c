@@ -2,12 +2,12 @@
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
-#include "tepl-container-helper.h"
+#include "tepl-stack-helper.h"
 #include "tepl-signal-group.h"
 
 /* To add a convenience signal to GtkContainer. */
 
-struct _TeplContainerHelperPrivate
+struct _TeplStackHelperPrivate
 {
 	TeplSignalGroup *signal_group;
 };
@@ -20,28 +20,28 @@ enum
 
 static guint signals[N_SIGNALS];
 
-G_DEFINE_TYPE_WITH_PRIVATE (TeplContainerHelper, _tepl_container_helper, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (TeplStackHelper, _tepl_stack_helper, G_TYPE_OBJECT)
 
 static void
-_tepl_container_helper_dispose (GObject *object)
+_tepl_stack_helper_dispose (GObject *object)
 {
-	TeplContainerHelper *helper = TEPL_CONTAINER_HELPER (object);
+	TeplStackHelper *helper = TEPL_STACK_HELPER (object);
 
 	tepl_signal_group_clear (&helper->priv->signal_group);
 
-	G_OBJECT_CLASS (_tepl_container_helper_parent_class)->dispose (object);
+	G_OBJECT_CLASS (_tepl_stack_helper_parent_class)->dispose (object);
 }
 
 static void
-_tepl_container_helper_class_init (TeplContainerHelperClass *klass)
+_tepl_stack_helper_class_init (TeplStackHelperClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	object_class->dispose = _tepl_container_helper_dispose;
+	object_class->dispose = _tepl_stack_helper_dispose;
 
 	/*
-	 * TeplContainerHelper::children-changed:
-	 * @helper: the #TeplContainerHelper emitting the signal.
+	 * TeplStackHelper::children-changed:
+	 * @helper: the #TeplStackHelper emitting the signal.
 	 *
 	 * ::children-changed is a convenience signal that is emitted on:
 	 * - #GtkContainer::add
@@ -60,28 +60,28 @@ _tepl_container_helper_class_init (TeplContainerHelperClass *klass)
 }
 
 static void
-_tepl_container_helper_init (TeplContainerHelper *helper)
+_tepl_stack_helper_init (TeplStackHelper *helper)
 {
-	helper->priv = _tepl_container_helper_get_instance_private (helper);
+	helper->priv = _tepl_stack_helper_get_instance_private (helper);
 }
 
 static void
-children_changed (TeplContainerHelper *helper)
+children_changed (TeplStackHelper *helper)
 {
 	g_signal_emit (helper, signals[SIGNAL_CHILDREN_CHANGED], 0);
 }
 
 static void
-child_notify_cb (GtkWidget           *widget,
-		 GParamSpec          *child_property,
-		 TeplContainerHelper *helper)
+child_notify_cb (GtkWidget       *widget,
+                 GParamSpec      *child_property,
+                 TeplStackHelper *helper)
 {
 	children_changed (helper);
 }
 
 static void
-connect_child (TeplContainerHelper *helper,
-	       GtkWidget           *widget)
+connect_child (TeplStackHelper *helper,
+               GtkWidget       *widget)
 {
 	g_signal_connect (widget,
 			  "child-notify",
@@ -90,8 +90,8 @@ connect_child (TeplContainerHelper *helper,
 }
 
 static void
-connect_all_children (TeplContainerHelper *helper,
-		      GtkContainer        *container)
+connect_all_children (TeplStackHelper *helper,
+                      GtkContainer    *container)
 {
 	GList *children;
 	GList *l;
@@ -108,32 +108,32 @@ connect_all_children (TeplContainerHelper *helper,
 }
 
 static void
-add_cb (GtkContainer        *container,
-	GtkWidget           *widget,
-	TeplContainerHelper *helper)
+add_cb (GtkContainer    *container,
+        GtkWidget       *widget,
+        TeplStackHelper *helper)
 {
 	connect_child (helper, widget);
 	children_changed (helper);
 }
 
 static void
-remove_cb (GtkContainer        *container,
-	   GtkWidget           *widget,
-	   TeplContainerHelper *helper)
+remove_cb (GtkContainer    *container,
+           GtkWidget       *widget,
+           TeplStackHelper *helper)
 {
 	g_signal_handlers_disconnect_by_func (widget, child_notify_cb, helper);
 	children_changed (helper);
 }
 
 /* Doesn't hold a reference to @container. */
-TeplContainerHelper *
-_tepl_container_helper_new (GtkContainer *container)
+TeplStackHelper *
+_tepl_stack_helper_new (GtkContainer *container)
 {
-	TeplContainerHelper *helper;
+	TeplStackHelper *helper;
 
 	g_return_val_if_fail (GTK_IS_CONTAINER (container), NULL);
 
-	helper = g_object_new (TEPL_TYPE_CONTAINER_HELPER, NULL);
+	helper = g_object_new (TEPL_TYPE_STACK_HELPER, NULL);
 
 	connect_all_children (helper, container);
 
