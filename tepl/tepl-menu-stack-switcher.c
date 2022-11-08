@@ -384,7 +384,7 @@ tepl_menu_stack_switcher_init (TeplMenuStackSwitcher *switcher)
 	switcher->priv->buttons = g_hash_table_new (g_direct_hash, g_direct_equal);
 }
 
-GtkWidget *
+TeplMenuStackSwitcher *
 tepl_menu_stack_switcher_new (void)
 {
 	return g_object_new (TEPL_TYPE_MENU_STACK_SWITCHER, NULL);

@@ -50,14 +50,14 @@ struct _TeplMenuStackSwitcherClass
 	gpointer padding[12];
 };
 
-GType		tepl_menu_stack_switcher_get_type	(void);
+GType			tepl_menu_stack_switcher_get_type	(void);
 
-GtkWidget *	tepl_menu_stack_switcher_new		(void);
+TeplMenuStackSwitcher *	tepl_menu_stack_switcher_new		(void);
 
-void		tepl_menu_stack_switcher_set_stack	(TeplMenuStackSwitcher *switcher,
-							 GtkStack              *stack);
+void			tepl_menu_stack_switcher_set_stack	(TeplMenuStackSwitcher *switcher,
+								 GtkStack              *stack);
 
-GtkStack *	tepl_menu_stack_switcher_get_stack	(TeplMenuStackSwitcher *switcher);
+GtkStack *		tepl_menu_stack_switcher_get_stack	(TeplMenuStackSwitcher *switcher);
 
 G_END_DECLS
 
