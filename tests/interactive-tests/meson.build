@@ -1,5 +1,6 @@
 interactive_tests = [
   # executable name, sources
+  ['test-encoding', 'test-encoding.c'],
   ['test-fold-region', 'test-fold-region.c'],
   ['test-language-chooser-dialog', 'test-language-chooser-dialog.c'],
   ['test-language-chooser-widget', 'test-language-chooser-widget.c'],
