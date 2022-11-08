@@ -4,8 +4,8 @@
  */
 
 #include "config.h"
-#include "tepl-encoding.h"
-#include "tepl-encoding-private.h"
+#include "tepl-encoding-iconv.h"
+#include "tepl-encoding-iconv-private.h"
 #include <glib/gi18n-lib.h>
 
 /*

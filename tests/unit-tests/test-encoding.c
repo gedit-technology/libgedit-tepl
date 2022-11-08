@@ -2,8 +2,8 @@
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
-#include "tepl/tepl-encoding.h"
-#include "tepl/tepl-encoding-private.h"
+#include "tepl/tepl-encoding-iconv.h"
+#include "tepl/tepl-encoding-iconv-private.h"
 
 static void
 test_remove_duplicates (void)
