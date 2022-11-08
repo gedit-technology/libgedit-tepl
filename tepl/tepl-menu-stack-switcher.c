@@ -27,7 +27,7 @@ static GParamSpec *properties[N_PROPERTIES];
 G_DEFINE_TYPE_WITH_PRIVATE (TeplMenuStackSwitcher, tepl_menu_stack_switcher, GTK_TYPE_MENU_BUTTON)
 
 static void
-clear_popover (TeplMenuStackSwitcher *switcher)
+clear_button_box (TeplMenuStackSwitcher *switcher)
 {
 	gtk_container_foreach (GTK_CONTAINER (switcher->priv->button_box),
 			       (GtkCallback) gtk_widget_destroy,
@@ -390,7 +390,7 @@ tepl_menu_stack_switcher_set_stack (TeplMenuStackSwitcher *switcher,
 	if (switcher->priv->stack != NULL)
 	{
 		disconnect_stack_signals (switcher);
-		clear_popover (switcher);
+		clear_button_box (switcher);
 		g_clear_object (&switcher->priv->stack);
 	}
 
