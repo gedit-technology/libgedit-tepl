@@ -24,7 +24,7 @@ typedef enum _TeplEncodingIconvDuplicates
 } TeplEncodingIconvDuplicates;
 
 G_GNUC_INTERNAL
-GSList *	_tepl_encoding_remove_duplicates	(GSList                      *encodings,
+GSList *	_tepl_encoding_iconv_remove_duplicates	(GSList                      *encodings,
 							 TeplEncodingIconvDuplicates  removal_type);
 
 G_END_DECLS
