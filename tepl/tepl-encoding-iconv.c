@@ -1,5 +1,5 @@
 /* SPDX-FileCopyrightText: 2002-2005 - Paolo Maggi
- * SPDX-FileCopyrightText: 2014, 2015, 2017 - Sébastien Wilmet <swilmet@gnome.org>
+ * SPDX-FileCopyrightText: 2014-2022 - Sébastien Wilmet <swilmet@gnome.org>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
@@ -74,8 +74,8 @@ struct _EncodingData
 {
 	const gchar *charset;
 
-	/* The name stored here is not yet translated and must be translated. */
-	const gchar *name_to_translate;
+	/* The category name stored here is not yet translated. */
+	const gchar *translatable_category_name;
 };
 
 #define UTF8_CANONICAL_FORM "UTF-8"
@@ -270,7 +270,7 @@ get_translated_name (const gchar *charset)
 
 		if (g_ascii_strcasecmp (cur_data->charset, charset) == 0)
 		{
-			return _(cur_data->name_to_translate);
+			return _(cur_data->translatable_category_name);
 		}
 	}
 
@@ -489,7 +489,7 @@ tepl_encoding_iconv_get_all (void)
 		TeplEncodingIconv *enc;
 
 		enc = _tepl_encoding_iconv_new_full (cur_data->charset,
-						     _(cur_data->name_to_translate));
+						     _(cur_data->translatable_category_name));
 
 		list = g_slist_prepend (list, enc);
 	}
