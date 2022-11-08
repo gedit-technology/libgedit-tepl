@@ -388,11 +388,6 @@ tepl_menu_stack_switcher_set_stack (TeplMenuStackSwitcher *switcher,
 	clear_popover (switcher);
 	populate_button_box (switcher);
 
-	/* TODO: look if it is really necessary, since the widgets inside anyway
-	 * change.
-	 */
-	gtk_widget_queue_resize (GTK_WIDGET (switcher));
-
 	g_object_notify_by_pspec (G_OBJECT (switcher), properties[PROP_STACK]);
 }
 
