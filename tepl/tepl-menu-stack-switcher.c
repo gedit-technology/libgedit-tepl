@@ -363,19 +363,16 @@ tepl_menu_stack_switcher_class_init (TeplMenuStackSwitcherClass *klass)
 static void
 create_menu_button_title (TeplMenuStackSwitcher *switcher)
 {
-	GtkWidget *box;
-	GtkWidget *down_arrow;
+	GtkGrid *hgrid;
 	GtkStyleContext *style_context;
+	GtkWidget *down_arrow;
 
-	box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-
-	down_arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
-	gtk_box_pack_end (GTK_BOX (box), down_arrow, FALSE, TRUE, 0);
-	gtk_widget_set_valign (down_arrow, GTK_ALIGN_BASELINE);
+	hgrid = GTK_GRID (gtk_grid_new ());
+	gtk_grid_set_column_spacing (hgrid, 6);
 
 	switcher->priv->title = GTK_LABEL (gtk_label_new (NULL));
-	gtk_widget_set_valign (GTK_WIDGET (switcher->priv->title), GTK_ALIGN_BASELINE);
-	gtk_box_pack_start (GTK_BOX (box), GTK_WIDGET (switcher->priv->title), TRUE, TRUE, 6);
+	gtk_container_add (GTK_CONTAINER (hgrid),
+			   GTK_WIDGET (switcher->priv->title));
 
 	/* To use a TeplMenuStackSwitcher in a GtkHeaderBar.
 	 * If we want to use it outside an headerbar, this should be made
@@ -386,8 +383,13 @@ create_menu_button_title (TeplMenuStackSwitcher *switcher)
 	style_context = gtk_widget_get_style_context (GTK_WIDGET (switcher->priv->title));
 	gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_TITLE);
 
-	gtk_widget_show_all (box);
-	gtk_container_add (GTK_CONTAINER (switcher), box);
+	down_arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
+	gtk_container_add (GTK_CONTAINER (hgrid), down_arrow);
+
+	gtk_widget_set_valign (GTK_WIDGET (hgrid), GTK_ALIGN_CENTER);
+	gtk_widget_show_all (GTK_WIDGET (hgrid));
+	gtk_container_add (GTK_CONTAINER (switcher),
+			   GTK_WIDGET (hgrid));
 }
 
 static void
