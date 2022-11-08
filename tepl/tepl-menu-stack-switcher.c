@@ -17,7 +17,7 @@ struct _TeplMenuStackSwitcherPrivate
 	GtkWidget *button_box;
 	GtkWidget *popover;
 	GHashTable *buttons;
-	guint in_child_changed : 1;
+	guint in_visible_child_notify : 1;
 };
 
 enum
@@ -64,7 +64,7 @@ static void
 on_button_clicked (GtkButton             *button,
                    TeplMenuStackSwitcher *switcher)
 {
-	if (!switcher->priv->in_child_changed)
+	if (!switcher->priv->in_visible_child_notify)
 	{
 		GtkWidget *stack_child;
 
@@ -214,9 +214,9 @@ stack_visible_child_notify_cb (GtkStack              *stack,
 	button = g_hash_table_lookup (switcher->priv->buttons, visible_child);
 	if (button != NULL)
 	{
-		switcher->priv->in_child_changed = TRUE;
+		switcher->priv->in_visible_child_notify = TRUE;
 		gtk_toggle_button_set_active (button, TRUE);
-		switcher->priv->in_child_changed = FALSE;
+		switcher->priv->in_visible_child_notify = FALSE;
 	}
 }
 
