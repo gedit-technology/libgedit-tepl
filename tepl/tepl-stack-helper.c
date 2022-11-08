@@ -44,6 +44,7 @@ _tepl_stack_helper_class_init (TeplStackHelperClass *klass)
 	 * ::changed is a convenience signal that is emitted on:
 	 * - #GtkContainer::add
 	 * - #GtkContainer::remove
+	 * - #GObject::notify for the #GtkStack:visible-child property.
 	 * - #GtkWidget::child-notify for all children part of the container.
 	 *
 	 * Possible use-case: implement a #GtkStack switcher, to know when the
@@ -123,6 +124,14 @@ remove_cb (GtkContainer    *container,
 	emit_changed (helper);
 }
 
+static void
+visible_child_notify_cb (GtkStack        *stack,
+			 GParamSpec      *pspec,
+			 TeplStackHelper *helper)
+{
+	emit_changed (helper);
+}
+
 /* Doesn't hold a reference to @stack. */
 TeplStackHelper *
 _tepl_stack_helper_new (GtkStack *stack)
@@ -147,6 +156,12 @@ _tepl_stack_helper_new (GtkStack *stack)
 			       g_signal_connect (stack,
 						 "remove",
 						 G_CALLBACK (remove_cb),
+						 helper));
+
+	tepl_signal_group_add (helper->priv->signal_group,
+			       g_signal_connect (stack,
+						 "notify::visible-child",
+						 G_CALLBACK (visible_child_notify_cb),
 						 helper));
 
 	return helper;
