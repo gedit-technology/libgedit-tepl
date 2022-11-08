@@ -6,11 +6,14 @@
 #ifndef TEPL_ENCODING_ICONV_H
 #define TEPL_ENCODING_ICONV_H
 
-#include <glib.h>
+#include "tepl-encoding.h"
 
 G_BEGIN_DECLS
 
 typedef struct _TeplEncodingIconv TeplEncodingIconv;
+
+G_GNUC_INTERNAL
+const TeplEncoding *	tepl_encoding_iconv_to_base_type	(const TeplEncodingIconv *enc);
 
 G_GNUC_INTERNAL
 TeplEncodingIconv *	tepl_encoding_iconv_new			(const gchar *charset);

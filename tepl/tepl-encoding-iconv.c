@@ -58,6 +58,8 @@
 
 struct _TeplEncodingIconv
 {
+	TeplEncoding parent;
+
 	/* Must never be NULL. */
 	gchar *charset;
 
@@ -168,19 +170,46 @@ static const EncodingData encodings_table[] =
 	{ "WINDOWS-1258", N_("Vietnamese") }
 };
 
+static const gchar *
+tepl_encoding_iconv_get_category_name (const TeplEncoding *enc)
+{
+	return tepl_encoding_iconv_get_name ((const TeplEncodingIconv *) enc);
+}
+
+static void
+init_vtable (TeplEncodingVtable *vtable)
+{
+	vtable->get_category_name = tepl_encoding_iconv_get_category_name;
+}
+
 static TeplEncodingIconv *
 _tepl_encoding_iconv_new_full (const gchar *charset,
 			       const gchar *translated_name)
 {
+	static TeplEncodingVtable vtable;
+	static gboolean vtable_initialized = FALSE;
 	TeplEncodingIconv *enc;
 
 	g_assert (charset != NULL);
 
+	if (!vtable_initialized)
+	{
+		init_vtable (&vtable);
+		vtable_initialized = TRUE;
+	}
+
 	enc = g_new (TeplEncodingIconv, 1);
+	enc->parent.vtable = &vtable;
 	enc->charset = g_strdup (charset);
 	enc->translated_name = g_strdup (translated_name);
 
 	return enc;
+}
+
+const TeplEncoding *
+tepl_encoding_iconv_to_base_type (const TeplEncodingIconv *enc)
+{
+	return (const TeplEncoding *) enc;
 }
 
 /**
