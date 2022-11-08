@@ -450,7 +450,7 @@ tepl_menu_stack_switcher_set_stack (TeplMenuStackSwitcher *switcher,
 
 	if (stack != NULL)
 	{
-		switcher->priv->stack = g_object_ref (stack);
+		switcher->priv->stack = g_object_ref_sink (stack);
 		populate_button_box (switcher);
 		connect_stack_signals (switcher);
 	}
