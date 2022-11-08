@@ -171,9 +171,11 @@ static const EncodingData encodings_table[] =
 };
 
 static const gchar *
-tepl_encoding_iconv_get_category_name (const TeplEncoding *enc)
+tepl_encoding_iconv_get_category_name (const TeplEncoding *enc_base_type)
 {
-	return tepl_encoding_iconv_get_name ((const TeplEncodingIconv *) enc);
+	const TeplEncodingIconv *enc = (const TeplEncodingIconv *) enc_base_type;
+
+	return enc->translated_name;
 }
 
 static void
@@ -361,25 +363,6 @@ tepl_encoding_iconv_get_charset (const TeplEncodingIconv *enc)
 	g_assert (enc->charset != NULL);
 
 	return enc->charset;
-}
-
-/**
- * tepl_encoding_iconv_get_name:
- * @enc: a #TeplEncodingIconv.
- *
- * Gets the name of the #TeplEncodingIconv such as "Unicode" or "Western". If
- * the charset is unknown by #TeplEncodingIconv, "Unknown" is returned. The
- * return value is already translated by gettext.
- *
- * Returns: the name of the #TeplEncodingIconv.
- * Since: 2.0
- */
-const gchar *
-tepl_encoding_iconv_get_name (const TeplEncodingIconv *enc)
-{
-	g_return_val_if_fail (enc != NULL, NULL);
-
-	return (enc->translated_name != NULL) ? enc->translated_name : _("Unknown");
 }
 
 /**

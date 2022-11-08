@@ -34,9 +34,6 @@ G_GNUC_INTERNAL
 const gchar *		tepl_encoding_iconv_get_charset		(const TeplEncodingIconv *enc);
 
 G_GNUC_INTERNAL
-const gchar *		tepl_encoding_iconv_get_name		(const TeplEncodingIconv *enc);
-
-G_GNUC_INTERNAL
 gchar *			tepl_encoding_iconv_to_string		(const TeplEncodingIconv *enc);
 
 G_GNUC_INTERNAL
