@@ -105,6 +105,7 @@ update_button (TeplMenuStackSwitcher *switcher,
 
 		if (stack_child == gtk_stack_get_visible_child (switcher->priv->stack))
 		{
+			/* TODO: call this function independently, not here. */
 			update_title_label (switcher);
 		}
 
@@ -140,6 +141,9 @@ on_position_updated (GtkWidget             *stack_child,
 				 "position", &position,
 				 NULL);
 
+	/* TODO: fix bug with the position not taken into account *initially*
+	 * when populating the button_box.
+	 */
 	gtk_box_reorder_child (GTK_BOX (switcher->priv->button_box), button, position);
 }
 
