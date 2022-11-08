@@ -11,14 +11,14 @@
 /*
  * SECTION:encoding
  * @Short_description: Character encoding
- * @Title: TeplEncoding
+ * @Title: TeplEncodingIconv
  * @See_also: #TeplFileSaver, #TeplFileLoader
  *
- * The #TeplEncoding boxed type represents a character encoding. It is used
- * for example by #TeplFile. Note that the text in GTK widgets is always
- * encoded in UTF-8.
+ * The #TeplEncodingIconv boxed type represents a character encoding. It is used
+ * for example by #TeplFile. Note that the text in GTK widgets is always encoded
+ * in UTF-8.
  *
- * #TeplEncoding is a fork of #GtkSourceEncoding with a different API to
+ * #TeplEncodingIconv is a fork of #GtkSourceEncoding with a different API to
  * accommodate the new #TeplFileLoader implementation.
  */
 
@@ -27,11 +27,11 @@
  * Why not using a simple string to store a charset? With for example a
  * TeplEncodingTable singleton to retrieve the information from the table.
  * An API like that would have some ugliness:
- * - To compare charsets, g_ascii_strcasecmp() must be used. TeplEncoding hides
- *   that with tepl_encoding_equals().
+ * - To compare charsets, g_ascii_strcasecmp() must be used. TeplEncodingIconv
+ *   hides that with tepl_encoding_equals().
  * - The result of `iconv --list` contains duplicates, for example "UTF8" and
- *   "UTF-8". Since UTF-8 is an important case, TeplEncoding has special cases
- *   and special functions for it: tepl_encoding_new_utf8() and
+ *   "UTF-8". Since UTF-8 is an important case, TeplEncodingIconv has special
+ *   cases and special functions for it: tepl_encoding_new_utf8() and
  *   tepl_encoding_is_utf8().
  *
  * An earlier implementation of this class (the first implementation of
@@ -47,16 +47,16 @@
  * guaranteed to be in the table. So the charset passed to tepl_encoding_new()
  * is copied as-is, to not loose any information from uchardet. If the table
  * contains that charset, fine, we also have a name like "Unicode"; otherwise
- * it's not a problem, we have a TeplEncoding encapsulating the charset.
+ * it's not a problem, we have a TeplEncodingIconv encapsulating the charset.
  *
  * It's a boxed type, not a GObject. Because signals are not needed, so a boxed
- * type is lighter. tepl_encoding_get_all() creates a lot of TeplEncoding's. It
- * would be slightly more convenient to have ref counting, but TeplEncoding can
- * be seen as a string: instead of g_strdup()/g_free(), it's
- * tepl_encoding_copy()/tepl_encoding_free().
+ * type is lighter. tepl_encoding_get_all() creates a lot of
+ * TeplEncodingIconv's. It would be slightly more convenient to have ref
+ * counting, but TeplEncodingIconv can be seen as a string: instead of
+ * g_strdup()/g_free(), it's tepl_encoding_copy()/tepl_encoding_free().
  */
 
-struct _TeplEncoding
+struct _TeplEncodingIconv
 {
 	/* Must never be NULL. */
 	gchar *charset;
@@ -167,15 +167,15 @@ static const EncodingData encodings_table[] =
 	{ "WINDOWS-1258", N_("Vietnamese") }
 };
 
-static TeplEncoding *
+static TeplEncodingIconv *
 _tepl_encoding_new_full (const gchar *charset,
 			 const gchar *translated_name)
 {
-	TeplEncoding *enc;
+	TeplEncodingIconv *enc;
 
 	g_assert (charset != NULL);
 
-	enc = g_new (TeplEncoding, 1);
+	enc = g_new (TeplEncodingIconv, 1);
 	enc->charset = g_strdup (charset);
 	enc->translated_name = g_strdup (translated_name);
 
@@ -184,13 +184,13 @@ _tepl_encoding_new_full (const gchar *charset,
 
 /**
  * tepl_encoding_copy:
- * @enc: a #TeplEncoding.
+ * @enc: a #TeplEncodingIconv.
  *
  * Returns: (transfer full): a copy of @enc.
  * Since: 2.0
  */
-TeplEncoding *
-tepl_encoding_copy (const TeplEncoding *enc)
+TeplEncodingIconv *
+tepl_encoding_copy (const TeplEncodingIconv *enc)
 {
 	g_return_val_if_fail (enc != NULL, NULL);
 
@@ -200,12 +200,12 @@ tepl_encoding_copy (const TeplEncoding *enc)
 
 /**
  * tepl_encoding_free:
- * @enc: (nullable): a #TeplEncoding, or %NULL.
+ * @enc: (nullable): a #TeplEncodingIconv, or %NULL.
  *
  * Since: 2.0
  */
 void
-tepl_encoding_free (TeplEncoding *enc)
+tepl_encoding_free (TeplEncodingIconv *enc)
 {
 	if (enc != NULL)
 	{
@@ -257,16 +257,16 @@ get_translated_name (const gchar *charset)
  * tepl_encoding_new:
  * @charset: a character set.
  *
- * Creates a new #TeplEncoding from a character set such as "UTF-8" or
+ * Creates a new #TeplEncodingIconv from a character set such as "UTF-8" or
  * "ISO-8859-1".
  *
  * The tepl_encoding_get_charset() function will return exactly the same string
  * as the @charset passed in to this constructor.
  *
- * Returns: the new #TeplEncoding. Free with tepl_encoding_free().
+ * Returns: the new #TeplEncodingIconv. Free with tepl_encoding_free().
  * Since: 2.0
  */
-TeplEncoding *
+TeplEncodingIconv *
 tepl_encoding_new (const gchar *charset)
 {
 	const gchar *translated_name;
@@ -281,12 +281,12 @@ tepl_encoding_new (const gchar *charset)
 /**
  * tepl_encoding_new_utf8:
  *
- * Creates a new #TeplEncoding with the "UTF-8" character set.
+ * Creates a new #TeplEncodingIconv with the "UTF-8" character set.
  *
- * Returns: the new #TeplEncoding. Free with tepl_encoding_free().
+ * Returns: the new #TeplEncodingIconv. Free with tepl_encoding_free().
  * Since: 2.0
  */
-TeplEncoding *
+TeplEncodingIconv *
 tepl_encoding_new_utf8 (void)
 {
 	return tepl_encoding_new (UTF8_CANONICAL_FORM);
@@ -295,13 +295,13 @@ tepl_encoding_new_utf8 (void)
 /**
  * tepl_encoding_new_from_locale:
  *
- * Creates a new #TeplEncoding from the current locale, as returned by
+ * Creates a new #TeplEncodingIconv from the current locale, as returned by
  * g_get_charset().
  *
- * Returns: the new #TeplEncoding. Free with tepl_encoding_free().
+ * Returns: the new #TeplEncodingIconv. Free with tepl_encoding_free().
  * Since: 2.0
  */
-TeplEncoding *
+TeplEncodingIconv *
 tepl_encoding_new_from_locale (void)
 {
 	const gchar *locale_charset;
@@ -316,15 +316,16 @@ tepl_encoding_new_from_locale (void)
 
 /**
  * tepl_encoding_get_charset:
- * @enc: a #TeplEncoding.
+ * @enc: a #TeplEncodingIconv.
  *
- * Gets the character set of the #TeplEncoding, such as "UTF-8" or "ISO-8859-1".
+ * Gets the character set of the #TeplEncodingIconv, such as "UTF-8" or
+ * "ISO-8859-1".
  *
- * Returns: the character set of the #TeplEncoding.
+ * Returns: the character set of the #TeplEncodingIconv.
  * Since: 2.0
  */
 const gchar *
-tepl_encoding_get_charset (const TeplEncoding *enc)
+tepl_encoding_get_charset (const TeplEncodingIconv *enc)
 {
 	g_return_val_if_fail (enc != NULL, NULL);
 	g_assert (enc->charset != NULL);
@@ -334,17 +335,17 @@ tepl_encoding_get_charset (const TeplEncoding *enc)
 
 /**
  * tepl_encoding_get_name:
- * @enc: a #TeplEncoding.
+ * @enc: a #TeplEncodingIconv.
  *
- * Gets the name of the #TeplEncoding such as "Unicode" or "Western". If the
- * charset is unknown by #TeplEncoding, "Unknown" is returned. The return value
- * is already translated by gettext.
+ * Gets the name of the #TeplEncodingIconv such as "Unicode" or "Western". If
+ * the charset is unknown by #TeplEncodingIconv, "Unknown" is returned. The
+ * return value is already translated by gettext.
  *
- * Returns: the name of the #TeplEncoding.
+ * Returns: the name of the #TeplEncodingIconv.
  * Since: 2.0
  */
 const gchar *
-tepl_encoding_get_name (const TeplEncoding *enc)
+tepl_encoding_get_name (const TeplEncodingIconv *enc)
 {
 	g_return_val_if_fail (enc != NULL, NULL);
 
@@ -353,7 +354,7 @@ tepl_encoding_get_name (const TeplEncoding *enc)
 
 /**
  * tepl_encoding_to_string:
- * @enc: a #TeplEncoding.
+ * @enc: a #TeplEncodingIconv.
  *
  * Returns the encoding name with the charset in parenthesis, for example
  * "Unicode (UTF-8)". If the name is unknown, just the charset is returned. The
@@ -363,7 +364,7 @@ tepl_encoding_get_name (const TeplEncoding *enc)
  * Since: 2.0
  */
 gchar *
-tepl_encoding_to_string (const TeplEncoding *enc)
+tepl_encoding_to_string (const TeplEncodingIconv *enc)
 {
 	g_return_val_if_fail (enc != NULL, NULL);
 	g_assert (enc->charset != NULL);
@@ -378,7 +379,7 @@ tepl_encoding_to_string (const TeplEncoding *enc)
 
 /**
  * tepl_encoding_is_utf8:
- * @enc: a #TeplEncoding.
+ * @enc: a #TeplEncodingIconv.
  *
  * Returns whether @enc is a UTF-8 encoding.
  *
@@ -390,7 +391,7 @@ tepl_encoding_to_string (const TeplEncoding *enc)
  * Since: 2.0
  */
 gboolean
-tepl_encoding_is_utf8 (const TeplEncoding *enc)
+tepl_encoding_is_utf8 (const TeplEncodingIconv *enc)
 {
 	g_return_val_if_fail (enc != NULL, FALSE);
 	g_assert (enc->charset != NULL);
@@ -400,8 +401,8 @@ tepl_encoding_is_utf8 (const TeplEncoding *enc)
 
 /**
  * tepl_encoding_equals:
- * @enc1: (nullable): a #TeplEncoding, or %NULL.
- * @enc2: (nullable): a #TeplEncoding, or %NULL.
+ * @enc1: (nullable): a #TeplEncodingIconv, or %NULL.
+ * @enc2: (nullable): a #TeplEncodingIconv, or %NULL.
  *
  * Returns whether @enc1 and @enc2 are equal. It returns %TRUE iff:
  * - Both @enc1 and @enc2 are %NULL;
@@ -414,8 +415,8 @@ tepl_encoding_is_utf8 (const TeplEncoding *enc)
  * Since: 2.0
  */
 gboolean
-tepl_encoding_equals (const TeplEncoding *enc1,
-		      const TeplEncoding *enc2)
+tepl_encoding_equals (const TeplEncodingIconv *enc1,
+		      const TeplEncodingIconv *enc2)
 {
 	if (enc1 == NULL || enc2 == NULL)
 	{
@@ -435,14 +436,14 @@ tepl_encoding_equals (const TeplEncoding *enc1,
 }
 
 static gboolean
-present_in_list (const GSList       *list,
-		 const TeplEncoding *enc)
+present_in_list (const GSList            *list,
+		 const TeplEncodingIconv *enc)
 {
 	const GSList *l;
 
 	for (l = list; l != NULL; l = l->next)
 	{
-		const TeplEncoding *cur_enc = l->data;
+		const TeplEncodingIconv *cur_enc = l->data;
 
 		if (tepl_encoding_equals (cur_enc, enc))
 		{
@@ -456,23 +457,23 @@ present_in_list (const GSList       *list,
 /**
  * tepl_encoding_get_all:
  *
- * Gets a list of all encodings known by #TeplEncoding.
+ * Gets a list of all encodings known by #TeplEncodingIconv.
  *
- * Returns: (transfer full) (element-type TeplEncoding): a list of
- * #TeplEncoding's.
+ * Returns: (transfer full) (element-type TeplEncodingIconv): a list of
+ *   #TeplEncodingIconv's.
  * Since: 2.0
  */
 GSList *
 tepl_encoding_get_all (void)
 {
 	GSList *list = NULL;
-	TeplEncoding *locale_enc;
+	TeplEncodingIconv *locale_enc;
 	gint i;
 
 	for (i = G_N_ELEMENTS (encodings_table) - 1; i >= 0; i--)
 	{
 		const EncodingData *cur_data = encodings_table + i;
-		TeplEncoding *enc;
+		TeplEncodingIconv *enc;
 
 		enc = _tepl_encoding_new_full (cur_data->charset,
 					       _(cur_data->name_to_translate));
@@ -504,7 +505,7 @@ remove_duplicates_keep_first (GSList *list)
 
 	for (l = list; l != NULL; l = l->next)
 	{
-		TeplEncoding *cur_enc = l->data;
+		TeplEncodingIconv *cur_enc = l->data;
 
 		if (present_in_list (new_list, cur_enc))
 		{
@@ -532,7 +533,7 @@ remove_duplicates_keep_last (GSList *list)
 
 	for (l = list; l != NULL; l = l->next)
 	{
-		TeplEncoding *cur_enc = l->data;
+		TeplEncodingIconv *cur_enc = l->data;
 
 		if (present_in_list (new_list, cur_enc))
 		{
@@ -550,26 +551,26 @@ remove_duplicates_keep_last (GSList *list)
 
 /*
  * _tepl_encoding_remove_duplicates:
- * @list: (transfer full) (element-type TeplEncoding): a list of
- * #TeplEncoding's.
- * @removal_type: the #TeplEncodingDuplicates.
+ * @list: (transfer full) (element-type TeplEncodingIconv): a list of
+ *   #TeplEncodingIconv's.
+ * @removal_type: the #TeplEncodingIconvDuplicates.
  *
  * A convenience function to remove duplicated encodings in a list.
  *
- * Returns: (transfer full) (element-type TeplEncoding): the new start of the
- * #GSList.
+ * Returns: (transfer full) (element-type TeplEncodingIconv): the new start of
+ *   the #GSList.
  * Since: 2.0
  */
 GSList *
-_tepl_encoding_remove_duplicates (GSList                 *list,
-				  TeplEncodingDuplicates  removal_type)
+_tepl_encoding_remove_duplicates (GSList                      *list,
+				  TeplEncodingIconvDuplicates  removal_type)
 {
 	switch (removal_type)
 	{
-		case TEPL_ENCODING_DUPLICATES_KEEP_FIRST:
+		case TEPL_ENCODING_ICONV_DUPLICATES_KEEP_FIRST:
 			return remove_duplicates_keep_first (list);
 
-		case TEPL_ENCODING_DUPLICATES_KEEP_LAST:
+		case TEPL_ENCODING_ICONV_DUPLICATES_KEEP_LAST:
 			return remove_duplicates_keep_last (list);
 
 		default:
@@ -579,7 +580,7 @@ _tepl_encoding_remove_duplicates (GSList                 *list,
 	g_return_val_if_reached (list);
 }
 
-/* Returns: (transfer full) (element-type TeplEncoding). */
+/* Returns: (transfer full) (element-type TeplEncodingIconv). */
 static GSList *
 default_candidates_strv_to_list (const gchar * const *enc_str)
 {
@@ -592,7 +593,7 @@ default_candidates_strv_to_list (const gchar * const *enc_str)
 	for (p = (gchar **)enc_str; p != NULL && *p != NULL; p++)
 	{
 		const gchar *charset = *p;
-		TeplEncoding *enc;
+		TeplEncodingIconv *enc;
 
 		if (g_str_equal (charset, "CURRENT"))
 		{
@@ -615,7 +616,7 @@ default_candidates_strv_to_list (const gchar * const *enc_str)
 		 */
 		if (!present_in_list (all_encodings, enc))
 		{
-			g_warning ("TeplEncoding: unknown charset '%s', "
+			g_warning ("TeplEncodingIconv: unknown charset '%s', "
 				   "ignoring it for the default candidates.",
 				   charset);
 
@@ -642,11 +643,11 @@ default_candidates_strv_to_list (const gchar * const *enc_str)
  * locale encoding are guaranteed to be present in the returned list.
  *
  * Note that the returned list doesn't contain all encodings known by
- * #TeplEncoding, it is a limited list that contains only the encodings that
- * have the most likelihood to fit for the current locale.
+ * #TeplEncodingIconv, it is a limited list that contains only the encodings
+ * that have the most likelihood to fit for the current locale.
  *
- * Returns: (transfer full) (element-type TeplEncoding): the list of default
- * candidate encodings.
+ * Returns: (transfer full) (element-type TeplEncodingIconv): the list of
+ *   default candidate encodings.
  * Since: 2.0
  */
 /* TODO s/gtk_source_file_loader_set_candidate_encodings/tepl_.../ when the
@@ -715,7 +716,7 @@ tepl_encoding_get_default_candidates (void)
 	encodings_list = g_slist_prepend (encodings_list, tepl_encoding_new_from_locale ());
 	encodings_list = g_slist_prepend (encodings_list, tepl_encoding_new_utf8 ());
 	encodings_list = _tepl_encoding_remove_duplicates (encodings_list,
-							   TEPL_ENCODING_DUPLICATES_KEEP_LAST);
+							   TEPL_ENCODING_ICONV_DUPLICATES_KEEP_LAST);
 
 	g_variant_unref (encodings_variant);
 	return encodings_list;
