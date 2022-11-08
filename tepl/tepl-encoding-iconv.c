@@ -9,17 +9,14 @@
 #include <glib/gi18n-lib.h>
 
 /*
- * SECTION:encoding
- * @Short_description: Character encoding
+ * SECTION:encoding-iconv
+ * @Short_description: Character encoding for iconv
  * @Title: TeplEncodingIconv
- * @See_also: #TeplFileSaver, #TeplFileLoader
  *
- * The #TeplEncodingIconv boxed type represents a character encoding. It is used
- * for example by #TeplFile. Note that the text in GTK widgets is always encoded
- * in UTF-8.
+ * The #TeplEncodingIconv type represents a character encoding, with support for
+ * iconv in mind (although #TeplEncodingIconv doesn't use iconv by itself).
  *
- * #TeplEncodingIconv is a fork of #GtkSourceEncoding with a different API to
- * accommodate the new #TeplFileLoader implementation.
+ * Note that the text in GTK widgets is always encoded in UTF-8.
  */
 
 /* API design:
@@ -41,19 +38,22 @@
  * not found. The problem is that the table is not complete, it just contains
  * common encodings. For GtkSourceEncoding and the implementation of
  * GtkSourceFileLoader, this was not a problem: the file loader tried each
- * candidate GtkSourceEncoding one by one. But the new file loader
- * implementation uses an external library (uchardet) to determine the encoding.
- * uchardet returns an iconv-compatible charset, as a string, which is not
- * guaranteed to be in the table. So the charset passed to tepl_encoding_iconv_new()
- * is copied as-is, to not loose any information from uchardet. If the table
- * contains that charset, fine, we also have a name like "Unicode"; otherwise
- * it's not a problem, we have a TeplEncodingIconv encapsulating the charset.
+ * candidate GtkSourceEncoding one by one.
+ * But when using an external library (for example uchardet) to determine the
+ * encoding of a file, we get a charset string from the library (with uchardet
+ * it's an iconv-compatible charset). That charset string is not guaranteed to
+ * be in the table. So the charset passed to tepl_encoding_iconv_new() is copied
+ * as-is, to not loose any information from what returns the external library.
+ * If the table contains that charset, fine, we also have a category name like
+ * "Unicode"; otherwise it's not a problem, we have a TeplEncodingIconv
+ * encapsulating the charset.
  *
- * It's a boxed type, not a GObject. Because signals are not needed, so a boxed
- * type is lighter. tepl_encoding_iconv_get_all() creates a lot of
+ * It's a simple struct, not a GObject. Because signals are not needed, so a
+ * simple struct type is lighter. tepl_encoding_iconv_get_all() creates a lot of
  * TeplEncodingIconv's. It would be slightly more convenient to have ref
  * counting, but TeplEncodingIconv can be seen as a string: instead of
- * g_strdup()/g_free(), it's tepl_encoding_iconv_copy()/tepl_encoding_iconv_free().
+ * g_strdup()/g_free(), it's
+ * tepl_encoding_iconv_copy()/tepl_encoding_iconv_free().
  */
 
 struct _TeplEncodingIconv
@@ -81,9 +81,10 @@ struct _EncodingData
 /* This table should not contain duplicates: iconv supports for example "utf8",
  * "UTF8", "utf-8" and "UTF-8", they are equivalent (as far as I've tested) but
  * the table contains only "UTF-8". As a result, a function like
- * tepl_encoding_iconv_get_all() doesn't return duplicates, which is important to not
- * try several times the same encoding when loading a file, or to not show
- * duplicated encodings in a GtkComboBox when choosing manually an encoding.
+ * tepl_encoding_iconv_get_all() doesn't return duplicates, which is important
+ * to not try several times the same encoding when loading a file, or to not
+ * show duplicated encodings in a GtkComboBox when choosing manually an
+ * encoding.
  *
  * The original version of this table comes from profterm.
  * SPDX-FileCopyrightText: (C) 2002 Red Hat, Inc.
@@ -169,7 +170,7 @@ static const EncodingData encodings_table[] =
 
 static TeplEncodingIconv *
 _tepl_encoding_iconv_new_full (const gchar *charset,
-			 const gchar *translated_name)
+			       const gchar *translated_name)
 {
 	TeplEncodingIconv *enc;
 
@@ -195,7 +196,7 @@ tepl_encoding_iconv_copy (const TeplEncodingIconv *enc)
 	g_return_val_if_fail (enc != NULL, NULL);
 
 	return _tepl_encoding_iconv_new_full (enc->charset,
-					enc->translated_name);
+					      enc->translated_name);
 }
 
 /**
@@ -260,8 +261,8 @@ get_translated_name (const gchar *charset)
  * Creates a new #TeplEncodingIconv from a character set such as "UTF-8" or
  * "ISO-8859-1".
  *
- * The tepl_encoding_iconv_get_charset() function will return exactly the same string
- * as the @charset passed in to this constructor.
+ * The tepl_encoding_iconv_get_charset() function will return exactly the same
+ * string as the @charset passed in to this constructor.
  *
  * Returns: the new #TeplEncodingIconv. Free with tepl_encoding_iconv_free().
  * Since: 2.0
@@ -383,9 +384,9 @@ tepl_encoding_iconv_to_string (const TeplEncodingIconv *enc)
  *
  * Returns whether @enc is a UTF-8 encoding.
  *
- * If @enc was created with tepl_encoding_iconv_new_utf8(), the charset is "UTF-8".
- * But iconv supports other variants: "UTF8", "utf-8" and "utf8". This function
- * returns %TRUE for all UTF-8 variants supported by iconv.
+ * If @enc was created with tepl_encoding_iconv_new_utf8(), the charset is
+ * "UTF-8".  But iconv supports other variants: "UTF8", "utf-8" and "utf8". This
+ * function returns %TRUE for all UTF-8 variants supported by iconv.
  *
  * Returns: whether @enc is a UTF-8 encoding.
  * Since: 2.0
@@ -416,7 +417,7 @@ tepl_encoding_iconv_is_utf8 (const TeplEncodingIconv *enc)
  */
 gboolean
 tepl_encoding_iconv_equals (const TeplEncodingIconv *enc1,
-		      const TeplEncodingIconv *enc2)
+			    const TeplEncodingIconv *enc2)
 {
 	if (enc1 == NULL || enc2 == NULL)
 	{
@@ -476,7 +477,7 @@ tepl_encoding_iconv_get_all (void)
 		TeplEncodingIconv *enc;
 
 		enc = _tepl_encoding_iconv_new_full (cur_data->charset,
-					       _(cur_data->name_to_translate));
+						     _(cur_data->name_to_translate));
 
 		list = g_slist_prepend (list, enc);
 	}
@@ -563,7 +564,7 @@ remove_duplicates_keep_last (GSList *list)
  */
 GSList *
 _tepl_encoding_iconv_remove_duplicates (GSList                      *list,
-				  TeplEncodingIconvDuplicates  removal_type)
+					TeplEncodingIconvDuplicates  removal_type)
 {
 	switch (removal_type)
 	{
