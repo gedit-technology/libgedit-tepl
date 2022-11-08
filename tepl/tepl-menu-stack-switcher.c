@@ -5,6 +5,19 @@
 
 #include "tepl-menu-stack-switcher.h"
 
+/**
+ * SECTION:menu-stack-switcher
+ * @Short_description: A #GtkStack switcher based on #GtkMenuButton
+ * @Title: TeplMenuStackSwitcher
+ *
+ * #TeplMenuStackSwitcher is a #GtkStack switcher based on #GtkMenuButton.
+ *
+ * #TeplMenuStackSwitcher is intended to be used in a #GtkHeaderBar, although
+ * the API could be extended to support other use cases.
+ *
+ * It's an alternative to #GtkStackSwitcher and has a similar API.
+ */
+
 struct _TeplMenuStackSwitcherPrivate
 {
 	GtkStack *stack;
@@ -352,6 +365,13 @@ tepl_menu_stack_switcher_class_init (TeplMenuStackSwitcherClass *klass)
 	object_class->dispose = tepl_menu_stack_switcher_dispose;
 	object_class->finalize = tepl_menu_stack_switcher_finalize;
 
+	/**
+	 * TeplMenuStackSwitcher:stack:
+	 *
+	 * The current #GtkStack that the switcher controls.
+	 *
+	 * Since: 6.4
+	 */
 	properties[PROP_STACK] =
 		g_param_spec_object ("stack",
 				     "stack",
@@ -381,8 +401,6 @@ create_menu_button_title (TeplMenuStackSwitcher *switcher)
 	/* To use a TeplMenuStackSwitcher in a GtkHeaderBar.
 	 * If we want to use it outside an headerbar, this should be made
 	 * configurable with additional API.
-	 * TODO: when writing the API docs, explain that it's intended to be
-	 * used in a GtkHeaderBar.
 	 */
 	style_context = gtk_widget_get_style_context (GTK_WIDGET (switcher->priv->title));
 	gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_TITLE);
@@ -423,12 +441,27 @@ tepl_menu_stack_switcher_init (TeplMenuStackSwitcher *switcher)
 	create_popover (switcher);
 }
 
+/**
+ * tepl_menu_stack_switcher_new:
+ *
+ * Returns: (transfer floating): a new #TeplMenuStackSwitcher widget.
+ * Since: 6.4
+ */
 TeplMenuStackSwitcher *
 tepl_menu_stack_switcher_new (void)
 {
 	return g_object_new (TEPL_TYPE_MENU_STACK_SWITCHER, NULL);
 }
 
+/**
+ * tepl_menu_stack_switcher_set_stack:
+ * @switcher: a #TeplMenuStackSwitcher.
+ * @stack: (nullable): a #GtkStack, or %NULL.
+ *
+ * Sets the #TeplMenuStackSwitcher:stack property.
+ *
+ * Since: 6.4
+ */
 void
 tepl_menu_stack_switcher_set_stack (TeplMenuStackSwitcher *switcher,
 				    GtkStack              *stack)
@@ -463,6 +496,14 @@ tepl_menu_stack_switcher_set_stack (TeplMenuStackSwitcher *switcher,
 	g_object_notify_by_pspec (G_OBJECT (switcher), properties[PROP_STACK]);
 }
 
+/**
+ * tepl_menu_stack_switcher_get_stack:
+ * @switcher: a #TeplMenuStackSwitcher.
+ *
+ * Returns: (transfer none) (nullable): the value of the
+ *   #TeplMenuStackSwitcher:stack property.
+ * Since: 6.4
+ */
 GtkStack *
 tepl_menu_stack_switcher_get_stack (TeplMenuStackSwitcher *switcher)
 {

@@ -20,6 +20,7 @@ tepl_public_headers = [
   'tepl-language-chooser-widget.h',
   'tepl-macros.h',
   'tepl-menu-shell.h',
+  'tepl-menu-stack-switcher.h',
   'tepl-metadata.h',
   'tepl-metadata-manager.h',
   'tepl-notebook.h',
@@ -62,6 +63,7 @@ tepl_public_c_files = [
   'tepl-language-chooser-dialog.c',
   'tepl-language-chooser-widget.c',
   'tepl-menu-shell.c',
+  'tepl-menu-stack-switcher.c',
   'tepl-metadata.c',
   'tepl-metadata-manager.c',
   'tepl-notebook.c',
@@ -87,7 +89,6 @@ tepl_public_c_files = [
 TEPL_PRIVATE_HEADERS = [
   'tepl-close-confirm-dialog-single.h',
   'tepl-icu.h',
-  'tepl-menu-stack-switcher.h',
   'tepl-metadata-attic.h',
   'tepl-metadata-parser.h',
   'tepl-stack-helper.h',
@@ -99,7 +100,6 @@ TEPL_PRIVATE_HEADERS = [
 tepl_private_c_files = [
   'tepl-close-confirm-dialog-single.c',
   'tepl-icu.c',
-  'tepl-menu-stack-switcher.c',
   'tepl-metadata-attic.c',
   'tepl-metadata-parser.c',
   'tepl-stack-helper.c',
