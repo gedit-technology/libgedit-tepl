@@ -99,34 +99,23 @@ update_button (TeplMenuStackSwitcher *switcher,
 	       GtkWidget             *stack_child,
 	       GtkButton             *button)
 {
-	GList *children;
+	gchar *title = NULL;
+	gboolean visible;
 
-	/* We get spurious notifications while the stack is being destroyed, so
-	 * for now check the child actually exists.
-	 */
-	children = gtk_container_get_children (GTK_CONTAINER (switcher->priv->stack));
-	if (g_list_index (children, stack_child) >= 0)
-	{
-		gchar *title;
-		gboolean visible;
+	gtk_container_child_get (GTK_CONTAINER (switcher->priv->stack),
+				 stack_child,
+				 "title", &title,
+				 NULL);
 
-		gtk_container_child_get (GTK_CONTAINER (switcher->priv->stack),
-					 stack_child,
-					 "title", &title,
-					 NULL);
+	gtk_button_set_label (button, title);
 
-		gtk_button_set_label (button, title);
+	visible = (gtk_widget_get_visible (stack_child) &&
+		   title != NULL);
+	gtk_widget_set_visible (GTK_WIDGET (button), visible);
 
-		visible = (gtk_widget_get_visible (stack_child) &&
-			   title != NULL);
-		gtk_widget_set_visible (GTK_WIDGET (button), visible);
+	gtk_widget_set_size_request (GTK_WIDGET (button), 100, -1);
 
-		gtk_widget_set_size_request (GTK_WIDGET (button), 100, -1);
-
-		g_free (title);
-	}
-
-	g_list_free (children);
+	g_free (title);
 }
 
 static void
