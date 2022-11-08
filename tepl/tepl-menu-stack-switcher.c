@@ -4,6 +4,7 @@
  */
 
 #include "tepl-menu-stack-switcher.h"
+#include "tepl-stack-helper.h"
 
 /**
  * SECTION:menu-stack-switcher
@@ -21,6 +22,7 @@
 struct _TeplMenuStackSwitcherPrivate
 {
 	GtkStack *stack;
+	TeplStackHelper *stack_helper;
 
 	/* The title of the GtkMenuButton (the title of the currently visible
 	 * child of the stack).
@@ -343,6 +345,35 @@ create_popover (TeplMenuStackSwitcher *switcher)
 }
 
 static void
+stack_changed_cb (TeplStackHelper       *stack_helper,
+		  TeplMenuStackSwitcher *switcher)
+{
+}
+
+static void
+update_stack_helper (TeplMenuStackSwitcher *switcher)
+{
+	if (switcher->priv->stack_helper != NULL)
+	{
+		g_signal_handlers_disconnect_by_func (switcher->priv->stack_helper,
+						      stack_changed_cb,
+						      switcher);
+
+		g_clear_object (&switcher->priv->stack_helper);
+	}
+
+	if (switcher->priv->stack != NULL)
+	{
+		switcher->priv->stack_helper = _tepl_stack_helper_new (switcher->priv->stack);
+
+		g_signal_connect (switcher->priv->stack_helper,
+				  "changed",
+				  G_CALLBACK (stack_changed_cb),
+				  switcher);
+	}
+}
+
+static void
 tepl_menu_stack_switcher_get_property (GObject    *object,
 				       guint       prop_id,
 				       GValue     *value,
@@ -487,6 +518,8 @@ tepl_menu_stack_switcher_set_stack (TeplMenuStackSwitcher *switcher,
 		populate_button_box (switcher);
 		connect_stack_signals (switcher);
 	}
+
+	update_stack_helper (switcher);
 
 	/* TODO: look if it is really necessary, since the widgets inside anyway
 	 * change.
