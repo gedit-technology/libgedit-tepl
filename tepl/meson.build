@@ -4,6 +4,7 @@ tepl_public_headers = [
   'tepl-application.h',
   'tepl-application-window.h',
   'tepl-buffer.h',
+  'tepl-encoding.h',
   'tepl-file.h',
   'tepl-file-chooser.h',
   'tepl-file-loader.h',
@@ -47,6 +48,7 @@ tepl_public_c_files = [
   'tepl-application.c',
   'tepl-application-window.c',
   'tepl-buffer.c',
+  'tepl-encoding.c',
   'tepl-file.c',
   'tepl-file-chooser.c',
   'tepl-file-loader.c',
@@ -86,7 +88,6 @@ tepl_public_c_files = [
 
 TEPL_PRIVATE_HEADERS = [
   'tepl-close-confirm-dialog-single.h',
-  'tepl-encoding.h',
   'tepl-encoding-iconv.h',
   'tepl-encoding-iconv-private.h',
   'tepl-icu.h',
@@ -99,7 +100,6 @@ TEPL_PRIVATE_HEADERS = [
 
 tepl_private_c_files = [
   'tepl-close-confirm-dialog-single.c',
-  'tepl-encoding.c',
   'tepl-encoding-iconv.c',
   'tepl-icu.c',
   'tepl-metadata-attic.c',

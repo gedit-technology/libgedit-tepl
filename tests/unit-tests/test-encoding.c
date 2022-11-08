@@ -2,6 +2,7 @@
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
+#include <tepl/tepl.h>
 #include "tepl/tepl-encoding-iconv.h"
 #include "tepl/tepl-encoding-iconv-private.h"
 

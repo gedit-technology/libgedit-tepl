@@ -15,8 +15,6 @@
  *
  * The #TeplEncodingIconv type represents a character encoding, with support for
  * iconv in mind (although #TeplEncodingIconv doesn't use iconv by itself).
- *
- * Note that the text in GTK widgets is always encoded in UTF-8.
  */
 
 /* API design:

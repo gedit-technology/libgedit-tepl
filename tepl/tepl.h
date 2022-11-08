@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2016-2020 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2016-2022 - Sébastien Wilmet <swilmet@gnome.org>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
@@ -16,6 +16,7 @@
 #include <tepl/tepl-application.h>
 #include <tepl/tepl-application-window.h>
 #include <tepl/tepl-buffer.h>
+#include <tepl/tepl-encoding.h>
 #include <tepl/tepl-file.h>
 #include <tepl/tepl-file-chooser.h>
 #include <tepl/tepl-file-loader.h>

@@ -42,6 +42,7 @@
 
     <chapter id="file-loading-and-saving">
       <title>File Loading and Saving</title>
+      <xi:include href="xml/encoding.xml"/>
       <xi:include href="xml/file.xml"/>
       <xi:include href="xml/file-loader.xml"/>
       <xi:include href="xml/file-saver.xml"/>
@@ -158,6 +159,10 @@
     <index id="api-index-6-2" role="6.2">
       <title>Index of new symbols in 6.2</title>
       <xi:include href="xml/api-index-6.2.xml"><xi:fallback /></xi:include>
+    </index>
+    <index id="api-index-6-4" role="6.4">
+      <title>Index of new symbols in 6.4</title>
+      <xi:include href="xml/api-index-6.4.xml"><xi:fallback /></xi:include>
     </index>
   </part>
 </book>

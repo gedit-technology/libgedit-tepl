@@ -5,6 +5,20 @@
 #include "tepl-encoding.h"
 
 /**
+ * SECTION:encoding
+ * @Short_description: Character encoding interface
+ * @Title: TeplEncoding
+ *
+ * #TeplEncoding is an interface to represent a character encoding, also called
+ * a "character set" or "charset".
+ *
+ * It serves as a basis for features such as character encoding detection and
+ * conversion during file loading and saving.
+ *
+ * Note that the text in GTK widgets is always encoded in UTF-8.
+ */
+
+/**
  * tepl_encoding_get_name:
  * @enc: a #TeplEncoding.
  *
@@ -30,7 +44,7 @@ tepl_encoding_get_name (const TeplEncoding *enc)
  * This function returns the category name of the #TeplEncoding, or %NULL if the
  * category is unknown.
  *
- * The returned string is localized (already translated).
+ * The returned string is localized (i.e., already translated).
  *
  * Returns: (nullable): the category name of the #TeplEncoding, or %NULL.
  * Since: 6.4

@@ -102,6 +102,14 @@ tepl_selection_type_get_type
 </SECTION>
 
 <SECTION>
+<FILE>encoding</FILE>
+TeplEncoding
+TeplEncodingVtable
+tepl_encoding_get_name
+tepl_encoding_get_category_name
+</SECTION>
+
+<SECTION>
 <FILE>file</FILE>
 TeplFile
 TeplNewlineType
