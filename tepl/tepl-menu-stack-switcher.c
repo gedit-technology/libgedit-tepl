@@ -29,6 +29,25 @@ G_DEFINE_TYPE_WITH_PRIVATE (TeplMenuStackSwitcher, tepl_menu_stack_switcher, GTK
 #define STACK_CHILD_KEY "stack-child-key"
 
 static void
+update_title_label (TeplMenuStackSwitcher *switcher)
+{
+	GtkWidget *stack_child;
+	gchar *title = NULL;
+
+	stack_child = gtk_stack_get_visible_child (switcher->priv->stack);
+	if (stack_child != NULL)
+	{
+		gtk_container_child_get (GTK_CONTAINER (switcher->priv->stack),
+					 stack_child,
+					 "title", &title,
+					 NULL);
+	}
+
+	gtk_label_set_label (switcher->priv->label, title);
+	g_free (title);
+}
+
+static void
 clear_button_box (TeplMenuStackSwitcher *switcher)
 {
 	gtk_container_foreach (GTK_CONTAINER (switcher->priv->button_box),
@@ -81,7 +100,7 @@ update_button (TeplMenuStackSwitcher *switcher,
 
 		if (stack_child == gtk_stack_get_visible_child (switcher->priv->stack))
 		{
-			gtk_label_set_label (switcher->priv->label, title);
+			update_title_label (switcher);
 		}
 
 		g_free (title);
