@@ -126,16 +126,17 @@ on_title_icon_visible_updated (GtkWidget             *stack_child,
 }
 
 static void
-on_position_updated (GtkWidget             *widget,
+on_position_updated (GtkWidget             *stack_child,
 		     GParamSpec            *pspec,
 		     TeplMenuStackSwitcher *switcher)
 {
 	GtkWidget *button;
 	gint position;
 
-	button = g_hash_table_lookup (switcher->priv->buttons, widget);
+	button = g_hash_table_lookup (switcher->priv->buttons, stack_child);
 
-	gtk_container_child_get (GTK_CONTAINER (switcher->priv->stack), widget,
+	gtk_container_child_get (GTK_CONTAINER (switcher->priv->stack),
+				 stack_child,
 				 "position", &position,
 				 NULL);
 
