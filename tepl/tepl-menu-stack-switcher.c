@@ -322,6 +322,7 @@ tepl_menu_stack_switcher_dispose (GObject *object)
 {
 	TeplMenuStackSwitcher *switcher = TEPL_MENU_STACK_SWITCHER (object);
 
+	/* TODO: don't call a public function inside dispose(). */
 	tepl_menu_stack_switcher_set_stack (switcher, NULL);
 
 	G_OBJECT_CLASS (tepl_menu_stack_switcher_parent_class)->dispose (object);
