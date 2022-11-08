@@ -177,6 +177,9 @@ _tepl_stack_helper_new (GtkStack *stack)
 
 	g_return_val_if_fail (GTK_IS_STACK (stack), NULL);
 
+	/* In an ideal world, a :stack construct-only property should be added
+	 * instead of doing the work in new().
+	 */
 	helper = g_object_new (TEPL_TYPE_STACK_HELPER, NULL);
 
 	connect_all_children (helper, stack);
