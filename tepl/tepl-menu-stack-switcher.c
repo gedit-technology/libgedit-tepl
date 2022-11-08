@@ -115,14 +115,14 @@ update_button (TeplMenuStackSwitcher *switcher,
 }
 
 static void
-on_title_icon_visible_updated (GtkWidget             *widget,
+on_title_icon_visible_updated (GtkWidget             *stack_child,
 			       GParamSpec            *pspec,
 			       TeplMenuStackSwitcher *switcher)
 {
 	GtkButton *button;
 
-	button = g_hash_table_lookup (switcher->priv->buttons, widget);
-	update_button (switcher, widget, button);
+	button = g_hash_table_lookup (switcher->priv->buttons, stack_child);
+	update_button (switcher, stack_child, button);
 }
 
 static void
