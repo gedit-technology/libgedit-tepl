@@ -384,7 +384,10 @@ tepl_encoding_iconv_to_string (const TeplEncodingIconv *enc)
 
 	if (enc->translated_category_name != NULL)
 	{
-		return g_strdup_printf ("%s (%s)", enc->translated_category_name, enc->charset);
+		/* Translators: the first %s is a category, the second %s is the
+		 * name.
+		 */
+		return g_strdup_printf (_("%s (%s)"), enc->translated_category_name, enc->charset);
 	}
 
 	return g_strdup (enc->charset);
