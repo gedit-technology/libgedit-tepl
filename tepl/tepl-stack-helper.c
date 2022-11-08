@@ -7,7 +7,7 @@
 
 struct _TeplStackHelperPrivate
 {
-	TeplSignalGroup *signal_group;
+	TeplSignalGroup *stack_signal_group;
 };
 
 enum
@@ -25,7 +25,7 @@ _tepl_stack_helper_dispose (GObject *object)
 {
 	TeplStackHelper *helper = TEPL_STACK_HELPER (object);
 
-	tepl_signal_group_clear (&helper->priv->signal_group);
+	tepl_signal_group_clear (&helper->priv->stack_signal_group);
 
 	G_OBJECT_CLASS (_tepl_stack_helper_parent_class)->dispose (object);
 }
@@ -41,14 +41,24 @@ _tepl_stack_helper_class_init (TeplStackHelperClass *klass)
 	 * TeplStackHelper::changed:
 	 * @helper: the #TeplStackHelper emitting the signal.
 	 *
-	 * ::changed is a convenience signal that is emitted on:
+	 * ::changed is a convenience signal that is emitted whenever the
+	 * content of a #GtkStack switcher potentially needs to be re-created.
+	 *
+	 * There are two possible approaches to implement a #GtkStack switcher:
+	 * 1. Listen to this signal and re-create each time the whole content of
+	 *    the switcher.
+	 * 2. Don't use this class, and listen instead to the individual
+	 *    finer-grained signals (listed below) and update the minimum of the
+	 *    switcher content. This approach is more difficult (and
+	 *    error-prone), but has normally better performances.
+	 *
+	 * This signal is emitted on these finer-grained signals:
 	 * - #GtkContainer::add
 	 * - #GtkContainer::remove
 	 * - #GObject::notify for the #GtkStack:visible-child property.
-	 * - #GtkWidget::child-notify for all children part of the container.
-	 *
-	 * Possible use-case: implement a #GtkStack switcher, to know when the
-	 * switcher content needs to be re-created.
+	 * - For all children part of the container:
+	 *     - #GtkWidget::child-notify
+	 *     - #GObject::notify for the #GtkWidget:visible property.
 	 */
 	signals[SIGNAL_CHANGED] =
 		g_signal_new ("changed",
@@ -71,7 +81,7 @@ emit_changed (TeplStackHelper *helper)
 }
 
 static void
-child_notify_cb (GtkWidget       *widget,
+child_notify_cb (GtkWidget       *stack_child,
                  GParamSpec      *child_property,
                  TeplStackHelper *helper)
 {
@@ -79,13 +89,34 @@ child_notify_cb (GtkWidget       *widget,
 }
 
 static void
-connect_child (TeplStackHelper *helper,
-               GtkWidget       *widget)
+visible_notify_cb (GtkWidget       *stack_child,
+		   GParamSpec      *pspec,
+		   TeplStackHelper *helper)
 {
-	g_signal_connect (widget,
+	emit_changed (helper);
+}
+
+static void
+connect_child (TeplStackHelper *helper,
+               GtkWidget       *stack_child)
+{
+	g_signal_connect (stack_child,
 			  "child-notify",
 			  G_CALLBACK (child_notify_cb),
 			  helper);
+
+	g_signal_connect (stack_child,
+			  "notify::visible",
+			  G_CALLBACK (visible_notify_cb),
+			  helper);
+}
+
+static void
+disconnect_child (TeplStackHelper *helper,
+		  GtkWidget       *stack_child)
+{
+	g_signal_handlers_disconnect_by_func (stack_child, child_notify_cb, helper);
+	g_signal_handlers_disconnect_by_func (stack_child, visible_notify_cb, helper);
 }
 
 static void
@@ -96,31 +127,29 @@ connect_all_children (TeplStackHelper *helper,
 	GList *l;
 
 	children = gtk_container_get_children (GTK_CONTAINER (stack));
-
 	for (l = children; l != NULL; l = l->next)
 	{
-		GtkWidget *child = GTK_WIDGET (l->data);
-		connect_child (helper, child);
+		GtkWidget *stack_child = GTK_WIDGET (l->data);
+		connect_child (helper, stack_child);
 	}
-
 	g_list_free (children);
 }
 
 static void
-add_cb (GtkContainer    *container,
-        GtkWidget       *widget,
-        TeplStackHelper *helper)
+add_cb (GtkStack        *stack,
+	GtkWidget       *stack_child,
+	TeplStackHelper *helper)
 {
-	connect_child (helper, widget);
+	connect_child (helper, stack_child);
 	emit_changed (helper);
 }
 
 static void
-remove_cb (GtkContainer    *container,
-           GtkWidget       *widget,
-           TeplStackHelper *helper)
+remove_cb (GtkStack        *stack,
+	   GtkWidget       *stack_child,
+	   TeplStackHelper *helper)
 {
-	g_signal_handlers_disconnect_by_func (widget, child_notify_cb, helper);
+	disconnect_child (helper, stack_child);
 	emit_changed (helper);
 }
 
@@ -144,21 +173,21 @@ _tepl_stack_helper_new (GtkStack *stack)
 
 	connect_all_children (helper, stack);
 
-	helper->priv->signal_group = tepl_signal_group_new (G_OBJECT (stack));
+	helper->priv->stack_signal_group = tepl_signal_group_new (G_OBJECT (stack));
 
-	tepl_signal_group_add (helper->priv->signal_group,
+	tepl_signal_group_add (helper->priv->stack_signal_group,
 			       g_signal_connect (stack,
 						 "add",
 						 G_CALLBACK (add_cb),
 						 helper));
 
-	tepl_signal_group_add (helper->priv->signal_group,
+	tepl_signal_group_add (helper->priv->stack_signal_group,
 			       g_signal_connect (stack,
 						 "remove",
 						 G_CALLBACK (remove_cb),
 						 helper));
 
-	tepl_signal_group_add (helper->priv->signal_group,
+	tepl_signal_group_add (helper->priv->stack_signal_group,
 			       g_signal_connect (stack,
 						 "notify::visible-child",
 						 G_CALLBACK (visible_child_notify_cb),

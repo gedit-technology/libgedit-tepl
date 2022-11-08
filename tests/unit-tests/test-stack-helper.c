@@ -174,6 +174,42 @@ test_set_visible_child (void)
 	signal_received = FALSE; /* reset */
 	gtk_stack_set_visible_child (stack, child1);
 	g_assert_false (signal_received);
+
+	gtk_widget_destroy (GTK_WIDGET (stack));
+	g_object_unref (stack_helper);
+}
+
+static void
+test_show_hide_child (void)
+{
+	GtkStack *stack;
+	GtkWidget *child;
+	TeplStackHelper *stack_helper;
+	gboolean signal_received = FALSE;
+
+	stack = GTK_STACK (gtk_stack_new ());
+	g_object_ref_sink (stack);
+
+	child = gtk_label_new (NULL);
+	gtk_widget_show (child);
+	gtk_stack_add_titled (stack, child, "child", "Child");
+
+	stack_helper = _tepl_stack_helper_new (stack);
+	g_signal_connect (stack_helper,
+			  "changed",
+			  G_CALLBACK (stack_changed_cb),
+			  &signal_received);
+
+	g_assert_false (signal_received);
+	gtk_widget_hide (child);
+	g_assert_true (signal_received);
+
+	signal_received = FALSE; /* reset */
+	gtk_widget_show (child);
+	g_assert_true (signal_received);
+
+	gtk_widget_destroy (GTK_WIDGET (stack));
+	g_object_unref (stack_helper);
 }
 
 int
@@ -187,6 +223,7 @@ main (int    argc,
 	g_test_add_func ("/StackHelper/change_child", test_change_child);
 	g_test_add_func ("/StackHelper/change_initially_present_child", test_change_initially_present_child);
 	g_test_add_func ("/StackHelper/set_visible_child", test_set_visible_child);
+	g_test_add_func ("/StackHelper/show_hide_child", test_show_hide_child);
 
 	return g_test_run ();
 }
