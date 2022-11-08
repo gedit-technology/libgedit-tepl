@@ -29,90 +29,74 @@ tepl_view_create_buffer (GtkTextView *view)
 	return GTK_TEXT_BUFFER (tepl_buffer_new ());
 }
 
-/* TODO: simplify this function because it's called only with count==1 */
 static void
-delete_line (GtkTextView *text_view,
-	     gint         count)
+set_to_line_end (GtkTextIter *iter)
 {
+	if (!gtk_text_iter_ends_line (iter))
+	{
+		gtk_text_iter_forward_to_line_end (iter);
+	}
+}
+
+static void
+get_extents_for_lines_deletion (GtkTextBuffer *buffer,
+				GtkTextIter   *start,
+				GtkTextIter   *end)
+{
+	gboolean has_selection;
+
+	has_selection = gtk_text_buffer_get_selection_bounds (buffer, start, end);
+
+	gtk_text_iter_set_line_offset (start, 0);
+
+	if (has_selection && gtk_text_iter_starts_line (end))
+	{
+		/* In this case, the GtkTextView displays the selection only on
+		 * the previous line(s), not on the line where 'end' is, so
+		 * don't delete the line located at 'end'.
+		 */
+		return;
+	}
+
+	set_to_line_end (end);
+
+	/* We have now the same situation with 'start' at the start of a line,
+	 * and 'end' at the end of a line, with start <= end.
+	 * We must just include one more \n (or equivalent) to not leave a blank
+	 * line as a result.
+	 */
+	if (!gtk_text_iter_is_end (end))
+	{
+		gtk_text_iter_forward_line (end);
+	}
+	/* We take the \n from the previous line, if there is one. */
+	else if (!gtk_text_iter_is_start (start))
+	{
+		gtk_text_iter_backward_line (start);
+		set_to_line_end (start);
+	}
+}
+
+static void
+delete_lines (GtkTextView *text_view)
+{
+	GtkTextBuffer *buffer;
 	GtkTextIter start;
 	GtkTextIter end;
-	GtkTextBuffer *buffer;
-
-	buffer = gtk_text_view_get_buffer (text_view);
 
 	gtk_text_view_reset_im_context (text_view);
 
-	/* If there is a selection delete the selected lines and ignore count. */
-	if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
-	{
-		gtk_text_iter_order (&start, &end);
-
-		if (gtk_text_iter_starts_line (&end))
-		{
-			/* Do not delete the line with the cursor if the cursor
-			 * is at the beginning of the line.
-			 */
-			count = 0;
-		}
-		else
-		{
-			count = 1;
-		}
-	}
-
-	gtk_text_iter_set_line_offset (&start, 0);
-
-	if (count > 0)
-	{
-		gtk_text_iter_forward_lines (&end, count);
-
-		if (gtk_text_iter_is_end (&end))
-		{
-			if (gtk_text_iter_backward_line (&start) &&
-			    !gtk_text_iter_ends_line (&start))
-			{
-				gtk_text_iter_forward_to_line_end (&start);
-			}
-		}
-	}
-	else if (count < 0)
-	{
-		if (!gtk_text_iter_ends_line (&end))
-		{
-			gtk_text_iter_forward_to_line_end (&end);
-		}
-
-		while (count < 0)
-		{
-			if (!gtk_text_iter_backward_line (&start))
-			{
-				break;
-			}
-
-			count++;
-		}
-
-		if (count == 0)
-		{
-			if (!gtk_text_iter_ends_line (&start))
-			{
-				gtk_text_iter_forward_to_line_end (&start);
-			}
-		}
-		else
-		{
-			gtk_text_iter_forward_line (&end);
-		}
-	}
+	buffer = gtk_text_view_get_buffer (text_view);
+	get_extents_for_lines_deletion (buffer, &start, &end);
 
 	if (!gtk_text_iter_equal (&start, &end))
 	{
-		GtkTextIter cur = start;
-		gtk_text_iter_set_line_offset (&cur, 0);
+		GtkTextIter cursor = start;
+		gtk_text_iter_set_line_offset (&cursor, 0);
 
 		gtk_text_buffer_begin_user_action (buffer);
 
-		gtk_text_buffer_place_cursor (buffer, &cur);
+		gtk_text_buffer_place_cursor (buffer, &cursor);
 
 		gtk_text_buffer_delete_interactive (buffer,
 						    &start,
@@ -140,9 +124,12 @@ tepl_view_delete_from_cursor (GtkTextView   *text_view,
 			      GtkDeleteType  type,
 			      gint           count)
 {
-	if (type == GTK_DELETE_PARAGRAPHS)
+	/* For a keybinding we only care about count==1, so it permits to
+	 * simplify the implementation.
+	 */
+	if (type == GTK_DELETE_PARAGRAPHS && count == 1)
 	{
-		delete_line (text_view, count);
+		delete_lines (text_view);
 		return;
 	}
 
