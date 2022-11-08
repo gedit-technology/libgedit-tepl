@@ -6,6 +6,10 @@
 #ifndef TEPL_MENU_STACK_SWITCHER_H
 #define TEPL_MENU_STACK_SWITCHER_H
 
+#if !defined (TEPL_H_INSIDE) && !defined (TEPL_COMPILATION)
+#error "Only <tepl/tepl.h> can be included directly."
+#endif
+
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS

@@ -31,6 +31,7 @@
 #include <tepl/tepl-language-chooser-dialog.h>
 #include <tepl/tepl-language-chooser-widget.h>
 #include <tepl/tepl-menu-shell.h>
+#include <tepl/tepl-menu-stack-switcher.h>
 #include <tepl/tepl-metadata.h>
 #include <tepl/tepl-metadata-manager.h>
 #include <tepl/tepl-notebook.h>

@@ -3,7 +3,6 @@
  */
 
 #include <tepl/tepl.h>
-#include "tepl/tepl-menu-stack-switcher.h"
 #include <stdlib.h>
 
 #define N_STACK_CHILDREN (3)
