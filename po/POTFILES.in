@@ -18,7 +18,6 @@ tepl/tepl-language-chooser.c
 tepl/tepl-language-chooser-dialog.c
 tepl/tepl-language-chooser-widget.c
 tepl/tepl-menu-shell.c
-tepl/tepl-menu-stack-switcher.c
 tepl/tepl-metadata-attic.c
 tepl/tepl-metadata.c
 tepl/tepl-metadata-manager.c
@@ -31,7 +30,6 @@ tepl/tepl-progress-info-bar.c
 tepl/tepl-settings.c
 tepl/tepl-signal-group.c
 tepl/tepl-space-drawer-prefs.c
-tepl/tepl-stack-helper.c
 tepl/tepl-statusbar.c
 tepl/tepl-style-scheme-chooser-widget.c
 tepl/tepl-tab.c

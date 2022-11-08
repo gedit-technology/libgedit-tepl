@@ -97,7 +97,6 @@
     <chapter id="gtk-extras-other">
       <title>GTK Extras - Other</title>
       <xi:include href="xml/file-chooser.xml"/>
-      <xi:include href="xml/menu-stack-switcher.xml"/>
       <xi:include href="xml/panel.xml"/>
     </chapter>
 
@@ -159,10 +158,6 @@
     <index id="api-index-6-2" role="6.2">
       <title>Index of new symbols in 6.2</title>
       <xi:include href="xml/api-index-6.2.xml"><xi:fallback /></xi:include>
-    </index>
-    <index id="api-index-6-4" role="6.4">
-      <title>Index of new symbols in 6.4</title>
-      <xi:include href="xml/api-index-6.4.xml"><xi:fallback /></xi:include>
     </index>
   </part>
 </book>

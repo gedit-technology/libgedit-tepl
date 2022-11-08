@@ -8,7 +8,6 @@ unit_tests = [
   'test-metadata',
   'test-metadata-manager',
   'test-notebook',
-  'test-stack-helper',
   'test-utils'
 ]
 

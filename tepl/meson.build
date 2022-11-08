@@ -20,7 +20,6 @@ tepl_public_headers = [
   'tepl-language-chooser-widget.h',
   'tepl-macros.h',
   'tepl-menu-shell.h',
-  'tepl-menu-stack-switcher.h',
   'tepl-metadata.h',
   'tepl-metadata-manager.h',
   'tepl-notebook.h',
@@ -63,7 +62,6 @@ tepl_public_c_files = [
   'tepl-language-chooser-dialog.c',
   'tepl-language-chooser-widget.c',
   'tepl-menu-shell.c',
-  'tepl-menu-stack-switcher.c',
   'tepl-metadata.c',
   'tepl-metadata-manager.c',
   'tepl-notebook.c',
@@ -91,7 +89,6 @@ TEPL_PRIVATE_HEADERS = [
   'tepl-icu.h',
   'tepl-metadata-attic.h',
   'tepl-metadata-parser.h',
-  'tepl-stack-helper.h',
   'tepl-window-actions-edit.h',
   'tepl-window-actions-file.h',
   'tepl-window-actions-search.h'
@@ -102,7 +99,6 @@ tepl_private_c_files = [
   'tepl-icu.c',
   'tepl-metadata-attic.c',
   'tepl-metadata-parser.c',
-  'tepl-stack-helper.c',
   'tepl-window-actions-edit.c',
   'tepl-window-actions-file.c',
   'tepl-window-actions-search.c'

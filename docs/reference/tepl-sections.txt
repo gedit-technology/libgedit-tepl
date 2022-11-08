@@ -331,24 +331,6 @@ tepl_menu_shell_append_edit_actions
 </SECTION>
 
 <SECTION>
-<FILE>menu-stack-switcher</FILE>
-TeplMenuStackSwitcher
-tepl_menu_stack_switcher_new
-tepl_menu_stack_switcher_set_stack
-tepl_menu_stack_switcher_get_stack
-<SUBSECTION Standard>
-TEPL_IS_MENU_STACK_SWITCHER
-TEPL_IS_MENU_STACK_SWITCHER_CLASS
-TEPL_MENU_STACK_SWITCHER
-TEPL_MENU_STACK_SWITCHER_CLASS
-TEPL_MENU_STACK_SWITCHER_GET_CLASS
-TEPL_TYPE_MENU_STACK_SWITCHER
-TeplMenuStackSwitcherClass
-TeplMenuStackSwitcherPrivate
-tepl_menu_stack_switcher_get_type
-</SECTION>
-
-<SECTION>
 <FILE>metadata</FILE>
 TeplMetadata
 tepl_metadata_new
