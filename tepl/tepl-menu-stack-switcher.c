@@ -196,31 +196,26 @@ populate_button_box (TeplMenuStackSwitcher *switcher)
 }
 
 static void
-stack_visible_child_notify_cb (GtkWidget             *widget,
+stack_visible_child_notify_cb (GtkStack              *stack,
 			       GParamSpec            *pspec,
 			       TeplMenuStackSwitcher *switcher)
 {
-	GtkWidget *child;
-	GtkWidget *button;
+	GtkWidget *visible_child;
+	GtkToggleButton *button;
 
-	child = gtk_stack_get_visible_child (GTK_STACK (widget));
-	if (child != NULL)
+	update_title_label (switcher);
+
+	visible_child = gtk_stack_get_visible_child (stack);
+	if (visible_child == NULL)
 	{
-		gchar *title;
-
-		gtk_container_child_get (GTK_CONTAINER (switcher->priv->stack), child,
-					 "title", &title,
-					 NULL);
-
-		gtk_label_set_label (switcher->priv->title, title);
-		g_free (title);
+		return;
 	}
 
-	button = g_hash_table_lookup (switcher->priv->buttons, child);
+	button = g_hash_table_lookup (switcher->priv->buttons, visible_child);
 	if (button != NULL)
 	{
 		switcher->priv->in_child_changed = TRUE;
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+		gtk_toggle_button_set_active (button, TRUE);
 		switcher->priv->in_child_changed = FALSE;
 	}
 }
