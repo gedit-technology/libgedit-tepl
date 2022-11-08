@@ -288,7 +288,7 @@ tepl_menu_stack_switcher_get_property (GObject    *object,
 	switch (prop_id)
 	{
 		case PROP_STACK:
-			g_value_set_object (value, switcher->priv->stack);
+			g_value_set_object (value, tepl_menu_stack_switcher_get_stack (switcher));
 			break;
 
 		default:
