@@ -52,16 +52,19 @@ G_DEFINE_TYPE_WITH_PRIVATE (TeplMenuStackSwitcher, tepl_menu_stack_switcher, GTK
 static void
 update_title_label (TeplMenuStackSwitcher *switcher)
 {
-	GtkWidget *stack_child;
 	gchar *title = NULL;
 
-	stack_child = gtk_stack_get_visible_child (switcher->priv->stack);
-	if (stack_child != NULL)
+	if (switcher->priv->stack != NULL)
 	{
-		gtk_container_child_get (GTK_CONTAINER (switcher->priv->stack),
-					 stack_child,
-					 "title", &title,
-					 NULL);
+		GtkWidget *stack_child = gtk_stack_get_visible_child (switcher->priv->stack);
+
+		if (stack_child != NULL)
+		{
+			gtk_container_child_get (GTK_CONTAINER (switcher->priv->stack),
+						 stack_child,
+						 "title", &title,
+						 NULL);
+		}
 	}
 
 	gtk_label_set_label (switcher->priv->title, title);
@@ -121,12 +124,6 @@ update_button (TeplMenuStackSwitcher *switcher,
 		gtk_widget_set_visible (GTK_WIDGET (button), visible);
 
 		gtk_widget_set_size_request (GTK_WIDGET (button), 100, -1);
-
-		if (stack_child == gtk_stack_get_visible_child (switcher->priv->stack))
-		{
-			/* TODO: call this function independently, not here. */
-			update_title_label (switcher);
-		}
 
 		g_free (title);
 	}
@@ -221,8 +218,6 @@ stack_visible_child_notify_cb (GtkStack              *stack,
 {
 	GtkWidget *visible_child;
 	GtkToggleButton *button;
-
-	update_title_label (switcher);
 
 	visible_child = gtk_stack_get_visible_child (stack);
 	if (visible_child == NULL)
@@ -348,6 +343,7 @@ static void
 stack_changed_cb (TeplStackHelper       *stack_helper,
 		  TeplMenuStackSwitcher *switcher)
 {
+	update_title_label (switcher);
 }
 
 static void
@@ -520,6 +516,7 @@ tepl_menu_stack_switcher_set_stack (TeplMenuStackSwitcher *switcher,
 	}
 
 	update_stack_helper (switcher);
+	update_title_label (switcher);
 
 	/* TODO: look if it is really necessary, since the widgets inside anyway
 	 * change.
