@@ -1,4 +1,5 @@
 unit_tests = [
+  'test-encoding',
   'test-file',
   'test-file-loader',
   'test-file-saver',

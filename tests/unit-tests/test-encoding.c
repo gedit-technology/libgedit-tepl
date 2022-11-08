@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
-#include <tepl/tepl.h>
+#include "tepl/tepl-encoding.h"
 #include "tepl/tepl-encoding-private.h"
 
 static void
@@ -43,9 +43,10 @@ test_remove_duplicates (void)
 }
 
 int
-main (int argc, char **argv)
+main (int    argc,
+      char **argv)
 {
-	gtk_test_init (&argc, &argv);
+	g_test_init (&argc, &argv, NULL);
 
 	g_test_add_func ("/Encoding/remove_duplicates", test_remove_duplicates);
 
