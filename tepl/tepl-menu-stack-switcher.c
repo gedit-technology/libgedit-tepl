@@ -222,26 +222,26 @@ stack_visible_child_notify_cb (GtkStack              *stack,
 
 static void
 on_stack_child_added (GtkStack              *stack,
-		      GtkWidget             *widget,
+		      GtkWidget             *stack_child,
 		      TeplMenuStackSwitcher *switcher)
 {
-	add_child (switcher, widget);
+	add_child (switcher, stack_child);
 }
 
 static void
 on_stack_child_removed (GtkStack              *stack,
-			GtkWidget             *widget,
+			GtkWidget             *stack_child,
 			TeplMenuStackSwitcher *switcher)
 {
-	GtkWidget *button;
+	GtkButton *button;
 
-	g_signal_handlers_disconnect_by_func (widget, on_title_visible_updated, switcher);
-	g_signal_handlers_disconnect_by_func (widget, on_title_visible_updated, switcher);
-	g_signal_handlers_disconnect_by_func (widget, on_position_updated, switcher);
+	g_signal_handlers_disconnect_by_func (stack_child, on_title_visible_updated, switcher);
+	g_signal_handlers_disconnect_by_func (stack_child, on_position_updated, switcher);
 
-	button = g_hash_table_lookup (switcher->priv->buttons, widget);
-	gtk_container_remove (GTK_CONTAINER (switcher->priv->button_box), button);
-	g_hash_table_remove (switcher->priv->buttons, widget);
+	button = g_hash_table_lookup (switcher->priv->buttons, stack_child);
+	gtk_container_remove (GTK_CONTAINER (switcher->priv->button_box),
+			      GTK_WIDGET (button));
+	g_hash_table_remove (switcher->priv->buttons, stack_child);
 }
 
 static void
