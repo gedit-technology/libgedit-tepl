@@ -196,9 +196,9 @@ populate_button_box (TeplMenuStackSwitcher *switcher)
 }
 
 static void
-on_child_changed (GtkWidget             *widget,
-		  GParamSpec            *pspec,
-		  TeplMenuStackSwitcher *switcher)
+stack_visible_child_notify_cb (GtkWidget             *widget,
+			       GParamSpec            *pspec,
+			       TeplMenuStackSwitcher *switcher)
 {
 	GtkWidget *child;
 	GtkWidget *button;
@@ -254,7 +254,7 @@ disconnect_stack_signals (TeplMenuStackSwitcher *switcher)
 {
 	g_signal_handlers_disconnect_by_func (switcher->priv->stack, on_stack_child_added, switcher);
 	g_signal_handlers_disconnect_by_func (switcher->priv->stack, on_stack_child_removed, switcher);
-	g_signal_handlers_disconnect_by_func (switcher->priv->stack, on_child_changed, switcher);
+	g_signal_handlers_disconnect_by_func (switcher->priv->stack, stack_visible_child_notify_cb, switcher);
 	g_signal_handlers_disconnect_by_func (switcher->priv->stack, disconnect_stack_signals, switcher);
 }
 
@@ -273,7 +273,7 @@ connect_stack_signals (TeplMenuStackSwitcher *switcher)
 
 	g_signal_connect (switcher->priv->stack,
 			  "notify::visible-child",
-			  G_CALLBACK (on_child_changed),
+			  G_CALLBACK (stack_visible_child_notify_cb),
 			  switcher);
 
 	g_signal_connect_swapped (switcher->priv->stack,
