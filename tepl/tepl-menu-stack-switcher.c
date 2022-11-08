@@ -180,18 +180,19 @@ add_child (TeplMenuStackSwitcher *switcher,
 }
 
 static void
-foreach_stack (GtkWidget             *widget,
-	       TeplMenuStackSwitcher *switcher)
+populate_button_box (TeplMenuStackSwitcher *switcher)
 {
-	add_child (switcher, widget);
-}
+	GList *children;
+	GList *l;
 
-static void
-populate_popover (TeplMenuStackSwitcher *switcher)
-{
-	gtk_container_foreach (GTK_CONTAINER (switcher->priv->stack),
-			       (GtkCallback)foreach_stack,
-			       switcher);
+	children = gtk_container_get_children (GTK_CONTAINER (switcher->priv->stack));
+	for (l = children; l != NULL; l = l->next)
+	{
+		GtkWidget *stack_child = GTK_WIDGET (l->data);
+
+		add_child (switcher, stack_child);
+	}
+	g_list_free (children);
 }
 
 static void
@@ -433,7 +434,7 @@ tepl_menu_stack_switcher_set_stack (TeplMenuStackSwitcher *switcher,
 	if (stack != NULL)
 	{
 		switcher->priv->stack = g_object_ref (stack);
-		populate_popover (switcher);
+		populate_button_box (switcher);
 		connect_stack_signals (switcher);
 	}
 
