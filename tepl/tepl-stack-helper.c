@@ -5,6 +5,14 @@
 #include "tepl-stack-helper.h"
 #include "tepl-signal-group.h"
 
+/*
+ * #TeplStackHelper adds convenience API to #GtkStack.
+ */
+
+/* Another nice benefit is that unit tests can be written. For a #GtkStack
+ * switcher widget, only interactive tests are possible.
+ */
+
 struct _TeplStackHelperPrivate
 {
 	TeplSignalGroup *stack_signal_group;
