@@ -78,10 +78,6 @@ struct _EncodingData
 
 #define UTF8_CANONICAL_FORM "UTF-8"
 
-G_DEFINE_BOXED_TYPE (TeplEncoding, tepl_encoding,
-                     tepl_encoding_copy,
-                     tepl_encoding_free)
-
 /* This table should not contain duplicates: iconv supports for example "utf8",
  * "UTF8", "utf-8" and "UTF-8", they are equivalent (as far as I've tested) but
  * the table contains only "UTF-8". As a result, a function like

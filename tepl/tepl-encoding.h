@@ -6,16 +6,11 @@
 #ifndef TEPL_ENCODING_H
 #define TEPL_ENCODING_H
 
-#include <glib-object.h>
+#include <glib.h>
 
 G_BEGIN_DECLS
 
-#define TEPL_TYPE_ENCODING (tepl_encoding_get_type ())
-
 typedef struct _TeplEncoding TeplEncoding;
-
-G_GNUC_INTERNAL
-GType			tepl_encoding_get_type			(void) G_GNUC_CONST;
 
 G_GNUC_INTERNAL
 TeplEncoding *		tepl_encoding_new			(const gchar *charset);
