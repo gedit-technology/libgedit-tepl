@@ -1,14 +1,16 @@
 Tepl - more information
 =======================
 
-About versions and API
-----------------------
+About versions
+--------------
 
-The API is now **constantly unstable**, there can be API breaks for new
-versions. As a consequence, it is highly recommended to **bundle** Tepl with the
-program, and for the program to depend on a precise version of Tepl.
+Tepl follows the even/odd minor version scheme.
 
-The library soname is adapted for each release.
+For example the `6.3.x` versions are development snapshots, and the `6.4.x`
+series is stable.
+
+There are sometimes API or ABI breaks, in which case the library soname is
+adapted.
 
 Dependencies
 ------------
