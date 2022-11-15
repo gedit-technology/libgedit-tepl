@@ -160,7 +160,7 @@ tepl_lib = library(
   link_depends: symbol_map,
   # link_whole is not supported with MSVC, so we use extract_all_objects().
   objects: tepl_static_lib.extract_all_objects(),
-  version: TEPL_LT_VERSION,
+  soversion: 1,
   install: true
 )
 

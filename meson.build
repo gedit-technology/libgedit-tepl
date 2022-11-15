@@ -6,25 +6,13 @@
 project(
   'tepl', 'c',
   meson_version: '>= 0.53',
-  version: '6.3.1', # Don't forget to increment lt_current too.
+  version: '6.3.1',
   default_options: ['warning_level=2']
 )
 
 GNOME = import('gnome')
 PKG_CONFIG = import('pkgconfig')
 I18N = import('i18n')
-
-# Libtool versioning (for the soname).
-# See https://www.gnu.org/software/libtool/manual/html_node/Versioning.html for
-# the official docs.
-#
-# For Tepl needs and to keep things simple, for *each* release (each release is
-# now only a development snapshot):
-#
-# Just increment CURRENT.
-# REVISION and AGE are kept to 0.
-lt_current = 1
-TEPL_LT_VERSION = '@0@.0.0'.format(lt_current)
 
 # API version, used for parallel installability.
 TEPL_API_VERSION = '6'
