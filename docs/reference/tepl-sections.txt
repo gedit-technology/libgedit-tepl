@@ -680,3 +680,16 @@ tepl_view_select_lines
 TEPL_TYPE_VIEW
 TeplViewClass
 </SECTION>
+
+<SECTION>
+<FILE>widget-list-item</FILE>
+TeplWidgetListItem
+tepl_widget_list_item_new
+tepl_widget_list_item_free
+tepl_widget_list_item_set_widget
+tepl_widget_list_item_get_widget
+tepl_widget_list_item_set_displayed
+tepl_widget_list_item_get_displayed
+tepl_widget_list_item_set_infos
+tepl_widget_list_item_get_infos
+</SECTION>

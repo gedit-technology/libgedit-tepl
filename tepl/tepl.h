@@ -53,6 +53,7 @@
 #include <tepl/tepl-tab-saving.h>
 #include <tepl/tepl-utils.h>
 #include <tepl/tepl-view.h>
+#include <tepl/tepl-widget-list-item.h>
 
 #undef TEPL_H_INSIDE
 
