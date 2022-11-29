@@ -35,6 +35,17 @@ check_short_name (TeplFile    *file,
 }
 
 static void
+check_full_name (TeplFile    *file,
+		 const gchar *expected_full_name)
+{
+	gchar *received_full_name;
+
+	received_full_name = tepl_file_get_full_name (file);
+	g_assert_cmpstr (received_full_name, ==, expected_full_name);
+	g_free (received_full_name);
+}
+
+static void
 check_short_name_is_untitled_file_number (TeplFile *file,
 					  gint      untitled_number)
 {
@@ -43,6 +54,17 @@ check_short_name_is_untitled_file_number (TeplFile *file,
 	expected_short_name = default_untitled_file_cb (untitled_number);
 	check_short_name (file, expected_short_name);
 	g_free (expected_short_name);
+}
+
+static void
+check_full_name_is_untitled_file_number (TeplFile *file,
+					 gint      untitled_number)
+{
+	gchar *expected_full_name;
+
+	expected_full_name = default_untitled_file_cb (untitled_number);
+	check_full_name (file, expected_full_name);
+	g_free (expected_full_name);
 }
 
 static void
@@ -159,6 +181,21 @@ test_short_name (void)
 	_tepl_test_utils_wait_signal (data);
 	check_short_name (file, "https://swilmet.be/");
 	g_object_unref (file);
+	g_object_unref (location);
+}
+
+static void
+test_full_name (void)
+{
+	TeplFile *file;
+	GFile *location;
+
+	file = tepl_file_new ();
+	check_full_name_is_untitled_file_number (file, 1);
+
+	location = g_file_new_for_path ("/one/path");
+	tepl_file_set_location (file, location);
+	check_full_name (file, "/one/path");
 	g_object_unref (location);
 }
 
@@ -409,6 +446,7 @@ main (int    argc,
 	g_test_add_func ("/file/untitled_files", test_untitled_files);
 	g_test_add_func ("/file/custom_untitled_file_name", test_custom_untitled_file_name);
 	g_test_add_func ("/file/short_name", test_short_name);
+	g_test_add_func ("/file/full_name", test_full_name);
 
 #if 0
 	g_test_add_func ("/file/externally_modified", test_externally_modified);

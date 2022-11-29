@@ -57,6 +57,7 @@ enum
 	PROP_LOCATION,
 	PROP_NEWLINE_TYPE,
 	PROP_SHORT_NAME,
+	PROP_FULL_NAME,
 	N_PROPERTIES
 };
 
@@ -143,6 +144,10 @@ tepl_file_get_property (GObject    *object,
 
 		case PROP_SHORT_NAME:
 			g_value_take_string (value, tepl_file_get_short_name (file));
+			break;
+
+		case PROP_FULL_NAME:
+			g_value_take_string (value, tepl_file_get_full_name (file));
 			break;
 
 		default:
@@ -276,6 +281,27 @@ tepl_file_class_init (TeplFileClass *klass)
 	properties[PROP_SHORT_NAME] =
 		g_param_spec_string ("short-name",
 				     "short-name",
+				     "",
+				     NULL,
+				     G_PARAM_READABLE |
+				     G_PARAM_STATIC_STRINGS);
+
+	/**
+	 * TeplFile:full-name:
+	 *
+	 * Convenience property for the full name of a #TeplFile.
+	 *
+	 * When the #TeplFile:location is %NULL, this property has the same
+	 * value as the #TeplFile:short-name.
+	 *
+	 * When the #TeplFile:location is not %NULL, this property contains the
+	 * full path to the location. It uses:
+	 * - g_file_get_parse_name()
+	 * - tepl_utils_replace_home_dir_with_tilde()
+	 */
+	properties[PROP_FULL_NAME] =
+		g_param_spec_string ("full-name",
+				     "full-name",
 				     "",
 				     NULL,
 				     G_PARAM_READABLE |
@@ -421,6 +447,7 @@ tepl_file_set_location (TeplFile *file,
 		update_short_name (file);
 
 		g_object_notify_by_pspec (G_OBJECT (file), properties[PROP_LOCATION]);
+		g_object_notify_by_pspec (G_OBJECT (file), properties[PROP_FULL_NAME]);
 	}
 }
 
@@ -443,8 +470,7 @@ tepl_file_get_location (TeplFile *file)
  * tepl_file_get_short_name:
  * @file: a #TeplFile.
  *
- * Returns: the value of the #TeplFile:short-name property. Free with g_free()
- *   when no longer needed.
+ * Returns: the value of the #TeplFile:short-name property. Free with g_free().
  * Since: 5.0
  */
 gchar *
@@ -463,6 +489,33 @@ tepl_file_get_short_name (TeplFile *file)
 	}
 
 	return _tepl_utils_get_fallback_basename_for_display (file->priv->location);
+}
+
+/**
+ * tepl_file_get_full_name:
+ * @file: a #TeplFile.
+ *
+ * Returns: the value of the #TeplFile:full-name property. Free with g_free().
+ * Since: 6.4
+ */
+gchar *
+tepl_file_get_full_name (TeplFile *file)
+{
+	gchar *parse_name;
+	gchar *full_name;
+
+	g_return_val_if_fail (TEPL_IS_FILE (file), NULL);
+
+	if (file->priv->location == NULL)
+	{
+		return tepl_file_get_short_name (file);
+	}
+
+	parse_name = g_file_get_parse_name (file->priv->location);
+	full_name = tepl_utils_replace_home_dir_with_tilde (parse_name);
+	g_free (parse_name);
+
+	return full_name;
 }
 
 /**

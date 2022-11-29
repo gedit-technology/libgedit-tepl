@@ -110,6 +110,9 @@ _TEPL_EXTERN
 gchar *			tepl_file_get_short_name		(TeplFile *file);
 
 _TEPL_EXTERN
+gchar *			tepl_file_get_full_name			(TeplFile *file);
+
+_TEPL_EXTERN
 void			tepl_file_set_untitled_file_callback	(TeplFile                 *file,
 								 TeplUntitledFileCallback  callback);
 
