@@ -67,6 +67,7 @@
       <title>Misc</title>
       <xi:include href="xml/goto-line-bar.xml"/>
       <xi:include href="xml/iter.xml"/>
+      <xi:include href="xml/overwrite-indicator.xml"/>
       <xi:include href="xml/prefs.xml"/>
       <xi:include href="xml/prefs-dialog.xml"/>
       <xi:include href="xml/settings.xml"/>

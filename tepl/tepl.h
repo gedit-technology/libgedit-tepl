@@ -36,6 +36,7 @@
 #include <tepl/tepl-metadata.h>
 #include <tepl/tepl-metadata-manager.h>
 #include <tepl/tepl-notebook.h>
+#include <tepl/tepl-overwrite-indicator.h>
 #include <tepl/tepl-panel.h>
 #include <tepl/tepl-pango.h>
 #include <tepl/tepl-prefs.h>

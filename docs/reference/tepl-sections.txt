@@ -397,6 +397,24 @@ tepl_metadata_manager_get_type
 </SECTION>
 
 <SECTION>
+<FILE>overwrite-indicator</FILE>
+TeplOverwriteIndicator
+tepl_overwrite_indicator_new
+tepl_overwrite_indicator_get_overwrite
+tepl_overwrite_indicator_set_overwrite
+<SUBSECTION Standard>
+TEPL_IS_OVERWRITE_INDICATOR
+TEPL_IS_OVERWRITE_INDICATOR_CLASS
+TEPL_OVERWRITE_INDICATOR
+TEPL_OVERWRITE_INDICATOR_CLASS
+TEPL_OVERWRITE_INDICATOR_GET_CLASS
+TEPL_TYPE_OVERWRITE_INDICATOR
+TeplOverwriteIndicatorClass
+TeplOverwriteIndicatorPrivate
+tepl_overwrite_indicator_get_type
+</SECTION>
+
+<SECTION>
 <FILE>panel</FILE>
 TeplPanel
 tepl_panel_new

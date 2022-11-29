@@ -25,6 +25,7 @@ tepl/tepl-metadata.c
 tepl/tepl-metadata-manager.c
 tepl/tepl-metadata-parser.c
 tepl/tepl-notebook.c
+tepl/tepl-overwrite-indicator.c
 tepl/tepl-panel.c
 tepl/tepl-pango.c
 tepl/tepl-prefs.c
