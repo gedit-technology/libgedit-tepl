@@ -682,6 +682,19 @@ TeplViewClass
 </SECTION>
 
 <SECTION>
+<FILE>widget-list-category</FILE>
+TeplWidgetListCategory
+tepl_widget_list_category_new
+tepl_widget_list_category_free
+tepl_widget_list_category_get_name
+tepl_widget_list_category_add_item
+tepl_widget_list_category_get_all
+TEPL_WIDGET_LIST_CATEGORY_CORE
+TEPL_WIDGET_LIST_CATEGORY_DEFAULT
+TEPL_WIDGET_LIST_CATEGORY_PLUGINS
+</SECTION>
+
+<SECTION>
 <FILE>widget-list-item</FILE>
 TeplWidgetListItem
 tepl_widget_list_item_new
