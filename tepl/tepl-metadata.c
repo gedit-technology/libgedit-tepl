@@ -26,7 +26,7 @@
  *
  * Keys must be non-empty strings containing only:
  * - ASCII alphanumeric characters (see g_ascii_isalnum());
- * - `'-'` characters (dashes);
+ * - `'-'` characters (hyphens / minus signs);
  * - or `'_'` characters (underscores).
  *
  * Additionally, it's preferable that keys start with a namespace, to not get
