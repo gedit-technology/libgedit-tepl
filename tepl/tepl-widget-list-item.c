@@ -16,8 +16,9 @@
  * The only exception is when receiving the #GtkWidget::destroy signal of the
  * currently associated widget, the "widget" property becomes %NULL.
  *
- * The semantics of the different properties:
- * - "widget": the content, as a #GtkWidget.
+ * # The semantics of the different properties
+ *
+ * - "widget": The main content, as a #GtkWidget.
  *
  * - "displayed": Whether the "widget" is currently displayed in the UI.
  *
@@ -29,6 +30,25 @@
  *
  * - "icon-name": An icon-name representing this item, can be shown in the UI to
  *   choose this item. Can be used for #GtkImage:icon-name.
+ *
+ * # Relation to #GtkStack
+ *
+ * #TeplWidgetListItem is similar to the #GtkStack child properties. Some
+ * differences:
+ * - This class is more abstract. It can be used in combination with #GtkStack
+ *   but also other types of #GtkContainer's.
+ * - This class contains the "displayed" property, which permits to have several
+ *   items displayed at the same time. Use-cases: split-views, or showing
+ *   several documents side-by-side, or showing several components in a side
+ *   panel, etc.
+ * - This class has maximum flexibility with regards to the #GtkWidget: the
+ *   usual case is to set it just after calling tepl_widget_list_item_new(), and
+ *   to show/hide it when displayed/undisplayed. But lazy initialization is
+ *   possible too, or destroying/re-creating the widget when needed, while still
+ *   having the other infos available and the item present in a list.
+ * - #GtkStack emits signals when child properties change, while this class
+ *   defer the responsibility of updating the state of other objects to the
+ *   owner of the #TeplWidgetListItem.
  */
 
 struct _TeplWidgetListItem
