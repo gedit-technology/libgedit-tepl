@@ -74,6 +74,13 @@ _TEPL_EXTERN
 gchar *			tepl_buffer_get_full_title		(TeplBuffer *buffer);
 
 _TEPL_EXTERN
+void			tepl_buffer_provide_style_scheme_id_gsetting
+								(TeplBuffer  *buffer,
+								 GSettings   *settings,
+								 const gchar *setting_key,
+								 gboolean     bind_to_property);
+
+_TEPL_EXTERN
 gchar *			tepl_buffer_get_style_scheme_id		(TeplBuffer *buffer);
 
 _TEPL_EXTERN
