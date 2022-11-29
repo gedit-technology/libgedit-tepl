@@ -26,6 +26,9 @@ TeplInfoBar *	tepl_io_error_info_bar_externally_modified		(GFile    *location,
 									 gboolean  document_modified);
 
 _TEPL_EXTERN
+TeplInfoBar *	tepl_io_error_info_bar_saving_externally_modified	(GFile *location);
+
+_TEPL_EXTERN
 TeplInfoBar *	tepl_io_error_info_bar_invalid_characters		(GFile *location);
 
 G_END_DECLS

@@ -134,6 +134,27 @@ externally_modified_cb (GtkButton *button,
 }
 
 static void
+saving_externally_modified_cb (GtkButton *button,
+			       TeplTab   *tab)
+{
+	GFile *location;
+	TeplInfoBar *info_bar;
+
+	location = g_file_new_for_path ("/home/user/file");
+	info_bar = tepl_io_error_info_bar_saving_externally_modified (location);
+
+	g_signal_connect (info_bar,
+			  "response",
+			  G_CALLBACK (info_bar_response_cb),
+			  NULL);
+
+	tepl_tab_add_info_bar (tab, GTK_INFO_BAR (info_bar));
+	gtk_widget_show (GTK_WIDGET (info_bar));
+
+	g_object_unref (location);
+}
+
+static void
 invalid_characters_cb (GtkButton *button,
 		       TeplTab   *tab)
 {
@@ -163,6 +184,7 @@ create_side_panel (TeplTab *tab)
 	GtkWidget *already_open;
 	GtkWidget *cant_create_backup;
 	GtkWidget *externally_modified;
+	GtkWidget *saving_externally_modified;
 	GtkWidget *invalid_characters;
 
 	vgrid = GTK_GRID (gtk_grid_new ());
@@ -206,6 +228,14 @@ create_side_panel (TeplTab *tab)
 	g_signal_connect_object (externally_modified,
 				 "clicked",
 				 G_CALLBACK (externally_modified_cb),
+				 tab,
+				 0);
+
+	saving_externally_modified = gtk_button_new_with_label ("Saving externally modified");
+	gtk_container_add (GTK_CONTAINER (vgrid), saving_externally_modified);
+	g_signal_connect_object (saving_externally_modified,
+				 "clicked",
+				 G_CALLBACK (saving_externally_modified_cb),
 				 tab,
 				 0);
 

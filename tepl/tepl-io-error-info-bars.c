@@ -230,6 +230,50 @@ tepl_io_error_info_bar_externally_modified (GFile    *location,
 }
 
 /**
+ * tepl_io_error_info_bar_saving_externally_modified:
+ * @location: a #GFile.
+ *
+ * When attempting to save @location, creates a warning about @location having
+ * changed on disk. The possible actions:
+ * - Save anyway: %GTK_RESPONSE_YES.
+ * - Don't save: %GTK_RESPONSE_CANCEL.
+ *
+ * Returns: (transfer floating): the newly created #TeplInfoBar.
+ * Since: 6.4
+ */
+TeplInfoBar *
+tepl_io_error_info_bar_saving_externally_modified (GFile *location)
+{
+	TeplInfoBar *info_bar;
+	gchar *filename;
+	gchar *primary_msg;
+	const gchar *secondary_msg;
+
+	g_return_val_if_fail (G_IS_FILE (location), NULL);
+
+	filename = get_filename_for_display (location);
+
+	primary_msg = g_strdup_printf (_("The file “%s” has been externally modified."), filename);
+	secondary_msg = _("If you save it, all the external changes could be lost. Save it anyway?");
+
+	info_bar = tepl_info_bar_new_simple (GTK_MESSAGE_WARNING,
+					     primary_msg,
+					     secondary_msg);
+
+	gtk_info_bar_add_button (GTK_INFO_BAR (info_bar),
+				 _("_Save Anyway"),
+				 GTK_RESPONSE_YES);
+
+	gtk_info_bar_add_button (GTK_INFO_BAR (info_bar),
+				 _("_Don’t Save"),
+				 GTK_RESPONSE_CANCEL);
+
+	g_free (filename);
+	g_free (primary_msg);
+	return info_bar;
+}
+
+/**
  * tepl_io_error_info_bar_invalid_characters:
  * @location: where to save the document.
  *
