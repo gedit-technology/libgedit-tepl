@@ -39,6 +39,27 @@ static void set_view (TeplLineColumnIndicator *indicator,
 
 G_DEFINE_TYPE_WITH_PRIVATE (TeplLineColumnIndicator, tepl_line_column_indicator, GTK_TYPE_BIN)
 
+static gchar *
+get_label_text (gint line,
+		gint column)
+{
+	gchar *base_text;
+	gchar *text_with_padding;
+
+	/* Translators: "Ln" is an abbreviation for "Line", Col is an
+	 * abbreviation for "Column". Please, use abbreviations if possible.
+	 */
+	base_text = g_strdup_printf (_("Ln %d, Col %d"), line, column);
+
+	/* Use spaces to leave padding proportional to the font size.
+	 * TODO: have common code with TeplOverwriteIndicator.
+	 */
+	text_with_padding = g_strdup_printf ("  %s  ", base_text);
+
+	g_free (base_text);
+	return text_with_padding;
+}
+
 static void
 set_values (TeplLineColumnIndicator *indicator,
 	    gint                     line,
@@ -49,10 +70,7 @@ set_values (TeplLineColumnIndicator *indicator,
 	g_return_if_fail (line >= 1);
 	g_return_if_fail (column >= 1);
 
-	/* Translators: "Ln" is an abbreviation for "Line", Col is an
-	 * abbreviation for "Column". Please, use abbreviations if possible.
-	 */
-	text = g_strdup_printf (_("Ln %d, Col %d"), line, column);
+	text = get_label_text (line, column);
 	gtk_label_set_text (indicator->priv->label, text);
 	g_free (text);
 }
@@ -169,16 +187,46 @@ tepl_line_column_indicator_class_init (TeplLineColumnIndicatorClass *klass)
 	object_class->dispose = tepl_line_column_indicator_dispose;
 }
 
+static GtkWidget *
+create_label_for_size_allocation (void)
+{
+	GtkWidget *label;
+	gchar *text;
+
+	text = get_label_text (9999, 999);
+	label = gtk_label_new (text);
+	gtk_widget_show (label);
+	g_free (text);
+
+	return label;
+}
+
 static void
 tepl_line_column_indicator_init (TeplLineColumnIndicator *indicator)
 {
+	GtkStack *stack;
+
 	indicator->priv = tepl_line_column_indicator_get_instance_private (indicator);
 
 	indicator->priv->label = GTK_LABEL (gtk_label_new (NULL));
 	gtk_widget_show (GTK_WIDGET (indicator->priv->label));
 
-	gtk_container_add (GTK_CONTAINER (indicator),
+	stack = GTK_STACK (gtk_stack_new ());
+	gtk_widget_show (GTK_WIDGET (stack));
+
+	gtk_container_add (GTK_CONTAINER (stack),
 			   GTK_WIDGET (indicator->priv->label));
+	gtk_container_add (GTK_CONTAINER (stack),
+			   create_label_for_size_allocation ());
+
+	/* The visible child never changes. The "label for size allocation" is
+	 * used only to reserve some space, to avoid this widget to "push" the
+	 * other widgets (that are usually placed on the left in the statusbar).
+	 */
+	gtk_stack_set_visible_child (stack, GTK_WIDGET (indicator->priv->label));
+
+	gtk_container_add (GTK_CONTAINER (indicator),
+			   GTK_WIDGET (stack));
 }
 
 /**
