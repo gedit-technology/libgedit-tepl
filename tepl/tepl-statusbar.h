@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2020 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2020-2022 - Sébastien Wilmet <swilmet@gnome.org>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
@@ -44,18 +44,6 @@ GType		tepl_statusbar_get_type			(void);
 
 _TEPL_EXTERN
 TeplStatusbar *	tepl_statusbar_new			(void);
-
-_TEPL_EXTERN
-void		tepl_statusbar_show_cursor_position	(TeplStatusbar *statusbar,
-							 gint           line,
-							 gint           column);
-
-_TEPL_EXTERN
-void		tepl_statusbar_hide_cursor_position	(TeplStatusbar *statusbar);
-
-_TEPL_EXTERN
-void		tepl_statusbar_set_tab_group		(TeplStatusbar *statusbar,
-							 TeplTabGroup  *tab_group);
 
 G_END_DECLS
 
