@@ -20,6 +20,7 @@
 
 struct _TeplLineColumnIndicatorPrivate
 {
+	GtkStack *stack;
 	GtkLabel *label;
 
 	/* If @tab_group is set, then @view is always %NULL.
@@ -113,12 +114,12 @@ update_cursor_position (TeplLineColumnIndicator *indicator)
 
 	if (view == NULL)
 	{
-		gtk_widget_hide (GTK_WIDGET (indicator->priv->label));
+		gtk_widget_hide (GTK_WIDGET (indicator->priv->stack));
 	}
 	else
 	{
 		set_values_for_view (indicator, view);
-		gtk_widget_show (GTK_WIDGET (indicator->priv->label));
+		gtk_widget_show (GTK_WIDGET (indicator->priv->stack));
 	}
 }
 
@@ -204,29 +205,28 @@ create_label_for_size_allocation (void)
 static void
 tepl_line_column_indicator_init (TeplLineColumnIndicator *indicator)
 {
-	GtkStack *stack;
-
 	indicator->priv = tepl_line_column_indicator_get_instance_private (indicator);
+
+	indicator->priv->stack = GTK_STACK (gtk_stack_new ());
+	gtk_widget_show (GTK_WIDGET (indicator->priv->stack));
 
 	indicator->priv->label = GTK_LABEL (gtk_label_new (NULL));
 	gtk_widget_show (GTK_WIDGET (indicator->priv->label));
 
-	stack = GTK_STACK (gtk_stack_new ());
-	gtk_widget_show (GTK_WIDGET (stack));
-
-	gtk_container_add (GTK_CONTAINER (stack),
+	gtk_container_add (GTK_CONTAINER (indicator->priv->stack),
 			   GTK_WIDGET (indicator->priv->label));
-	gtk_container_add (GTK_CONTAINER (stack),
+	gtk_container_add (GTK_CONTAINER (indicator->priv->stack),
 			   create_label_for_size_allocation ());
 
 	/* The visible child never changes. The "label for size allocation" is
 	 * used only to reserve some space, to avoid this widget to "push" the
 	 * other widgets (that are usually placed on the left in the statusbar).
 	 */
-	gtk_stack_set_visible_child (stack, GTK_WIDGET (indicator->priv->label));
+	gtk_stack_set_visible_child (indicator->priv->stack,
+				     GTK_WIDGET (indicator->priv->label));
 
 	gtk_container_add (GTK_CONTAINER (indicator),
-			   GTK_WIDGET (stack));
+			   GTK_WIDGET (indicator->priv->stack));
 }
 
 /**
