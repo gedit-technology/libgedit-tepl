@@ -6,6 +6,7 @@
 #include "tepl-line-column-indicator.h"
 #include <glib/gi18n-lib.h>
 #include "tepl-signal-group.h"
+#include "tepl-utils.h"
 
 /**
  * SECTION:line-column-indicator
@@ -51,13 +52,9 @@ get_label_text (gint line,
 	 * abbreviation for "Column". Please, use abbreviations if possible.
 	 */
 	base_text = g_strdup_printf (_("Ln %d, Col %d"), line, column);
-
-	/* Use spaces to leave padding proportional to the font size.
-	 * TODO: have common code with TeplOverwriteIndicator.
-	 */
-	text_with_padding = g_strdup_printf ("  %s  ", base_text);
-
+	text_with_padding = _tepl_utils_statusbar_add_padding_to_text (base_text);
 	g_free (base_text);
+
 	return text_with_padding;
 }
 

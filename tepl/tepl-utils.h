@@ -49,6 +49,9 @@ gchar *		tepl_utils_str_replace				(const gchar *string,
 _TEPL_EXTERN
 gchar *		tepl_utils_markup_escape_text			(const gchar *src);
 
+G_GNUC_INTERNAL
+gchar *		_tepl_utils_statusbar_add_padding_to_text	(const gchar *text);
+
 /* File utilities */
 
 _TEPL_EXTERN

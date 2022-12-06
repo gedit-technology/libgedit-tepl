@@ -5,6 +5,7 @@
 #include "config.h"
 #include "tepl-overwrite-indicator.h"
 #include <glib/gi18n-lib.h>
+#include "tepl-utils.h"
 
 /**
  * SECTION:overwrite-indicator
@@ -75,8 +76,7 @@ get_string_with_padding (gboolean overwrite)
 
 	str = overwrite ? get_overwrite_string () : get_insert_string ();
 
-	/* Use spaces to leave padding proportional to the font size. */
-	return g_strdup_printf ("  %s  ", str);
+	return _tepl_utils_statusbar_add_padding_to_text (str);
 }
 
 static void

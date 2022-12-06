@@ -228,6 +228,15 @@ out:
 	return dest;
 }
 
+/* Useful for showing additional GtkLabels in a GtkStatusbar.
+ * It uses spaces to have padding proportional to the font size.
+ */
+gchar *
+_tepl_utils_statusbar_add_padding_to_text (const gchar *text)
+{
+	return g_strdup_printf ("  %s  ", text);
+}
+
 static gint
 get_extension_position (const gchar *filename)
 {
