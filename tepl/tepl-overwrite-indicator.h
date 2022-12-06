@@ -52,6 +52,10 @@ _TEPL_EXTERN
 void				tepl_overwrite_indicator_set_overwrite	(TeplOverwriteIndicator *indicator,
 									 gboolean                overwrite);
 
+_TEPL_EXTERN
+void				tepl_overwrite_indicator_set_view	(TeplOverwriteIndicator *indicator,
+									 GtkTextView            *view);
+
 G_END_DECLS
 
 #endif /* TEPL_OVERWRITE_INDICATOR_H */

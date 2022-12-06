@@ -420,6 +420,7 @@ TeplOverwriteIndicator
 tepl_overwrite_indicator_new
 tepl_overwrite_indicator_get_overwrite
 tepl_overwrite_indicator_set_overwrite
+tepl_overwrite_indicator_set_view
 <SUBSECTION Standard>
 TEPL_IS_OVERWRITE_INDICATOR
 TEPL_IS_OVERWRITE_INDICATOR_CLASS

@@ -5,6 +5,7 @@
 #include "config.h"
 #include "tepl-overwrite-indicator.h"
 #include <glib/gi18n-lib.h>
+#include "tepl-signal-group.h"
 #include "tepl-utils.h"
 
 /**
@@ -37,6 +38,11 @@ struct _TeplOverwriteIndicatorPrivate
 	GtkLabel *label_insert;
 	GtkLabel *label_overwrite;
 
+	GtkTextView *view; /* owned */
+	gulong view_destroy_handler_id;
+
+	TeplSignalGroup *view_signal_group;
+
 	guint overwrite : 1;
 };
 
@@ -48,6 +54,10 @@ enum
 };
 
 static GParamSpec *properties[N_PROPERTIES];
+
+/* Forward declarations */
+static void set_view (TeplOverwriteIndicator *indicator,
+		      GtkTextView            *view);
 
 G_DEFINE_TYPE_WITH_PRIVATE (TeplOverwriteIndicator, tepl_overwrite_indicator, GTK_TYPE_BIN)
 
@@ -120,9 +130,53 @@ tepl_overwrite_indicator_set_property (GObject      *object,
 }
 
 static void
+view_destroy_cb (GtkTextView            *view,
+		 TeplOverwriteIndicator *indicator)
+{
+	set_view (indicator, NULL);
+}
+
+static void
+set_view (TeplOverwriteIndicator *indicator,
+	  GtkTextView            *view)
+{
+	if (indicator->priv->view == view)
+	{
+		return;
+	}
+
+	if (indicator->priv->view != NULL)
+	{
+		if (indicator->priv->view_destroy_handler_id != 0)
+		{
+			g_signal_handler_disconnect (indicator->priv->view,
+						     indicator->priv->view_destroy_handler_id);
+			indicator->priv->view_destroy_handler_id = 0;
+		}
+
+		g_clear_object (&indicator->priv->view);
+	}
+
+	if (view != NULL)
+	{
+		indicator->priv->view = g_object_ref_sink (view);
+
+		indicator->priv->view_destroy_handler_id =
+			g_signal_connect (view,
+					  "destroy",
+					  G_CALLBACK (view_destroy_cb),
+					  indicator);
+	}
+}
+
+static void
 tepl_overwrite_indicator_dispose (GObject *object)
 {
 	TeplOverwriteIndicator *indicator = TEPL_OVERWRITE_INDICATOR (object);
+
+	tepl_signal_group_clear (&indicator->priv->view_signal_group);
+
+	set_view (indicator, NULL);
 
 	/* In case a public function is called after a first dispose. */
 	indicator->priv->stack = NULL;
@@ -256,4 +310,71 @@ tepl_overwrite_indicator_set_overwrite (TeplOverwriteIndicator *indicator,
 
 		g_object_notify_by_pspec (G_OBJECT (indicator), properties[PROP_OVERWRITE]);
 	}
+}
+
+static void
+update_overwrite (TeplOverwriteIndicator *indicator)
+{
+	if (indicator->priv->view != NULL)
+	{
+		gboolean overwrite;
+
+		overwrite = gtk_text_view_get_overwrite (indicator->priv->view);
+		tepl_overwrite_indicator_set_overwrite (indicator, overwrite);
+
+		gtk_widget_show (GTK_WIDGET (indicator->priv->stack));
+	}
+	else
+	{
+		gtk_widget_hide (GTK_WIDGET (indicator->priv->stack));
+	}
+}
+
+static void
+overwrite_notify_cb (GtkTextView            *view,
+		     GParamSpec             *pspec,
+		     TeplOverwriteIndicator *indicator)
+{
+	update_overwrite (indicator);
+}
+
+static void
+connect_to_view (TeplOverwriteIndicator *indicator)
+{
+	tepl_signal_group_clear (&indicator->priv->view_signal_group);
+
+	if (indicator->priv->view == NULL)
+	{
+		return;
+	}
+
+	indicator->priv->view_signal_group = tepl_signal_group_new (G_OBJECT (indicator->priv->view));
+
+	tepl_signal_group_add (indicator->priv->view_signal_group,
+			       g_signal_connect (indicator->priv->view,
+						 "notify::overwrite",
+						 G_CALLBACK (overwrite_notify_cb),
+						 indicator));
+}
+
+/**
+ * tepl_overwrite_indicator_set_view:
+ * @indicator: a #TeplOverwriteIndicator.
+ * @view: (nullable): a #GtkTextView, or %NULL.
+ *
+ * Sets a #GtkTextView to update automatically the state of @indicator according
+ * to @view. If @view is %NULL, then @indicator will be empty.
+ *
+ * Since: 6.4
+ */
+void
+tepl_overwrite_indicator_set_view (TeplOverwriteIndicator *indicator,
+				   GtkTextView            *view)
+{
+	g_return_if_fail (TEPL_IS_OVERWRITE_INDICATOR (indicator));
+	g_return_if_fail (view == NULL || GTK_IS_TEXT_VIEW (view));
+
+	set_view (indicator, view);
+	connect_to_view (indicator);
+	update_overwrite (indicator);
 }
