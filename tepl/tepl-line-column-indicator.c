@@ -22,11 +22,20 @@ struct _TeplLineColumnIndicatorPrivate
 {
 	GtkLabel *label;
 
-	TeplTabGroup *tab_group;
+	/* If @tab_group is set, then @view is always %NULL.
+	 * If @tab_group is %NULL, then @view is used but may be %NULL.
+	 */
+	TeplView *view; /* owned */
+	gulong view_destroy_handler_id;
+	TeplTabGroup *tab_group; /* owned */
 
 	TeplSignalGroup *view_signal_group;
 	TeplSignalGroup *buffer_signal_group;
 };
+
+/* Forward declarations */
+static void set_view (TeplLineColumnIndicator *indicator,
+		      TeplView                *view);
 
 G_DEFINE_TYPE_WITH_PRIVATE (TeplLineColumnIndicator, tepl_line_column_indicator, GTK_TYPE_BIN)
 
@@ -49,14 +58,102 @@ set_values (TeplLineColumnIndicator *indicator,
 }
 
 static void
+set_values_for_view (TeplLineColumnIndicator *indicator,
+		     TeplView                *view)
+{
+	GtkTextBuffer *buffer;
+	GtkTextIter iter;
+	gint line;
+	gint column;
+
+	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+	gtk_text_buffer_get_iter_at_mark (buffer,
+					  &iter,
+					  gtk_text_buffer_get_insert (buffer));
+
+	line = gtk_text_iter_get_line (&iter);
+	column = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (view), &iter);
+
+	set_values (indicator, line + 1, column + 1);
+}
+
+static TeplView *
+get_view (TeplLineColumnIndicator *indicator)
+{
+	if (indicator->priv->tab_group != NULL)
+	{
+		return tepl_tab_group_get_active_view (indicator->priv->tab_group);
+	}
+
+	return indicator->priv->view;
+}
+
+static void
+update_cursor_position (TeplLineColumnIndicator *indicator)
+{
+	TeplView *view = get_view (indicator);
+
+	if (view == NULL)
+	{
+		gtk_widget_hide (GTK_WIDGET (indicator->priv->label));
+	}
+	else
+	{
+		set_values_for_view (indicator, view);
+		gtk_widget_show (GTK_WIDGET (indicator->priv->label));
+	}
+}
+
+static void
+view_destroy_cb (TeplView                *view,
+		 TeplLineColumnIndicator *indicator)
+{
+	set_view (indicator, NULL);
+}
+
+static void
+set_view (TeplLineColumnIndicator *indicator,
+	  TeplView                *view)
+{
+	if (indicator->priv->view == view)
+	{
+		return;
+	}
+
+	if (indicator->priv->view != NULL)
+	{
+		if (indicator->priv->view_destroy_handler_id != 0)
+		{
+			g_signal_handler_disconnect (indicator->priv->view,
+						     indicator->priv->view_destroy_handler_id);
+			indicator->priv->view_destroy_handler_id = 0;
+		}
+
+		g_clear_object (&indicator->priv->view);
+	}
+
+	if (view != NULL)
+	{
+		indicator->priv->view = g_object_ref_sink (view);
+
+		indicator->priv->view_destroy_handler_id =
+			g_signal_connect (view,
+					  "destroy",
+					  G_CALLBACK (view_destroy_cb),
+					  indicator);
+	}
+}
+
+static void
 tepl_line_column_indicator_dispose (GObject *object)
 {
 	TeplLineColumnIndicator *indicator = TEPL_LINE_COLUMN_INDICATOR (object);
 
-	g_clear_object (&indicator->priv->tab_group);
-
 	tepl_signal_group_clear (&indicator->priv->view_signal_group);
 	tepl_signal_group_clear (&indicator->priv->buffer_signal_group);
+
+	set_view (indicator, NULL);
+	g_clear_object (&indicator->priv->tab_group);
 
 	/* In case a public function is called after a first dispose. */
 	indicator->priv->label = NULL;
@@ -94,34 +191,6 @@ TeplLineColumnIndicator *
 tepl_line_column_indicator_new (void)
 {
 	return g_object_new (TEPL_TYPE_LINE_COLUMN_INDICATOR, NULL);
-}
-
-static void
-update_cursor_position (TeplLineColumnIndicator *indicator)
-{
-	TeplView *active_view;
-	GtkTextBuffer *active_buffer;
-	GtkTextIter iter;
-	gint line;
-	gint column;
-
-	active_view = tepl_tab_group_get_active_view (indicator->priv->tab_group);
-	if (active_view == NULL)
-	{
-		gtk_widget_hide (GTK_WIDGET (indicator->priv->label));
-		return;
-	}
-
-	active_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (active_view));
-	gtk_text_buffer_get_iter_at_mark (active_buffer,
-					  &iter,
-					  gtk_text_buffer_get_insert (active_buffer));
-
-	line = gtk_text_iter_get_line (&iter);
-	column = gtk_source_view_get_visual_column (GTK_SOURCE_VIEW (active_view), &iter);
-
-	set_values (indicator, line + 1, column + 1);
-	gtk_widget_show (GTK_WIDGET (indicator->priv->label));
 }
 
 static void
@@ -200,18 +269,48 @@ connect_to_view (TeplLineColumnIndicator *indicator,
 }
 
 static void
-active_view_changed (TeplLineColumnIndicator *indicator)
+view_changed (TeplLineColumnIndicator *indicator)
 {
-	TeplView *active_view;
-	TeplBuffer *active_buffer;
+	TeplView *view;
+	TeplBuffer *buffer = NULL;
 
-	active_view = tepl_tab_group_get_active_view (indicator->priv->tab_group);
-	active_buffer = tepl_tab_group_get_active_buffer (indicator->priv->tab_group);
+	view = get_view (indicator);
 
-	connect_to_view (indicator, active_view);
-	connect_to_buffer (indicator, active_buffer);
+	if (view != NULL)
+	{
+		buffer = TEPL_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (view)));
+	}
+
+	connect_to_view (indicator, view);
+	connect_to_buffer (indicator, buffer);
 
 	update_cursor_position (indicator);
+}
+
+/**
+ * tepl_line_column_indicator_set_view:
+ * @indicator: a #TeplLineColumnIndicator.
+ * @view: (nullable): a #TeplView, or %NULL.
+ *
+ * Sets a #TeplView to update automatically the values for the line and column
+ * of the current cursor position. If @view is %NULL, then @indicator will be
+ * empty.
+ *
+ * Use tepl_line_column_indicator_set_view() or
+ * tepl_line_column_indicator_set_tab_group(), but not both.
+ *
+ * Since: 6.4
+ */
+void
+tepl_line_column_indicator_set_view (TeplLineColumnIndicator *indicator,
+				     TeplView                *view)
+{
+	g_return_if_fail (TEPL_IS_LINE_COLUMN_INDICATOR (indicator));
+	g_return_if_fail (view == NULL || TEPL_IS_VIEW (view));
+	g_return_if_fail (indicator->priv->tab_group == NULL);
+
+	set_view (indicator, view);
+	view_changed (indicator);
 }
 
 static void
@@ -219,7 +318,7 @@ active_view_notify_cb (TeplTabGroup            *tab_group,
 		       GParamSpec              *pspec,
 		       TeplLineColumnIndicator *indicator)
 {
-	active_view_changed (indicator);
+	view_changed (indicator);
 }
 
 /**
@@ -233,6 +332,9 @@ active_view_notify_cb (TeplTabGroup            *tab_group,
  *
  * This function can be called only once per @indicator.
  *
+ * Use tepl_line_column_indicator_set_view() or
+ * tepl_line_column_indicator_set_tab_group(), but not both.
+ *
  * Since: 6.4
  */
 void
@@ -242,6 +344,7 @@ tepl_line_column_indicator_set_tab_group (TeplLineColumnIndicator *indicator,
 	g_return_if_fail (TEPL_IS_LINE_COLUMN_INDICATOR (indicator));
 	g_return_if_fail (TEPL_IS_TAB_GROUP (tab_group));
 	g_return_if_fail (indicator->priv->tab_group == NULL);
+	g_return_if_fail (indicator->priv->view == NULL);
 
 	indicator->priv->tab_group = g_object_ref_sink (tab_group);
 
@@ -251,5 +354,5 @@ tepl_line_column_indicator_set_tab_group (TeplLineColumnIndicator *indicator,
 				 indicator,
 				 0);
 
-	active_view_changed (indicator);
+	view_changed (indicator);
 }

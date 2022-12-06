@@ -356,6 +356,7 @@ tepl_language_chooser_widget_get_type
 <FILE>line-column-indicator</FILE>
 TeplLineColumnIndicator
 tepl_line_column_indicator_new
+tepl_line_column_indicator_set_view
 tepl_line_column_indicator_set_tab_group
 <SUBSECTION Standard>
 TEPL_IS_LINE_COLUMN_INDICATOR

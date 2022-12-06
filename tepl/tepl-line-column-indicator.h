@@ -47,6 +47,10 @@ TeplLineColumnIndicator *
 		tepl_line_column_indicator_new			(void);
 
 _TEPL_EXTERN
+void		tepl_line_column_indicator_set_view		(TeplLineColumnIndicator *indicator,
+								 TeplView                *view);
+
+_TEPL_EXTERN
 void		tepl_line_column_indicator_set_tab_group	(TeplLineColumnIndicator *indicator,
 								 TeplTabGroup            *tab_group);
 
