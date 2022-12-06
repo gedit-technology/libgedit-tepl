@@ -120,12 +120,26 @@ tepl_overwrite_indicator_set_property (GObject      *object,
 }
 
 static void
+tepl_overwrite_indicator_dispose (GObject *object)
+{
+	TeplOverwriteIndicator *indicator = TEPL_OVERWRITE_INDICATOR (object);
+
+	/* In case a public function is called after a first dispose. */
+	indicator->priv->stack = NULL;
+	indicator->priv->label_insert = NULL;
+	indicator->priv->label_overwrite = NULL;
+
+	G_OBJECT_CLASS (tepl_overwrite_indicator_parent_class)->dispose (object);
+}
+
+static void
 tepl_overwrite_indicator_class_init (TeplOverwriteIndicatorClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->get_property = tepl_overwrite_indicator_get_property;
 	object_class->set_property = tepl_overwrite_indicator_set_property;
+	object_class->dispose = tepl_overwrite_indicator_dispose;
 
 	/**
 	 * TeplOverwriteIndicator:overwrite:
