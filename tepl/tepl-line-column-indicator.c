@@ -23,6 +23,8 @@ struct _TeplLineColumnIndicatorPrivate
 	GtkLabel *label;
 
 	TeplTabGroup *tab_group;
+
+	TeplSignalGroup *view_signal_group;
 	TeplSignalGroup *buffer_signal_group;
 };
 
@@ -52,6 +54,8 @@ tepl_line_column_indicator_dispose (GObject *object)
 	TeplLineColumnIndicator *indicator = TEPL_LINE_COLUMN_INDICATOR (object);
 
 	g_clear_object (&indicator->priv->tab_group);
+
+	tepl_signal_group_clear (&indicator->priv->view_signal_group);
 	tepl_signal_group_clear (&indicator->priv->buffer_signal_group);
 
 	/* In case a public function is called after a first dispose. */
@@ -121,43 +125,101 @@ update_cursor_position (TeplLineColumnIndicator *indicator)
 }
 
 static void
-active_buffer_cursor_moved_cb (TeplBuffer              *active_buffer,
-			       TeplLineColumnIndicator *indicator)
+cursor_moved_cb (TeplBuffer              *buffer,
+		 TeplLineColumnIndicator *indicator)
 {
 	update_cursor_position (indicator);
 }
 
 static void
-active_buffer_changed (TeplLineColumnIndicator *indicator)
+connect_to_buffer (TeplLineColumnIndicator *indicator,
+		   TeplBuffer              *buffer)
 {
-	TeplBuffer *active_buffer;
-
 	tepl_signal_group_clear (&indicator->priv->buffer_signal_group);
 
-	active_buffer = tepl_tab_group_get_active_buffer (indicator->priv->tab_group);
-	if (active_buffer == NULL)
+	if (buffer == NULL)
 	{
-		goto end;
+		return;
 	}
 
-	indicator->priv->buffer_signal_group = tepl_signal_group_new (G_OBJECT (active_buffer));
+	indicator->priv->buffer_signal_group = tepl_signal_group_new (G_OBJECT (buffer));
 
 	tepl_signal_group_add (indicator->priv->buffer_signal_group,
-			       g_signal_connect (active_buffer,
+			       g_signal_connect (buffer,
 						 "tepl-cursor-moved",
-						 G_CALLBACK (active_buffer_cursor_moved_cb),
+						 G_CALLBACK (cursor_moved_cb),
 						 indicator));
+}
 
-end:
+static void
+buffer_notify_cb (TeplView                *view,
+		  GParamSpec              *pspec,
+		  TeplLineColumnIndicator *indicator)
+{
+	TeplBuffer *buffer;
+
+	buffer = TEPL_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (view)));
+	connect_to_buffer (indicator, buffer);
+
 	update_cursor_position (indicator);
 }
 
 static void
-active_buffer_notify_cb (TeplTabGroup            *tab_group,
-			 GParamSpec              *pspec,
-			 TeplLineColumnIndicator *indicator)
+tab_width_notify_cb (TeplView                *view,
+		     GParamSpec              *pspec,
+		     TeplLineColumnIndicator *indicator)
 {
-	active_buffer_changed (indicator);
+	/* gtk_source_view_get_visual_column() depends on tab-width. */
+	update_cursor_position (indicator);
+}
+
+static void
+connect_to_view (TeplLineColumnIndicator *indicator,
+		 TeplView                *view)
+{
+	tepl_signal_group_clear (&indicator->priv->view_signal_group);
+
+	if (view == NULL)
+	{
+		return;
+	}
+
+	indicator->priv->view_signal_group = tepl_signal_group_new (G_OBJECT (view));
+
+	tepl_signal_group_add (indicator->priv->view_signal_group,
+			       g_signal_connect (view,
+						 "notify::buffer",
+						 G_CALLBACK (buffer_notify_cb),
+						 indicator));
+
+	tepl_signal_group_add (indicator->priv->view_signal_group,
+			       g_signal_connect (view,
+						 "notify::tab-width",
+						 G_CALLBACK (tab_width_notify_cb),
+						 indicator));
+}
+
+static void
+active_view_changed (TeplLineColumnIndicator *indicator)
+{
+	TeplView *active_view;
+	TeplBuffer *active_buffer;
+
+	active_view = tepl_tab_group_get_active_view (indicator->priv->tab_group);
+	active_buffer = tepl_tab_group_get_active_buffer (indicator->priv->tab_group);
+
+	connect_to_view (indicator, active_view);
+	connect_to_buffer (indicator, active_buffer);
+
+	update_cursor_position (indicator);
+}
+
+static void
+active_view_notify_cb (TeplTabGroup            *tab_group,
+		       GParamSpec              *pspec,
+		       TeplLineColumnIndicator *indicator)
+{
+	active_view_changed (indicator);
 }
 
 /**
@@ -184,10 +246,10 @@ tepl_line_column_indicator_set_tab_group (TeplLineColumnIndicator *indicator,
 	indicator->priv->tab_group = g_object_ref_sink (tab_group);
 
 	g_signal_connect_object (tab_group,
-				 "notify::active-buffer",
-				 G_CALLBACK (active_buffer_notify_cb),
+				 "notify::active-view",
+				 G_CALLBACK (active_view_notify_cb),
 				 indicator,
 				 0);
 
-	active_buffer_changed (indicator);
+	active_view_changed (indicator);
 }
