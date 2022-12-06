@@ -353,6 +353,23 @@ tepl_language_chooser_widget_get_type
 </SECTION>
 
 <SECTION>
+<FILE>line-column-indicator</FILE>
+TeplLineColumnIndicator
+tepl_line_column_indicator_new
+tepl_line_column_indicator_set_tab_group
+<SUBSECTION Standard>
+TEPL_IS_LINE_COLUMN_INDICATOR
+TEPL_IS_LINE_COLUMN_INDICATOR_CLASS
+TEPL_LINE_COLUMN_INDICATOR
+TEPL_LINE_COLUMN_INDICATOR_CLASS
+TEPL_LINE_COLUMN_INDICATOR_GET_CLASS
+TEPL_TYPE_LINE_COLUMN_INDICATOR
+TeplLineColumnIndicatorClass
+TeplLineColumnIndicatorPrivate
+tepl_line_column_indicator_get_type
+</SECTION>
+
+<SECTION>
 <FILE>menu-shell</FILE>
 tepl_menu_shell_append_edit_actions
 </SECTION>

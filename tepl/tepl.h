@@ -32,6 +32,7 @@
 #include <tepl/tepl-language-chooser.h>
 #include <tepl/tepl-language-chooser-dialog.h>
 #include <tepl/tepl-language-chooser-widget.h>
+#include <tepl/tepl-line-column-indicator.h>
 #include <tepl/tepl-menu-shell.h>
 #include <tepl/tepl-metadata.h>
 #include <tepl/tepl-metadata-manager.h>
