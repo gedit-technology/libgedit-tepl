@@ -1,6 +1,8 @@
-News in 6.3.x, xxxx-yy-zz (not yet released)
+News in 6.4.0, 2023-01-01
 -------------------------
+* Build: simplify handling of library soversion.
 * Add some new API (see the reference documentation).
+* Some API breaks (see the reference documentation).
 * Experiments to simplify GtkStack custom switcher implementations.
   Moved the result to the attic/ directory.
 * TeplView: add code from gedit: override delete_from_cursor vfunc.

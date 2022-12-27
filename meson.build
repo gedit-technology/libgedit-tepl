@@ -6,7 +6,7 @@
 project(
   'tepl', 'c',
   meson_version: '>= 0.53',
-  version: '6.3.1',
+  version: '6.4.0',
   default_options: ['warning_level=2']
 )
 

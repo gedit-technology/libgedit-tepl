@@ -229,5 +229,19 @@
         </para>
       </listitem>
     </itemizedlist>
+
+    <para>
+      Tepl 6.2 to Tepl 6.4:
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          The <code>tepl_statusbar_*()</code> functions have been removed, you
+          can use
+          <link linkend="TeplLineColumnIndicator">TeplLineColumnIndicator</link>
+          instead.
+        </para>
+      </listitem>
+    </itemizedlist>
   </chapter>
 </part>
