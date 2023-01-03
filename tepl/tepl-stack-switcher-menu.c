@@ -2,14 +2,14 @@
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
-#include "tepl-panel-chooser-menu.h"
+#include "tepl-stack-switcher-menu.h"
 
-struct _TeplPanelChooserMenuPrivate
+struct _TeplStackSwitcherMenuPrivate
 {
 	gint something;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (TeplPanelChooserMenu, tepl_panel_chooser_menu, GTK_TYPE_BIN)
+G_DEFINE_TYPE_WITH_PRIVATE (TeplStackSwitcherMenu, tepl_stack_switcher_menu, GTK_TYPE_BIN)
 
 static gboolean
 zero_or_one_component (void)
@@ -22,8 +22,8 @@ get_components_titles (void)
 {
 	GList *list = NULL;
 
-	list = g_list_prepend (list, g_strdup ("TeplPanelChooser 2"));
-	list = g_list_prepend (list, g_strdup ("TeplPanelChooser 1"));
+	list = g_list_prepend (list, g_strdup ("TeplStackSwitcher 2"));
+	list = g_list_prepend (list, g_strdup ("TeplStackSwitcher 1"));
 
 	return list;
 }
@@ -31,7 +31,7 @@ get_components_titles (void)
 static gchar *
 get_title_of_displayed_component (void)
 {
-	return g_strdup ("TeplPanelChooser 1");
+	return g_strdup ("TeplStackSwitcher 1");
 }
 
 static GtkLabel *
@@ -44,7 +44,7 @@ create_title_label (void)
 	title_of_displayed_component = get_title_of_displayed_component ();
 	title = GTK_LABEL (gtk_label_new (title_of_displayed_component));
 
-	/* To use a TeplPanelChooserMenu in a GtkHeaderBar.
+	/* To use a TeplStackSwitcherMenu in a GtkHeaderBar.
 	 * This could be made configurable with an additional API.
 	 */
 	style_context = gtk_widget_get_style_context (GTK_WIDGET (title));
@@ -128,52 +128,52 @@ create_menu_button (void)
 }
 
 static void
-populate (TeplPanelChooserMenu *chooser)
+populate (TeplStackSwitcherMenu *switcher)
 {
 	/* TODO: check vertical alignments. */
 
 	if (zero_or_one_component ())
 	{
-		gtk_container_add (GTK_CONTAINER (chooser),
+		gtk_container_add (GTK_CONTAINER (switcher),
 				   GTK_WIDGET (create_title_label ()));
 	}
 	else
 	{
-		gtk_container_add (GTK_CONTAINER (chooser),
+		gtk_container_add (GTK_CONTAINER (switcher),
 				   GTK_WIDGET (create_menu_button ()));
 	}
 }
 
 #if 0
 static void
-tepl_panel_chooser_menu_finalize (GObject *object)
+tepl_stack_switcher_menu_finalize (GObject *object)
 {
 
-	G_OBJECT_CLASS (tepl_panel_chooser_menu_parent_class)->finalize (object);
+	G_OBJECT_CLASS (tepl_stack_switcher_menu_parent_class)->finalize (object);
 }
 #endif
 
 static void
-tepl_panel_chooser_menu_class_init (TeplPanelChooserMenuClass *klass)
+tepl_stack_switcher_menu_class_init (TeplStackSwitcherMenuClass *klass)
 {
 #if 0
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	object_class->finalize = tepl_panel_chooser_menu_finalize;
+	object_class->finalize = tepl_stack_switcher_menu_finalize;
 #endif
 }
 
 static void
-tepl_panel_chooser_menu_init (TeplPanelChooserMenu *chooser)
+tepl_stack_switcher_menu_init (TeplStackSwitcherMenu *switcher)
 {
-	chooser->priv = tepl_panel_chooser_menu_get_instance_private (chooser);
+	switcher->priv = tepl_stack_switcher_menu_get_instance_private (switcher);
 
-	populate (chooser);
-	gtk_widget_show_all (GTK_WIDGET (chooser));
+	populate (switcher);
+	gtk_widget_show_all (GTK_WIDGET (switcher));
 }
 
-TeplPanelChooserMenu *
-tepl_panel_chooser_menu_new (void)
+TeplStackSwitcherMenu *
+tepl_stack_switcher_menu_new (void)
 {
-	return g_object_new (TEPL_TYPE_PANEL_CHOOSER_MENU, NULL);
+	return g_object_new (TEPL_TYPE_STACK_SWITCHER_MENU, NULL);
 }

@@ -39,7 +39,6 @@
 #include <tepl/tepl-notebook.h>
 #include <tepl/tepl-overwrite-indicator.h>
 #include <tepl/tepl-panel.h>
-#include <tepl/tepl-panel-chooser-menu.h>
 #include <tepl/tepl-pango.h>
 #include <tepl/tepl-prefs.h>
 #include <tepl/tepl-prefs-dialog.h>
@@ -49,6 +48,7 @@
 #include <tepl/tepl-space-drawer-prefs.h>
 #include <tepl/tepl-stack.h>
 #include <tepl/tepl-stack-item.h>
+#include <tepl/tepl-stack-switcher-menu.h>
 #include <tepl/tepl-statusbar.h>
 #include <tepl/tepl-style-scheme-chooser-widget.h>
 #include <tepl/tepl-tab.h>

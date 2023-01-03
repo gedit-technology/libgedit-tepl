@@ -28,7 +28,6 @@ tepl/tepl-metadata-parser.c
 tepl/tepl-notebook.c
 tepl/tepl-overwrite-indicator.c
 tepl/tepl-panel.c
-tepl/tepl-panel-chooser-menu.c
 tepl/tepl-pango.c
 tepl/tepl-prefs.c
 tepl/tepl-progress-info-bar.c
@@ -37,6 +36,7 @@ tepl/tepl-signal-group.c
 tepl/tepl-space-drawer-prefs.c
 tepl/tepl-stack.c
 tepl/tepl-stack-item.c
+tepl/tepl-stack-switcher-menu.c
 tepl/tepl-statusbar.c
 tepl/tepl-style-scheme-chooser-widget.c
 tepl/tepl-tab.c
