@@ -39,6 +39,7 @@
 #include <tepl/tepl-notebook.h>
 #include <tepl/tepl-overwrite-indicator.h>
 #include <tepl/tepl-panel.h>
+#include <tepl/tepl-panel-chooser-menu.h>
 #include <tepl/tepl-pango.h>
 #include <tepl/tepl-prefs.h>
 #include <tepl/tepl-prefs-dialog.h>
