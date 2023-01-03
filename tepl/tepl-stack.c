@@ -155,3 +155,21 @@ tepl_stack_changed (TeplStack *stack)
 
 	g_signal_emit (stack, signals[SIGNAL_CHANGED], 0);
 }
+
+/**
+ * tepl_stack_has_several_items:
+ * @stack: a #TeplStack.
+ *
+ * Convenience function.
+ *
+ * Returns: whether @stack has more than one #TeplStackItem.
+ * Since: 6.6
+ */
+gboolean
+tepl_stack_has_several_items (TeplStack *stack)
+{
+	g_return_val_if_fail (TEPL_IS_STACK (stack), FALSE);
+
+	return (stack->priv->items != NULL &&
+		stack->priv->items->next != NULL);
+}

@@ -39,24 +39,27 @@ struct _TeplStackClass
 };
 
 _TEPL_EXTERN
-GType		tepl_stack_get_type	(void);
+GType		tepl_stack_get_type		(void);
 
 _TEPL_EXTERN
-TeplStack *	tepl_stack_new		(void);
+TeplStack *	tepl_stack_new			(void);
 
 _TEPL_EXTERN
-void		tepl_stack_add_item	(TeplStack     *stack,
-					 TeplStackItem *item);
+void		tepl_stack_add_item		(TeplStack     *stack,
+						 TeplStackItem *item);
 
 _TEPL_EXTERN
-void		tepl_stack_remove_item	(TeplStack     *stack,
-					 TeplStackItem *item);
+void		tepl_stack_remove_item		(TeplStack     *stack,
+						 TeplStackItem *item);
 
 _TEPL_EXTERN
-GList *		tepl_stack_get_items	(TeplStack *stack);
+GList *		tepl_stack_get_items		(TeplStack *stack);
 
 _TEPL_EXTERN
-void		tepl_stack_changed	(TeplStack *stack);
+void		tepl_stack_changed		(TeplStack *stack);
+
+_TEPL_EXTERN
+gboolean	tepl_stack_has_several_items	(TeplStack *stack);
 
 G_END_DECLS
 
