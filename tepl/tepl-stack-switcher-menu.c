@@ -33,21 +33,23 @@ get_components_titles (TeplStack *stack)
 }
 
 static gchar *
-get_title_of_displayed_component (TeplStack *stack)
+get_title (TeplStack *stack)
 {
-	GList *titles;
-	gchar *ret = NULL;
+	TeplStackItem *visible_item;
+	gchar *title = NULL;
 
-	/* Dummy implementation */
-
-	titles = get_components_titles (stack);
-	if (titles != NULL)
+	if (tepl_stack_get_n_visible_items (stack) > 1)
 	{
-		ret = g_strdup (titles->data);
+		g_warn_if_reached ();
 	}
-	g_list_free_full (titles, g_free);
 
-	return ret;
+	visible_item = tepl_stack_get_visible_item (stack);
+	if (visible_item != NULL)
+	{
+		tepl_stack_item_get_infos (visible_item, NULL, &title, NULL);
+	}
+
+	return title;
 }
 
 static GtkLabel *
@@ -57,7 +59,7 @@ create_title_label (TeplStackSwitcherMenu *switcher)
 	GtkLabel *title;
 	GtkStyleContext *style_context;
 
-	title_of_displayed_component = get_title_of_displayed_component (switcher->priv->stack);
+	title_of_displayed_component = get_title (switcher->priv->stack);
 	title = GTK_LABEL (gtk_label_new (title_of_displayed_component));
 
 	/* To use a TeplStackSwitcherMenu in a GtkHeaderBar.
