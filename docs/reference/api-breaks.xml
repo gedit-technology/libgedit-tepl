@@ -243,5 +243,17 @@
         </para>
       </listitem>
     </itemizedlist>
+
+    <para>
+      Tepl 6.4 to Tepl 6.6:
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          The <link linkend="TeplWidgetListItem">TeplWidgetListItem</link> API
+          has been reworked.
+        </para>
+      </listitem>
+    </itemizedlist>
   </chapter>
 </part>
