@@ -250,6 +250,9 @@
     <itemizedlist>
       <listitem>
         <para>
+          The <code>TeplWidgetListCategory</code> class has been removed.
+        </para>
+        <para>
           The <link linkend="TeplWidgetListItem">TeplWidgetListItem</link> API
           has been reworked.
         </para>
