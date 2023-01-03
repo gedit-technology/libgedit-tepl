@@ -6,42 +6,71 @@
 
 struct _TeplStackSwitcherMenuPrivate
 {
-	gint something;
+	TeplStack *stack;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (TeplStackSwitcherMenu, tepl_stack_switcher_menu, GTK_TYPE_BIN)
 
 static gboolean
-zero_or_one_component (void)
+zero_or_one_component (TeplStack *stack)
 {
-	return FALSE;
+	GList *items;
+	gboolean ret;
+
+	items = tepl_stack_get_items (stack);
+	ret = (items == NULL || items->next == NULL);
+	g_list_free_full (items, g_object_unref);
+
+	return ret;
 }
 
 static GList *
-get_components_titles (void)
+get_components_titles (TeplStack *stack)
 {
-	GList *list = NULL;
+	GList *titles = NULL;
+	GList *items;
+	GList *l;
 
-	list = g_list_prepend (list, g_strdup ("TeplStackSwitcher 2"));
-	list = g_list_prepend (list, g_strdup ("TeplStackSwitcher 1"));
+	items = tepl_stack_get_items (stack);
+	for (l = items; l != NULL; l = l->next)
+	{
+		TeplStackItem *cur_item = TEPL_STACK_ITEM (l->data);
+		gchar *cur_title = NULL;
 
-	return list;
+		tepl_stack_item_get_infos (cur_item, NULL, &cur_title, NULL);
+		titles = g_list_prepend (titles, cur_title);
+	}
+	g_list_free_full (items, g_object_unref);
+
+	return g_list_reverse (titles);
 }
 
 static gchar *
-get_title_of_displayed_component (void)
+get_title_of_displayed_component (TeplStack *stack)
 {
-	return g_strdup ("TeplStackSwitcher 1");
+	GList *titles;
+	gchar *ret = NULL;
+
+	/* Dummy implementation */
+
+	titles = get_components_titles (stack);
+	if (titles != NULL)
+	{
+		ret = g_strdup (titles->data);
+	}
+	g_list_free_full (titles, g_free);
+
+	return ret;
 }
 
 static GtkLabel *
-create_title_label (void)
+create_title_label (TeplStackSwitcherMenu *switcher)
 {
 	gchar *title_of_displayed_component;
 	GtkLabel *title;
 	GtkStyleContext *style_context;
 
-	title_of_displayed_component = get_title_of_displayed_component ();
+	title_of_displayed_component = get_title_of_displayed_component (switcher->priv->stack);
 	title = GTK_LABEL (gtk_label_new (title_of_displayed_component));
 
 	/* To use a TeplStackSwitcherMenu in a GtkHeaderBar.
@@ -55,7 +84,7 @@ create_title_label (void)
 }
 
 static GtkGrid *
-create_menu_button_title (void)
+create_menu_button_title (TeplStackSwitcherMenu *switcher)
 {
 	GtkGrid *hgrid;
 	GtkLabel *title_label;
@@ -64,7 +93,7 @@ create_menu_button_title (void)
 	hgrid = GTK_GRID (gtk_grid_new ());
 	gtk_grid_set_column_spacing (hgrid, 6);
 
-	title_label = create_title_label ();
+	title_label = create_title_label (switcher);
 	gtk_container_add (GTK_CONTAINER (hgrid),
 			   GTK_WIDGET (title_label));
 
@@ -75,7 +104,7 @@ create_menu_button_title (void)
 }
 
 static GtkPopover *
-create_popover (void)
+create_popover (TeplStackSwitcherMenu *switcher)
 {
 	GtkPopover *popover;
 	GtkGrid *vgrid;
@@ -88,7 +117,7 @@ create_popover (void)
 	gtk_orientable_set_orientation (GTK_ORIENTABLE (vgrid), GTK_ORIENTATION_VERTICAL);
 	gtk_grid_set_row_spacing (vgrid, 6);
 
-	components_titles = get_components_titles ();
+	components_titles = get_components_titles (switcher->priv->stack);
 	for (l = components_titles; l != NULL; l = l->next)
 	{
 		const gchar *cur_component_title = l->data;
@@ -109,7 +138,7 @@ create_popover (void)
 }
 
 static GtkMenuButton *
-create_menu_button (void)
+create_menu_button (TeplStackSwitcherMenu *switcher)
 {
 	GtkMenuButton *menu_button;
 	GtkPopover *popover;
@@ -118,9 +147,9 @@ create_menu_button (void)
 	gtk_button_set_relief (GTK_BUTTON (menu_button), GTK_RELIEF_NONE);
 
 	gtk_container_add (GTK_CONTAINER (menu_button),
-			   GTK_WIDGET (create_menu_button_title ()));
+			   GTK_WIDGET (create_menu_button_title (switcher)));
 
-	popover = create_popover ();
+	popover = create_popover (switcher);
 	gtk_popover_set_relative_to (popover, GTK_WIDGET (menu_button));
 	gtk_menu_button_set_popover (menu_button, GTK_WIDGET (popover));
 
@@ -132,48 +161,55 @@ populate (TeplStackSwitcherMenu *switcher)
 {
 	/* TODO: check vertical alignments. */
 
-	if (zero_or_one_component ())
+	if (zero_or_one_component (switcher->priv->stack))
 	{
 		gtk_container_add (GTK_CONTAINER (switcher),
-				   GTK_WIDGET (create_title_label ()));
+				   GTK_WIDGET (create_title_label (switcher)));
 	}
 	else
 	{
 		gtk_container_add (GTK_CONTAINER (switcher),
-				   GTK_WIDGET (create_menu_button ()));
+				   GTK_WIDGET (create_menu_button (switcher)));
 	}
 }
 
-#if 0
 static void
-tepl_stack_switcher_menu_finalize (GObject *object)
+tepl_stack_switcher_menu_dispose (GObject *object)
 {
+	TeplStackSwitcherMenu *switcher = TEPL_STACK_SWITCHER_MENU (object);
 
-	G_OBJECT_CLASS (tepl_stack_switcher_menu_parent_class)->finalize (object);
+	g_clear_object (&switcher->priv->stack);
+
+	G_OBJECT_CLASS (tepl_stack_switcher_menu_parent_class)->dispose (object);
 }
-#endif
 
 static void
 tepl_stack_switcher_menu_class_init (TeplStackSwitcherMenuClass *klass)
 {
-#if 0
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	object_class->finalize = tepl_stack_switcher_menu_finalize;
-#endif
+	object_class->dispose = tepl_stack_switcher_menu_dispose;
 }
 
 static void
 tepl_stack_switcher_menu_init (TeplStackSwitcherMenu *switcher)
 {
 	switcher->priv = tepl_stack_switcher_menu_get_instance_private (switcher);
-
-	populate (switcher);
-	gtk_widget_show_all (GTK_WIDGET (switcher));
 }
 
 TeplStackSwitcherMenu *
-tepl_stack_switcher_menu_new (void)
+tepl_stack_switcher_menu_new (TeplStack *stack)
 {
-	return g_object_new (TEPL_TYPE_STACK_SWITCHER_MENU, NULL);
+	TeplStackSwitcherMenu *switcher;
+
+	g_return_val_if_fail (TEPL_IS_STACK (stack), NULL);
+
+	switcher = g_object_new (TEPL_TYPE_STACK_SWITCHER_MENU, NULL);
+
+	switcher->priv->stack = g_object_ref_sink (stack);
+
+	populate (switcher);
+	gtk_widget_show_all (GTK_WIDGET (switcher));
+
+	return switcher;
 }

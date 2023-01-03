@@ -9,8 +9,7 @@
 #error "Only <tepl/tepl.h> can be included directly."
 #endif
 
-#include <gtk/gtk.h>
-#include <tepl/tepl-macros.h>
+#include <tepl/tepl-stack.h>
 
 G_BEGIN_DECLS
 
@@ -43,7 +42,7 @@ _TEPL_EXTERN
 GType			tepl_stack_switcher_menu_get_type	(void);
 
 _TEPL_EXTERN
-TeplStackSwitcherMenu *	tepl_stack_switcher_menu_new		(void);
+TeplStackSwitcherMenu *	tepl_stack_switcher_menu_new		(TeplStack *stack);
 
 G_END_DECLS
 
