@@ -11,19 +11,6 @@ struct _TeplStackSwitcherMenuPrivate
 
 G_DEFINE_TYPE_WITH_PRIVATE (TeplStackSwitcherMenu, tepl_stack_switcher_menu, GTK_TYPE_BIN)
 
-static gboolean
-zero_or_one_component (TeplStack *stack)
-{
-	GList *items;
-	gboolean ret;
-
-	items = tepl_stack_get_items (stack);
-	ret = (items == NULL || items->next == NULL);
-	g_list_free_full (items, g_object_unref);
-
-	return ret;
-}
-
 static GList *
 get_components_titles (TeplStack *stack)
 {
@@ -161,15 +148,15 @@ populate (TeplStackSwitcherMenu *switcher)
 {
 	/* TODO: check vertical alignments. */
 
-	if (zero_or_one_component (switcher->priv->stack))
+	if (tepl_stack_has_several_items (switcher->priv->stack))
 	{
 		gtk_container_add (GTK_CONTAINER (switcher),
-				   GTK_WIDGET (create_title_label (switcher)));
+				   GTK_WIDGET (create_menu_button (switcher)));
 	}
 	else
 	{
 		gtk_container_add (GTK_CONTAINER (switcher),
-				   GTK_WIDGET (create_menu_button (switcher)));
+				   GTK_WIDGET (create_title_label (switcher)));
 	}
 }
 
