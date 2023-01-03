@@ -39,6 +39,7 @@ GNOME.gtkdoc(
   ignore_headers: [
     TEPL_PRIVATE_HEADERS,
     'tepl-panel-chooser-menu.h',
+    'tepl-stack.h',
   ],
   install: true
 )

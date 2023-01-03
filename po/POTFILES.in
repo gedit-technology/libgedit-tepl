@@ -35,6 +35,7 @@ tepl/tepl-progress-info-bar.c
 tepl/tepl-settings.c
 tepl/tepl-signal-group.c
 tepl/tepl-space-drawer-prefs.c
+tepl/tepl-stack.c
 tepl/tepl-stack-item.c
 tepl/tepl-statusbar.c
 tepl/tepl-style-scheme-chooser-widget.c
