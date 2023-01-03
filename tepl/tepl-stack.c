@@ -6,7 +6,6 @@
 
 struct _TeplStackPrivate
 {
-	/* Only one item at a time is showned in @grid. */
 	GtkGrid *grid;
 
 	/* Element-type: owned TeplStackItem */
@@ -172,4 +171,58 @@ tepl_stack_has_several_items (TeplStack *stack)
 
 	return (stack->priv->items != NULL &&
 		stack->priv->items->next != NULL);
+}
+
+guint
+tepl_stack_get_n_visible_items (TeplStack *stack)
+{
+	guint n_visible_items = 0;
+	GList *l;
+
+	g_return_val_if_fail (TEPL_IS_STACK (stack), 0);
+
+	for (l = stack->priv->items; l != NULL; l = l->next)
+	{
+		TeplStackItem *item = TEPL_STACK_ITEM (l->data);
+		GtkWidget *widget;
+
+		widget = tepl_stack_item_get_widget (item);
+
+		if (widget != NULL && gtk_widget_get_visible (widget))
+		{
+			n_visible_items++;
+		}
+	}
+
+	return n_visible_items;
+}
+
+/**
+ * tepl_stack_get_visible_item:
+ * @stack: a #TeplStack.
+ *
+ * Returns: (transfer none) (nullable):
+ * Since: 6.6
+ */
+TeplStackItem *
+tepl_stack_get_visible_item (TeplStack *stack)
+{
+	GList *l;
+
+	g_return_val_if_fail (TEPL_IS_STACK (stack), NULL);
+
+	for (l = stack->priv->items; l != NULL; l = l->next)
+	{
+		TeplStackItem *item = TEPL_STACK_ITEM (l->data);
+		GtkWidget *widget;
+
+		widget = tepl_stack_item_get_widget (item);
+
+		if (widget != NULL && gtk_widget_get_visible (widget))
+		{
+			return item;
+		}
+	}
+
+	return NULL;
 }

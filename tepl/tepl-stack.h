@@ -61,6 +61,12 @@ void		tepl_stack_changed		(TeplStack *stack);
 _TEPL_EXTERN
 gboolean	tepl_stack_has_several_items	(TeplStack *stack);
 
+_TEPL_EXTERN
+guint		tepl_stack_get_n_visible_items	(TeplStack *stack);
+
+_TEPL_EXTERN
+TeplStackItem *	tepl_stack_get_visible_item	(TeplStack *stack);
+
 G_END_DECLS
 
 #endif /* TEPL_STACK_H */
