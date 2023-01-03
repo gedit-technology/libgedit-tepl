@@ -45,7 +45,6 @@ tepl/tepl-tab-loading.c
 tepl/tepl-tab-saving.c
 tepl/tepl-utils.c
 tepl/tepl-view.c
-tepl/tepl-widget-list-item.c
 tepl/tepl-window-actions-edit.c
 tepl/tepl-window-actions-file.c
 tepl/tepl-window-actions-search.c

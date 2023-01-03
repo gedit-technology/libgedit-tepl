@@ -103,7 +103,6 @@
       <xi:include href="xml/file-chooser.xml"/>
       <xi:include href="xml/panel.xml"/>
       <xi:include href="xml/stack-item.xml"/>
-      <xi:include href="xml/widget-list-item.xml"/>
     </chapter>
 
     <chapter id="other-extras">

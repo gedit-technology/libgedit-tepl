@@ -46,7 +46,6 @@ tepl_public_headers = [
   'tepl-tab-saving.h',
   'tepl-utils.h',
   'tepl-view.h',
-  'tepl-widget-list-item.h',
 ]
 
 tepl_public_c_files = [
@@ -95,7 +94,6 @@ tepl_public_c_files = [
   'tepl-tab-saving.c',
   'tepl-utils.c',
   'tepl-view.c',
-  'tepl-widget-list-item.c',
 ]
 
 TEPL_PRIVATE_HEADERS = [
