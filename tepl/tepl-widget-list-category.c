@@ -69,7 +69,7 @@ tepl_widget_list_category_free (TeplWidgetListCategory *category)
 	if (category != NULL)
 	{
 		g_free (category->name);
-		g_list_free_full (category->items, (GDestroyNotify) tepl_widget_list_item_free);
+		g_list_free_full (category->items, g_object_unref);
 		g_free (category);
 	}
 }
@@ -92,8 +92,7 @@ tepl_widget_list_category_get_name (const TeplWidgetListCategory *category)
 /**
  * tepl_widget_list_category_add_item:
  * @category: a #TeplWidgetListCategory.
- * @item: (transfer full): an item to add to @category. @category then owns the
- *   item.
+ * @item: an item to add to @category.
  *
  * Since: 6.4
  */
@@ -102,9 +101,9 @@ tepl_widget_list_category_add_item (TeplWidgetListCategory *category,
 				    TeplWidgetListItem     *item)
 {
 	g_return_if_fail (category != NULL);
-	g_return_if_fail (item != NULL);
+	g_return_if_fail (TEPL_IS_WIDGET_LIST_ITEM (item));
 
-	category->items = g_list_prepend (category->items, item);
+	category->items = g_list_prepend (category->items, g_object_ref (item));
 }
 
 /**

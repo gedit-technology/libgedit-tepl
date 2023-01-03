@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2022 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2022-2023 - Sébastien Wilmet <swilmet@gnome.org>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
@@ -51,7 +51,7 @@
  *   owner of the #TeplWidgetListItem.
  */
 
-struct _TeplWidgetListItem
+struct _TeplWidgetListItemPrivate
 {
 	/* Owned. The ref is released on ::destroy. */
 	GtkWidget *widget;
@@ -64,44 +64,98 @@ struct _TeplWidgetListItem
 	guint displayed : 1;
 };
 
-/**
- * tepl_widget_list_item_new: (skip)
- *
- * Returns: a new #TeplWidgetListItem. Free with tepl_widget_list_item_free().
- * Since: 6.4
- */
-TeplWidgetListItem *
-tepl_widget_list_item_new (void)
-{
-	return g_new0 (TeplWidgetListItem, 1);
-}
+/* Forward declarations */
+static void set_widget (TeplWidgetListItem *item,
+			GtkWidget          *widget);
 
-/**
- * tepl_widget_list_item_free:
- * @item: (nullable): the #TeplWidgetListItem to free.
- *
- * Since: 6.4
- */
-void
-tepl_widget_list_item_free (TeplWidgetListItem *item)
-{
-	if (item != NULL)
-	{
-		tepl_widget_list_item_set_widget (item, NULL);
-
-		g_free (item->name);
-		g_free (item->title);
-		g_free (item->icon_name);
-
-		g_free (item);
-	}
-}
+G_DEFINE_TYPE_WITH_PRIVATE (TeplWidgetListItem, tepl_widget_list_item, G_TYPE_OBJECT)
 
 static void
 widget_destroy_cb (GtkWidget          *widget,
 		   TeplWidgetListItem *item)
 {
-	tepl_widget_list_item_set_widget (item, NULL);
+	set_widget (item, NULL);
+}
+
+static void
+set_widget (TeplWidgetListItem *item,
+	    GtkWidget          *widget)
+{
+	if (item->priv->widget == widget)
+	{
+		return;
+	}
+
+	if (item->priv->widget != NULL)
+	{
+		if (item->priv->widget_destroy_handler_id != 0)
+		{
+			g_signal_handler_disconnect (item->priv->widget, item->priv->widget_destroy_handler_id);
+			item->priv->widget_destroy_handler_id = 0;
+		}
+
+		g_clear_object (&item->priv->widget);
+	}
+
+	if (widget != NULL)
+	{
+		item->priv->widget = g_object_ref_sink (widget);
+
+		item->priv->widget_destroy_handler_id =
+			g_signal_connect (item->priv->widget,
+					  "destroy",
+					  G_CALLBACK (widget_destroy_cb),
+					  item);
+	}
+}
+
+static void
+tepl_widget_list_item_dispose (GObject *object)
+{
+	TeplWidgetListItem *item = TEPL_WIDGET_LIST_ITEM (object);
+
+	set_widget (item, NULL);
+
+	G_OBJECT_CLASS (tepl_widget_list_item_parent_class)->dispose (object);
+}
+
+static void
+tepl_widget_list_item_finalize (GObject *object)
+{
+	TeplWidgetListItem *item = TEPL_WIDGET_LIST_ITEM (object);
+
+	g_free (item->priv->name);
+	g_free (item->priv->title);
+	g_free (item->priv->icon_name);
+
+	G_OBJECT_CLASS (tepl_widget_list_item_parent_class)->finalize (object);
+}
+
+static void
+tepl_widget_list_item_class_init (TeplWidgetListItemClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	object_class->dispose = tepl_widget_list_item_dispose;
+	object_class->finalize = tepl_widget_list_item_finalize;
+}
+
+static void
+tepl_widget_list_item_init (TeplWidgetListItem *item)
+{
+	item->priv = tepl_widget_list_item_get_instance_private (item);
+}
+
+/**
+ * tepl_widget_list_item_new:
+ *
+ * Returns: a new #TeplWidgetListItem.
+ * Since: 6.4
+ */
+TeplWidgetListItem *
+tepl_widget_list_item_new (void)
+{
+	return g_object_new (TEPL_TYPE_WIDGET_LIST_ITEM, NULL);
 }
 
 /**
@@ -111,41 +165,16 @@ widget_destroy_cb (GtkWidget          *widget,
  *
  * Sets the "widget" property.
  *
- * Since: 6.4
+ * Since: 6.6
  */
 void
 tepl_widget_list_item_set_widget (TeplWidgetListItem *item,
 				  GtkWidget          *widget)
 {
-	g_return_if_fail (item != NULL);
+	g_return_if_fail (TEPL_IS_WIDGET_LIST_ITEM (item));
 	g_return_if_fail (widget == NULL || GTK_IS_WIDGET (widget));
 
-	if (item->widget == widget)
-	{
-		return;
-	}
-
-	if (item->widget != NULL)
-	{
-		if (item->widget_destroy_handler_id != 0)
-		{
-			g_signal_handler_disconnect (item->widget, item->widget_destroy_handler_id);
-			item->widget_destroy_handler_id = 0;
-		}
-
-		g_clear_object (&item->widget);
-	}
-
-	if (widget != NULL)
-	{
-		item->widget = g_object_ref_sink (widget);
-
-		item->widget_destroy_handler_id =
-			g_signal_connect (item->widget,
-					  "destroy",
-					  G_CALLBACK (widget_destroy_cb),
-					  item);
-	}
+	set_widget (item, widget);
 }
 
 /**
@@ -155,14 +184,14 @@ tepl_widget_list_item_set_widget (TeplWidgetListItem *item,
  * Returns: (transfer none) (nullable): the "widget" property. Is %NULL when the
  *   property isn't set, or if the widget has been destroyed (see the
  *   #GtkWidget::destroy signal).
- * Since: 6.4
+ * Since: 6.6
  */
 GtkWidget *
-tepl_widget_list_item_get_widget (const TeplWidgetListItem *item)
+tepl_widget_list_item_get_widget (TeplWidgetListItem *item)
 {
-	g_return_val_if_fail (item != NULL, NULL);
+	g_return_val_if_fail (TEPL_IS_WIDGET_LIST_ITEM (item), NULL);
 
-	return item->widget;
+	return item->priv->widget;
 }
 
 /**
@@ -172,15 +201,15 @@ tepl_widget_list_item_get_widget (const TeplWidgetListItem *item)
  *
  * Sets the "displayed" property.
  *
- * Since: 6.4
+ * Since: 6.6
  */
 void
 tepl_widget_list_item_set_displayed (TeplWidgetListItem *item,
 				     gboolean            displayed)
 {
-	g_return_if_fail (item != NULL);
+	g_return_if_fail (TEPL_IS_WIDGET_LIST_ITEM (item));
 
-	item->displayed = displayed != FALSE;
+	item->priv->displayed = displayed != FALSE;
 }
 
 /**
@@ -188,14 +217,14 @@ tepl_widget_list_item_set_displayed (TeplWidgetListItem *item,
  * @item: a #TeplWidgetListItem.
  *
  * Returns: the "displayed" property.
- * Since: 6.4
+ * Since: 6.6
  */
 gboolean
-tepl_widget_list_item_get_displayed (const TeplWidgetListItem *item)
+tepl_widget_list_item_get_displayed (TeplWidgetListItem *item)
 {
-	g_return_val_if_fail (item != NULL, FALSE);
+	g_return_val_if_fail (TEPL_IS_WIDGET_LIST_ITEM (item), FALSE);
 
-	return item->displayed;
+	return item->priv->displayed;
 }
 
 /**
@@ -207,7 +236,7 @@ tepl_widget_list_item_get_displayed (const TeplWidgetListItem *item)
  *
  * Sets some pieces of information to @item.
  *
- * Since: 6.4
+ * Since: 6.6
  */
 void
 tepl_widget_list_item_set_infos (TeplWidgetListItem *item,
@@ -215,48 +244,48 @@ tepl_widget_list_item_set_infos (TeplWidgetListItem *item,
 				 const gchar        *title,
 				 const gchar        *icon_name)
 {
-	g_return_if_fail (item != NULL);
+	g_return_if_fail (TEPL_IS_WIDGET_LIST_ITEM (item));
 
-	g_free (item->name);
-	g_free (item->title);
-	g_free (item->icon_name);
+	g_free (item->priv->name);
+	g_free (item->priv->title);
+	g_free (item->priv->icon_name);
 
-	item->name = g_strdup (name);
-	item->title = g_strdup (title);
-	item->icon_name = g_strdup (icon_name);
+	item->priv->name = g_strdup (name);
+	item->priv->title = g_strdup (title);
+	item->priv->icon_name = g_strdup (icon_name);
 }
 
 /**
  * tepl_widget_list_item_get_infos:
  * @item: a #TeplWidgetListItem.
- * @name: (out) (transfer none) (optional): the "name" property.
- * @title: (out) (transfer none) (optional): the "title" property.
- * @icon_name: (out) (transfer none) (optional): the "icon-name" property.
+ * @name: (out) (optional): the "name" property.
+ * @title: (out) (optional): the "title" property.
+ * @icon_name: (out) (optional): the "icon-name" property.
  *
  * Gets some pieces of information from @item.
  *
- * Since: 6.4
+ * Since: 6.6
  */
 void
-tepl_widget_list_item_get_infos (const TeplWidgetListItem  *item,
-				 const gchar              **name,
-				 const gchar              **title,
-				 const gchar              **icon_name)
+tepl_widget_list_item_get_infos (TeplWidgetListItem  *item,
+				 gchar              **name,
+				 gchar              **title,
+				 gchar              **icon_name)
 {
-	g_return_if_fail (item != NULL);
+	g_return_if_fail (TEPL_IS_WIDGET_LIST_ITEM (item));
 
 	if (name != NULL)
 	{
-		*name = item->name;
+		*name = g_strdup (item->priv->name);
 	}
 
 	if (title != NULL)
 	{
-		*title = item->title;
+		*title = g_strdup (item->priv->title);
 	}
 
 	if (icon_name != NULL)
 	{
-		*icon_name = item->icon_name;
+		*icon_name = g_strdup (item->priv->icon_name);
 	}
 }
