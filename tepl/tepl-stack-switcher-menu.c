@@ -64,12 +64,15 @@ create_menu_button_title (TeplStackSwitcherMenu *switcher)
 
 	hgrid = GTK_GRID (gtk_grid_new ());
 	gtk_grid_set_column_spacing (hgrid, 6);
+	gtk_widget_set_valign (GTK_WIDGET (hgrid), GTK_ALIGN_CENTER);
 
 	title_label = create_title_label (switcher);
+	gtk_widget_set_valign (GTK_WIDGET (title_label), GTK_ALIGN_BASELINE);
 	gtk_container_add (GTK_CONTAINER (hgrid),
 			   GTK_WIDGET (title_label));
 
 	down_arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
+	gtk_widget_set_valign (down_arrow, GTK_ALIGN_BASELINE);
 	gtk_container_add (GTK_CONTAINER (hgrid), down_arrow);
 
 	return hgrid;
@@ -111,6 +114,7 @@ create_item_button (TeplStackSwitcherMenu *switcher,
 
 	button = GTK_TOGGLE_BUTTON (gtk_toggle_button_new_with_label (title));
 	gtk_toggle_button_set_active (button, visible);
+	gtk_widget_set_size_request (GTK_WIDGET (button), 100, -1);
 
 	g_object_set_data_full (G_OBJECT (button),
 				TEPL_STACK_ITEM_KEY,
@@ -136,10 +140,14 @@ create_popover (TeplStackSwitcherMenu *switcher)
 	GList *l;
 
 	popover = GTK_POPOVER (gtk_popover_new (NULL));
+	gtk_popover_set_position (popover, GTK_POS_BOTTOM);
 
 	vgrid = GTK_GRID (gtk_grid_new ());
 	gtk_orientable_set_orientation (GTK_ORIENTABLE (vgrid), GTK_ORIENTATION_VERTICAL);
 	gtk_grid_set_row_spacing (vgrid, 6);
+	g_object_set (vgrid,
+		      "margin", 10,
+		      NULL);
 
 	items = tepl_stack_get_items (switcher->priv->stack);
 	for (l = items; l != NULL; l = l->next)
