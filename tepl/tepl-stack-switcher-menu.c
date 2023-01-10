@@ -7,6 +7,8 @@
 struct _TeplStackSwitcherMenuPrivate
 {
 	TeplStack *stack;
+
+	GtkPopover *popover;
 };
 
 #define TEPL_STACK_ITEM_KEY "tepl-stack-item-key"
@@ -82,6 +84,14 @@ item_button_clicked_cb (GtkToggleButton       *button,
 	item = g_object_get_data (G_OBJECT (button), TEPL_STACK_ITEM_KEY);
 	g_return_if_fail (TEPL_IS_STACK_ITEM (item));
 
+	/* Directly hide the GtkPopover, i.e. not with a transition. Because
+	 * repopulate() will be called, which will destroy everything first.
+	 * Closing the popover with a transition and destroying it at the same
+	 * time doesn't work well. It would be possible to wait before calling
+	 * repopulate(), but we prefer the simpler implementation.
+	 */
+	gtk_widget_hide (GTK_WIDGET (switcher->priv->popover));
+
 	tepl_stack_set_visible_item (switcher->priv->stack, item);
 }
 
@@ -152,7 +162,6 @@ static GtkMenuButton *
 create_menu_button (TeplStackSwitcherMenu *switcher)
 {
 	GtkMenuButton *menu_button;
-	GtkPopover *popover;
 
 	menu_button = GTK_MENU_BUTTON (gtk_menu_button_new ());
 	gtk_button_set_relief (GTK_BUTTON (menu_button), GTK_RELIEF_NONE);
@@ -160,9 +169,10 @@ create_menu_button (TeplStackSwitcherMenu *switcher)
 	gtk_container_add (GTK_CONTAINER (menu_button),
 			   GTK_WIDGET (create_menu_button_title (switcher)));
 
-	popover = create_popover (switcher);
-	gtk_popover_set_relative_to (popover, GTK_WIDGET (menu_button));
-	gtk_menu_button_set_popover (menu_button, GTK_WIDGET (popover));
+	g_assert (switcher->priv->popover == NULL);
+	switcher->priv->popover = create_popover (switcher);
+	gtk_popover_set_relative_to (switcher->priv->popover, GTK_WIDGET (menu_button));
+	gtk_menu_button_set_popover (menu_button, GTK_WIDGET (switcher->priv->popover));
 
 	return menu_button;
 }
@@ -176,6 +186,8 @@ clear_all (TeplStackSwitcherMenu *switcher)
 	{
 		gtk_widget_destroy (child);
 	}
+
+	switcher->priv->popover = NULL;
 }
 
 static void
@@ -206,6 +218,7 @@ tepl_stack_switcher_menu_dispose (GObject *object)
 	TeplStackSwitcherMenu *switcher = TEPL_STACK_SWITCHER_MENU (object);
 
 	g_clear_object (&switcher->priv->stack);
+	switcher->priv->popover = NULL;
 
 	G_OBJECT_CLASS (tepl_stack_switcher_menu_parent_class)->dispose (object);
 }
