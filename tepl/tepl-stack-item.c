@@ -15,11 +15,11 @@
  *
  * - "widget": The main content, as a #GtkWidget.
  *
- * - "name": An ID as a string. Not displayed in the UI. Uniquely identifies an
- *   item within a list.
+ * - "name": An ID as a UTF-8 string. Not displayed in the UI. Uniquely
+ *   identifies an item within a list.
  *
  * - "title": A human-readable title that can be shown in the UI to choose this
- *   item.
+ *   item (a UTF-8 string).
  *
  * - "icon-name": An icon-name representing this item, can be shown in the UI to
  *   choose this item. Can be used for #GtkImage:icon-name.
@@ -41,6 +41,12 @@ static void set_widget (TeplStackItem *item,
 			GtkWidget     *widget);
 
 G_DEFINE_TYPE_WITH_PRIVATE (TeplStackItem, tepl_stack_item, G_TYPE_OBJECT)
+
+static gboolean
+is_null_or_valid_utf8 (const gchar *str)
+{
+	return (str == NULL || g_utf8_validate (str, -1, NULL));
+}
 
 static void
 widget_destroy_cb (GtkWidget     *widget,
@@ -137,6 +143,8 @@ tepl_stack_item_new (GtkWidget   *widget,
 	TeplStackItem *item;
 
 	g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+	g_return_val_if_fail (is_null_or_valid_utf8 (name), NULL);
+	g_return_val_if_fail (is_null_or_valid_utf8 (title), NULL);
 
 	item = g_object_new (TEPL_TYPE_STACK_ITEM, NULL);
 
