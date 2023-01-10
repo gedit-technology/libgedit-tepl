@@ -226,3 +226,27 @@ tepl_stack_get_visible_item (TeplStack *stack)
 
 	return NULL;
 }
+
+void
+tepl_stack_set_visible_item (TeplStack     *stack,
+			     TeplStackItem *item)
+{
+	GList *l;
+
+	g_return_if_fail (TEPL_IS_STACK (stack));
+	g_return_if_fail (TEPL_IS_STACK_ITEM (item));
+
+	for (l = stack->priv->items; l != NULL; l = l->next)
+	{
+		TeplStackItem *cur_item = TEPL_STACK_ITEM (l->data);
+		GtkWidget *widget;
+
+		widget = tepl_stack_item_get_widget (cur_item);
+		if (widget != NULL)
+		{
+			gtk_widget_set_visible (widget, cur_item == item);
+		}
+	}
+
+	tepl_stack_changed (stack);
+}

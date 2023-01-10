@@ -67,6 +67,10 @@ guint		tepl_stack_get_n_visible_items	(TeplStack *stack);
 _TEPL_EXTERN
 TeplStackItem *	tepl_stack_get_visible_item	(TeplStack *stack);
 
+_TEPL_EXTERN
+void		tepl_stack_set_visible_item	(TeplStack     *stack,
+						 TeplStackItem *item);
+
 G_END_DECLS
 
 #endif /* TEPL_STACK_H */
