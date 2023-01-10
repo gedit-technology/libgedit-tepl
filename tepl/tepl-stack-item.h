@@ -40,22 +40,26 @@ struct _TeplStackItemClass
 };
 
 _TEPL_EXTERN
-GType		tepl_stack_item_get_type	(void);
+GType		tepl_stack_item_get_type		(void);
 
 _TEPL_EXTERN
-TeplStackItem *	tepl_stack_item_new		(GtkWidget   *widget,
-						 const gchar *name,
-						 const gchar *title,
-						 const gchar *icon_name);
+TeplStackItem *	tepl_stack_item_new			(GtkWidget   *widget,
+							 const gchar *name,
+							 const gchar *title,
+							 const gchar *icon_name);
 
 _TEPL_EXTERN
-GtkWidget *	tepl_stack_item_get_widget	(TeplStackItem *item);
+GtkWidget *	tepl_stack_item_get_widget		(TeplStackItem *item);
 
 _TEPL_EXTERN
-void		tepl_stack_item_get_infos	(TeplStackItem  *item,
-						 gchar         **name,
-						 gchar         **title,
-						 gchar         **icon_name);
+void		tepl_stack_item_get_infos		(TeplStackItem  *item,
+							 gchar         **name,
+							 gchar         **title,
+							 gchar         **icon_name);
+
+_TEPL_EXTERN
+gint		tepl_stack_item_compare_by_title	(TeplStackItem *a,
+							 TeplStackItem *b);
 
 G_END_DECLS
 

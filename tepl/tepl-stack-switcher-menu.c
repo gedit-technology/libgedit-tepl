@@ -142,54 +142,6 @@ create_item_button (TeplStackSwitcherMenu *switcher,
 	return button;
 }
 
-static gint
-compare_stack_items_by_title (gconstpointer a,
-			      gconstpointer b)
-{
-	TeplStackItem *item_a = TEPL_STACK_ITEM (a);
-	TeplStackItem *item_b = TEPL_STACK_ITEM (b);
-	gchar *title_a = NULL;
-	gchar *title_b = NULL;
-	gchar *normalized_title_a = NULL;
-	gchar *normalized_title_b = NULL;
-	gint result = 0;
-
-	tepl_stack_item_get_infos (item_a, NULL, &title_a, NULL);
-	tepl_stack_item_get_infos (item_b, NULL, &title_b, NULL);
-
-	/* Put untitled items at the end */
-
-	if (title_a == NULL && title_b == NULL)
-	{
-		result = 0;
-		goto out;
-	}
-	if (title_a == NULL)
-	{
-		result = 1;
-		goto out;
-	}
-	if (title_b == NULL)
-	{
-		result = -1;
-		goto out;
-	}
-
-	/* UTF-8 comparison */
-
-	normalized_title_a = g_utf8_normalize (title_a, -1, G_NORMALIZE_ALL);
-	normalized_title_b = g_utf8_normalize (title_b, -1, G_NORMALIZE_ALL);
-
-	result = g_utf8_collate (normalized_title_a, normalized_title_b);
-
-out:
-	g_free (title_a);
-	g_free (title_b);
-	g_free (normalized_title_a);
-	g_free (normalized_title_b);
-	return result;
-}
-
 static GtkPopover *
 create_popover (TeplStackSwitcherMenu *switcher)
 {
@@ -209,7 +161,7 @@ create_popover (TeplStackSwitcherMenu *switcher)
 		      NULL);
 
 	items = tepl_stack_get_items (switcher->priv->stack);
-	items = g_list_sort (items, compare_stack_items_by_title);
+	items = g_list_sort (items, (GCompareFunc) tepl_stack_item_compare_by_title);
 	for (l = items; l != NULL; l = l->next)
 	{
 		TeplStackItem *cur_item = TEPL_STACK_ITEM (l->data);
