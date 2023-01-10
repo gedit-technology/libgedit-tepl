@@ -11,27 +11,6 @@ struct _TeplStackSwitcherMenuPrivate
 
 G_DEFINE_TYPE_WITH_PRIVATE (TeplStackSwitcherMenu, tepl_stack_switcher_menu, GTK_TYPE_BIN)
 
-static GList *
-get_components_titles (TeplStack *stack)
-{
-	GList *titles = NULL;
-	GList *items;
-	GList *l;
-
-	items = tepl_stack_get_items (stack);
-	for (l = items; l != NULL; l = l->next)
-	{
-		TeplStackItem *cur_item = TEPL_STACK_ITEM (l->data);
-		gchar *cur_title = NULL;
-
-		tepl_stack_item_get_infos (cur_item, NULL, &cur_title, NULL);
-		titles = g_list_prepend (titles, cur_title);
-	}
-	g_list_free_full (items, g_object_unref);
-
-	return g_list_reverse (titles);
-}
-
 static gchar *
 get_title (TeplStack *stack)
 {
@@ -92,12 +71,32 @@ create_menu_button_title (TeplStackSwitcherMenu *switcher)
 	return hgrid;
 }
 
+static GtkToggleButton *
+create_toggle_button (TeplStackItem *item)
+{
+	gchar *title = NULL;
+	GtkWidget *widget;
+	gboolean visible;
+	GtkToggleButton *button;
+
+	tepl_stack_item_get_infos (item, NULL, &title, NULL);
+
+	widget = tepl_stack_item_get_widget (item);
+	visible = widget != NULL && gtk_widget_get_visible (widget);
+
+	button = GTK_TOGGLE_BUTTON (gtk_toggle_button_new_with_label (title));
+	gtk_toggle_button_set_active (button, visible);
+
+	g_free (title);
+	return button;
+}
+
 static GtkPopover *
 create_popover (TeplStackSwitcherMenu *switcher)
 {
 	GtkPopover *popover;
 	GtkGrid *vgrid;
-	GList *components_titles;
+	GList *items;
 	GList *l;
 
 	popover = GTK_POPOVER (gtk_popover_new (NULL));
@@ -106,18 +105,15 @@ create_popover (TeplStackSwitcherMenu *switcher)
 	gtk_orientable_set_orientation (GTK_ORIENTABLE (vgrid), GTK_ORIENTATION_VERTICAL);
 	gtk_grid_set_row_spacing (vgrid, 6);
 
-	components_titles = get_components_titles (switcher->priv->stack);
-	for (l = components_titles; l != NULL; l = l->next)
+	items = tepl_stack_get_items (switcher->priv->stack);
+	for (l = items; l != NULL; l = l->next)
 	{
-		const gchar *cur_component_title = l->data;
-		GtkToggleButton *button;
-
-		button = GTK_TOGGLE_BUTTON (gtk_toggle_button_new_with_label (cur_component_title));
+		TeplStackItem *cur_item = TEPL_STACK_ITEM (l->data);
 
 		gtk_container_add (GTK_CONTAINER (vgrid),
-				   GTK_WIDGET (button));
+				   GTK_WIDGET (create_toggle_button (cur_item)));
 	}
-	g_list_free_full (components_titles, g_free);
+	g_list_free_full (items, g_object_unref);
 
 	gtk_widget_show_all (GTK_WIDGET (vgrid));
 	gtk_container_add (GTK_CONTAINER (popover),
