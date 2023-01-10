@@ -9,6 +9,8 @@ struct _TeplStackSwitcherMenuPrivate
 	TeplStack *stack;
 };
 
+#define TEPL_STACK_ITEM_KEY "tepl-stack-item-key"
+
 G_DEFINE_TYPE_WITH_PRIVATE (TeplStackSwitcherMenu, tepl_stack_switcher_menu, GTK_TYPE_BIN)
 
 static gchar *
@@ -71,8 +73,21 @@ create_menu_button_title (TeplStackSwitcherMenu *switcher)
 	return hgrid;
 }
 
+static void
+item_button_clicked_cb (GtkToggleButton       *button,
+			TeplStackSwitcherMenu *switcher)
+{
+	TeplStackItem *item;
+
+	item = g_object_get_data (G_OBJECT (button), TEPL_STACK_ITEM_KEY);
+	g_return_if_fail (TEPL_IS_STACK_ITEM (item));
+
+	tepl_stack_set_visible_item (switcher->priv->stack, item);
+}
+
 static GtkToggleButton *
-create_toggle_button (TeplStackItem *item)
+create_item_button (TeplStackSwitcherMenu *switcher,
+		    TeplStackItem         *item)
 {
 	gchar *title = NULL;
 	GtkWidget *widget;
@@ -86,6 +101,17 @@ create_toggle_button (TeplStackItem *item)
 
 	button = GTK_TOGGLE_BUTTON (gtk_toggle_button_new_with_label (title));
 	gtk_toggle_button_set_active (button, visible);
+
+	g_object_set_data_full (G_OBJECT (button),
+				TEPL_STACK_ITEM_KEY,
+				g_object_ref (item),
+				g_object_unref);
+
+	g_signal_connect_object (button,
+				 "clicked",
+				 G_CALLBACK (item_button_clicked_cb),
+				 switcher,
+				 0);
 
 	g_free (title);
 	return button;
@@ -111,7 +137,7 @@ create_popover (TeplStackSwitcherMenu *switcher)
 		TeplStackItem *cur_item = TEPL_STACK_ITEM (l->data);
 
 		gtk_container_add (GTK_CONTAINER (vgrid),
-				   GTK_WIDGET (create_toggle_button (cur_item)));
+				   GTK_WIDGET (create_item_button (switcher, cur_item)));
 	}
 	g_list_free_full (items, g_object_unref);
 
