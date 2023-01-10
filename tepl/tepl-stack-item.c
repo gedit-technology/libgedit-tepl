@@ -176,9 +176,9 @@ tepl_stack_item_get_widget (TeplStackItem *item)
 /**
  * tepl_stack_item_get_infos:
  * @item: a #TeplStackItem.
- * @name: (out) (optional) (nullable): the "name" attribute.
- * @title: (out) (optional) (nullable): the "title" attribute.
- * @icon_name: (out) (optional) (nullable): the "icon-name" attribute.
+ * @name: (out) (optional) (nullable) (transfer full): the "name" attribute.
+ * @title: (out) (optional) (nullable) (transfer full): the "title" attribute.
+ * @icon_name: (out) (optional) (nullable) (transfer full): the "icon-name" attribute.
  *
  * Gets some pieces of information from @item.
  *
