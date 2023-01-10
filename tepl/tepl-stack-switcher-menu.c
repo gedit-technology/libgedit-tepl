@@ -217,8 +217,6 @@ repopulate (TeplStackSwitcherMenu *switcher)
 
 	clear_all (switcher);
 
-	/* TODO: check vertical alignments. */
-
 	if (tepl_stack_has_several_items (switcher->priv->stack))
 	{
 		child = GTK_WIDGET (create_menu_button (switcher));
