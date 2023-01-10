@@ -168,20 +168,36 @@ create_menu_button (TeplStackSwitcherMenu *switcher)
 }
 
 static void
-populate (TeplStackSwitcherMenu *switcher)
+clear_all (TeplStackSwitcherMenu *switcher)
 {
+	GtkWidget *child = gtk_bin_get_child (GTK_BIN (switcher));
+
+	if (child != NULL)
+	{
+		gtk_widget_destroy (child);
+	}
+}
+
+static void
+repopulate (TeplStackSwitcherMenu *switcher)
+{
+	GtkWidget *child;
+
+	clear_all (switcher);
+
 	/* TODO: check vertical alignments. */
 
 	if (tepl_stack_has_several_items (switcher->priv->stack))
 	{
-		gtk_container_add (GTK_CONTAINER (switcher),
-				   GTK_WIDGET (create_menu_button (switcher)));
+		child = GTK_WIDGET (create_menu_button (switcher));
 	}
 	else
 	{
-		gtk_container_add (GTK_CONTAINER (switcher),
-				   GTK_WIDGET (create_title_label (switcher)));
+		child = GTK_WIDGET (create_title_label (switcher));
 	}
+
+	gtk_widget_show_all (child);
+	gtk_container_add (GTK_CONTAINER (switcher), child);
 }
 
 static void
@@ -208,6 +224,13 @@ tepl_stack_switcher_menu_init (TeplStackSwitcherMenu *switcher)
 	switcher->priv = tepl_stack_switcher_menu_get_instance_private (switcher);
 }
 
+static void
+stack_changed_cb (TeplStack             *stack,
+		  TeplStackSwitcherMenu *switcher)
+{
+	repopulate (switcher);
+}
+
 TeplStackSwitcherMenu *
 tepl_stack_switcher_menu_new (TeplStack *stack)
 {
@@ -219,8 +242,13 @@ tepl_stack_switcher_menu_new (TeplStack *stack)
 
 	switcher->priv->stack = g_object_ref_sink (stack);
 
-	populate (switcher);
-	gtk_widget_show_all (GTK_WIDGET (switcher));
+	repopulate (switcher);
+
+	g_signal_connect_object (switcher->priv->stack,
+				 "changed",
+				 G_CALLBACK (stack_changed_cb),
+				 switcher,
+				 0);
 
 	return switcher;
 }
