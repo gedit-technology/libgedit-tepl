@@ -4,6 +4,17 @@
 
 #include "tepl-stack-switcher-menu.h"
 
+/**
+ * SECTION:stack-switcher-menu
+ * @Short_description: A controller for #TeplStack
+ * @Title: TeplStackSwitcherMenu
+ *
+ * Similar to #GtkStackSwitcher, but for a #TeplStack.
+ *
+ * This switcher widget is suitable to be put in a #GtkHeaderBar, to choose the
+ * component of a side panel (for example).
+ */
+
 struct _TeplStackSwitcherMenuPrivate
 {
 	TeplStack *stack;
@@ -252,6 +263,13 @@ stack_changed_cb (TeplStack             *stack,
 	repopulate (switcher);
 }
 
+/**
+ * tepl_stack_switcher_menu_new:
+ * @stack: a #TeplStack.
+ *
+ * Returns: (transfer floating): a new #TeplStackSwitcherMenu widget.
+ * Since: 6.6
+ */
 TeplStackSwitcherMenu *
 tepl_stack_switcher_menu_new (TeplStack *stack)
 {

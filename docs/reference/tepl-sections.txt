@@ -596,6 +596,22 @@ tepl_stack_item_get_type
 </SECTION>
 
 <SECTION>
+<FILE>stack-switcher-menu</FILE>
+TeplStackSwitcherMenu
+tepl_stack_switcher_menu_new
+<SUBSECTION Standard>
+TEPL_IS_STACK_SWITCHER_MENU
+TEPL_IS_STACK_SWITCHER_MENU_CLASS
+TEPL_STACK_SWITCHER_MENU
+TEPL_STACK_SWITCHER_MENU_CLASS
+TEPL_STACK_SWITCHER_MENU_GET_CLASS
+TEPL_TYPE_STACK_SWITCHER_MENU
+TeplStackSwitcherMenuClass
+TeplStackSwitcherMenuPrivate
+tepl_stack_switcher_menu_get_type
+</SECTION>
+
+<SECTION>
 <FILE>statusbar</FILE>
 TeplStatusbar
 tepl_statusbar_new

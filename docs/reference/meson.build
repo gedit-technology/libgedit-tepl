@@ -36,9 +36,6 @@ GNOME.gtkdoc(
     'api-breaks.xml',
     'intro.xml',
   ],
-  ignore_headers: [
-    TEPL_PRIVATE_HEADERS,
-    'tepl-stack-switcher-menu.h',
-  ],
+  ignore_headers: TEPL_PRIVATE_HEADERS,
   install: true
 )
