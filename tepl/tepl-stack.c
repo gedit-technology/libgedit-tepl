@@ -4,6 +4,23 @@
 
 #include "tepl-stack.h"
 
+/**
+ * SECTION:stack
+ * @Short_description: An alternative to #GtkStack
+ * @Title: TeplStack
+ *
+ * #TeplStack is an alternative to #GtkStack.
+ *
+ * It is normally easier to implement a custom switcher widget with #TeplStack.
+ * That is, a #GtkWidget that controls which item is currently visible in a
+ * #TeplStack.
+ *
+ * A #TeplStack contains #TeplStackItem's. If the #GtkWidget of a #TeplStackItem
+ * is visible (according to the #GtkWidget:visible property), then it will be
+ * shown in the #TeplStack. #TeplStack doesn't enforce that a single item is
+ * visible at a time.
+ */
+
 struct _TeplStackPrivate
 {
 	GtkGrid *grid;
@@ -46,7 +63,9 @@ tepl_stack_class_init (TeplStackClass *klass)
 	 * TeplStack::changed:
 	 * @stack: the #TeplStack emitting the signal.
 	 *
-	 * The ::changed signal is emitted when BLAH BLAH BLAH.
+	 * The ::changed signal is emitted when:
+	 * - A #TeplStackItem is added or removed from @stack.
+	 * - The visible #GtkWidget item of @stack has changed.
 	 *
 	 * Since: 6.6
 	 */
@@ -70,12 +89,27 @@ tepl_stack_init (TeplStack *stack)
 			   GTK_WIDGET (stack->priv->grid));
 }
 
+/**
+ * tepl_stack_new:
+ *
+ * Returns: (transfer floating): a new #TeplStack.
+ * Since: 6.6
+ */
 TeplStack *
 tepl_stack_new (void)
 {
 	return g_object_new (TEPL_TYPE_STACK, NULL);
 }
 
+/**
+ * tepl_stack_add_item:
+ * @stack: a #TeplStack.
+ * @item: a #TeplStackItem.
+ *
+ * To add an item to a stack.
+ *
+ * Since: 6.6
+ */
 void
 tepl_stack_add_item (TeplStack     *stack,
 		     TeplStackItem *item)
@@ -103,6 +137,15 @@ tepl_stack_add_item (TeplStack     *stack,
 	tepl_stack_changed (stack);
 }
 
+/**
+ * tepl_stack_remove_item:
+ * @stack: a #TeplStack.
+ * @item: a #TeplStackItem.
+ *
+ * Removes @item from @stack.
+ *
+ * Since: 6.6
+ */
 void
 tepl_stack_remove_item (TeplStack     *stack,
 			TeplStackItem *item)
@@ -147,6 +190,14 @@ tepl_stack_get_items (TeplStack *stack)
 	return g_list_copy_deep (stack->priv->items, (GCopyFunc) g_object_ref, NULL);
 }
 
+/**
+ * tepl_stack_changed:
+ * @stack: a #TeplStack.
+ *
+ * Emits the #TeplStack::changed signal.
+ *
+ * Since: 6.6
+ */
 void
 tepl_stack_changed (TeplStack *stack)
 {
@@ -161,6 +212,8 @@ tepl_stack_changed (TeplStack *stack)
  *
  * Convenience function.
  *
+ * Useful to implement a switcher widget.
+ *
  * Returns: whether @stack has more than one #TeplStackItem.
  * Since: 6.6
  */
@@ -173,6 +226,17 @@ tepl_stack_has_several_items (TeplStack *stack)
 		stack->priv->items->next != NULL);
 }
 
+/**
+ * tepl_stack_get_n_visible_items:
+ * @stack: a #TeplStack.
+ *
+ * This function can serve as a sanity check. Usually what is desired is that
+ * only one item at a time is visible.
+ *
+ * Returns: the number of #TeplStackItem's part of @stack which have their
+ *   #GtkWidget visible.
+ * Since: 6.6
+ */
 guint
 tepl_stack_get_n_visible_items (TeplStack *stack)
 {
@@ -201,7 +265,8 @@ tepl_stack_get_n_visible_items (TeplStack *stack)
  * tepl_stack_get_visible_item:
  * @stack: a #TeplStack.
  *
- * Returns: (transfer none) (nullable):
+ * Returns: (transfer none) (nullable): the first #TeplStackItem found in @stack
+ *   which has its #GtkWidget visible.
  * Since: 6.6
  */
 TeplStackItem *
@@ -227,6 +292,15 @@ tepl_stack_get_visible_item (TeplStack *stack)
 	return NULL;
 }
 
+/**
+ * tepl_stack_set_visible_item:
+ * @stack: a #TeplStack.
+ * @item: a #TeplStackItem.
+ *
+ * Make the #GtkWidget of @item the only visible one in @stack.
+ *
+ * Since: 6.6
+ */
 void
 tepl_stack_set_visible_item (TeplStack     *stack,
 			     TeplStackItem *item)

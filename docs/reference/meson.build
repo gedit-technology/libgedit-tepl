@@ -38,7 +38,6 @@ GNOME.gtkdoc(
   ],
   ignore_headers: [
     TEPL_PRIVATE_HEADERS,
-    'tepl-stack.h',
     'tepl-stack-switcher-menu.h',
   ],
   install: true
