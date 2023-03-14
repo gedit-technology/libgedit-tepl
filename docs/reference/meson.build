@@ -1,9 +1,8 @@
 subdir('xml')
 
-configure_file(
-  input: 'tepl-sections.txt',
-  output: 'tepl-@0@-sections.txt'.format(TEPL_API_VERSION),
-  copy: true
+FS.copyfile(
+  'tepl-sections.txt',
+  'tepl-@0@-sections.txt'.format(TEPL_API_VERSION)
 )
 
 gtkdoc_module_name = 'tepl-@0@'.format(TEPL_API_VERSION)
