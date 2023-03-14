@@ -185,9 +185,19 @@ tepl_stack_remove_item (TeplStack     *stack,
 GList *
 tepl_stack_get_items (TeplStack *stack)
 {
+	GList *ret;
+	GList *l;
+
 	g_return_val_if_fail (TEPL_IS_STACK (stack), NULL);
 
-	return g_list_copy_deep (stack->priv->items, (GCopyFunc) g_object_ref, NULL);
+	ret = g_list_copy (stack->priv->items);
+
+	for (l = ret; l != NULL; l = l->next)
+	{
+		g_object_ref (l->data);
+	}
+
+	return ret;
 }
 
 /**
