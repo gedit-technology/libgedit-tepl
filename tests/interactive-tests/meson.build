@@ -5,6 +5,7 @@ interactive_tests = [
   ['test-language-chooser-dialog', 'test-language-chooser-dialog.c'],
   ['test-language-chooser-widget', 'test-language-chooser-widget.c'],
   ['test-space-drawer-prefs', 'test-space-drawer-prefs.c'],
+  ['test-stack-switcher-menu', 'test-stack-switcher-menu.c'],
   ['test-tab', 'test-tab.c'],
 
   ['test-gutter-renderer-folds',
