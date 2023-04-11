@@ -15,11 +15,12 @@ adapted.
 Dependencies
 ------------
 
-- GLib 2
 - GTK 3
-- GtkSourceView 4
-- [Amtk](https://gitlab.gnome.org/World/amtk) 5
-- [ICU](http://site.icu-project.org/)
+- [ICU](https://icu.unicode.org/)
+
+From [Gedit Technology](https://gedit-technology.net/):
+- libgedit-gtksourceview
+- Amtk
 
 Documentation
 -------------
