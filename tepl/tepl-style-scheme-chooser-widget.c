@@ -291,25 +291,19 @@ static void
 populate_list_box (TeplStyleSchemeChooserWidget *chooser)
 {
 	GtkSourceStyleSchemeManager *manager;
-	const gchar * const *scheme_ids;
-	gint i;
+	GList *schemes;
+	GList *l;
 
 	manager = gtk_source_style_scheme_manager_get_default ();
-	scheme_ids = gtk_source_style_scheme_manager_get_scheme_ids (manager);
+	schemes = gtk_source_style_scheme_manager_get_schemes (manager);
 
-	if (scheme_ids == NULL)
+	for (l = schemes; l != NULL; l = l->next)
 	{
-		return;
-	}
-
-	for (i = 0; scheme_ids[i] != NULL; i++)
-	{
-		const gchar *cur_scheme_id = scheme_ids[i];
-		GtkSourceStyleScheme *style_scheme;
-
-		style_scheme = gtk_source_style_scheme_manager_get_scheme (manager, cur_scheme_id);
+		GtkSourceStyleScheme *style_scheme = GTK_SOURCE_STYLE_SCHEME (l->data);
 		append_style_scheme_to_list_box (chooser, style_scheme);
 	}
+
+	g_list_free (schemes);
 }
 
 static void
