@@ -327,9 +327,8 @@ list_box_selected_rows_changed_cb (GtkListBox                   *list_box,
 }
 
 static void
-style_scheme_manager_notify_scheme_ids_cb (GtkSourceStyleSchemeManager  *manager,
-					   GParamSpec                   *pspec,
-					   TeplStyleSchemeChooserWidget *chooser)
+style_scheme_manager_changed_cb (GtkSourceStyleSchemeManager  *manager,
+				 TeplStyleSchemeChooserWidget *chooser)
 {
 	gchar *style_scheme_id;
 
@@ -367,8 +366,8 @@ listen_to_scheme_manager_changes (TeplStyleSchemeChooserWidget *chooser)
 	manager = gtk_source_style_scheme_manager_get_default ();
 
 	g_signal_connect_object (manager,
-				 "notify::scheme-ids",
-				 G_CALLBACK (style_scheme_manager_notify_scheme_ids_cb),
+				 "changed",
+				 G_CALLBACK (style_scheme_manager_changed_cb),
 				 chooser,
 				 0);
 }
