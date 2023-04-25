@@ -10,10 +10,9 @@
 development of GtkSourceView-based text editors and IDEs. Tepl
 is the acronym for “Text editor product line”.</description>
 
-  <homepage rdf:resource="https://wiki.gnome.org/Projects/Tepl" />
-  <mailing-list rdf:resource="https://mail.gnome.org/mailman/listinfo/gnome-devtools" />
+  <homepage rdf:resource="https://gitlab.gnome.org/swilmet/tepl" />
   <download-page rdf:resource="https://download.gnome.org/sources/tepl/" />
-  <bug-database rdf:resource="https://gitlab.gnome.org/GNOME/tepl/issues" />
+  <bug-database rdf:resource="https://gitlab.gnome.org/swilmet/tepl/-/issues" />
 
   <programming-language>C</programming-language>
 
