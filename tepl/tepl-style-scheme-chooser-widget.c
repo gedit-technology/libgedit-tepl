@@ -12,14 +12,18 @@
  * @Short_description: A simple #GtkSourceStyleSchemeChooser
  *
  * #TeplStyleSchemeChooserWidget is a simple implementation of the
- * #GtkSourceStyleSchemeChooser interface. It already contains a
- * #GtkScrolledWindow internally.
+ * #GtkSourceStyleSchemeChooser interface.
  *
- * Additional features compared to #GtkSourceStyleSchemeChooserWidget:
- * - There is an additional convenience property:
- *   #TeplStyleSchemeChooserWidget:tepl-style-scheme-id.
- * - When the #GtkWidget::map signal is emitted, #TeplStyleSchemeChooserWidget
- *   scrolls to the selected row.
+ * It shows a list with the name and description of each #GtkSourceStyleScheme,
+ * taken from the default #GtkSourceStyleSchemeManager (as returned by
+ * gtk_source_style_scheme_manager_get_default()).
+ *
+ * #TeplStyleSchemeChooserWidget contains a #GtkScrolledWindow internally. When
+ * the #GtkWidget::map signal is emitted, it scrolls to the selected row (useful
+ * when the list is long).
+ *
+ * There is also an additional convenience property:
+ * #TeplStyleSchemeChooserWidget:tepl-style-scheme-id.
  */
 
 struct _TeplStyleSchemeChooserWidgetPrivate
