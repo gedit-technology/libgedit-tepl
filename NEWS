@@ -1,4 +1,4 @@
-News in 6.5.x, 2023-xx-yy (not yet released)
+News in 6.5.1, 2023-04-26
 -------------------------
 * Tepl now depends on libgedit-gtksourceview instead of GtkSourceView:
     https://github.com/gedit-technology/libgedit-gtksourceview
