@@ -30,16 +30,8 @@ is with the [Devhelp](https://wiki.gnome.org/Apps/Devhelp) application.
 
 See also other files in this directory for additional notes.
 
-Some links
-----------
+Tarballs
+--------
 
-- [Project home page](https://gitlab.gnome.org/swilmet/tepl)
-- [Tarballs](https://download.gnome.org/sources/tepl/)
+- [Tepl tarballs](https://download.gnome.org/sources/tepl/)
 - [Old Gtef tarballs](https://download.gnome.org/sources/gtef/)
-
-Development and maintenance
----------------------------
-
-If you want to see Tepl improved, you are encouraged to contribute. The
-maintainer will do its best at reviewing merge requests. However, contributions
-need to follow the roadmap of Tepl or the general philosophy of the project.
