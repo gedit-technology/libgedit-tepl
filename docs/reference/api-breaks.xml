@@ -250,6 +250,11 @@
     <itemizedlist>
       <listitem>
         <para>
+          Tepl now depends on libgedit-gtksourceview instead of GtkSourceView.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <code>TeplWidgetListItem</code> and
           <code>TeplWidgetListCategory</code> classes have been removed.
         </para>

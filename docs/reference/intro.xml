@@ -115,10 +115,9 @@
   </refsect1>
 
   <refsect1>
-    <title>GTK and GtkSourceView dependencies</title>
+    <title>GTK dependency</title>
     <para>
-      Tepl&nbsp;&package_api_version; depends on GTK&nbsp;3 and
-      GtkSourceView&nbsp;4.
+      Tepl&nbsp;&package_api_version; depends on GTK&nbsp;3.
     </para>
   </refsect1>
 
