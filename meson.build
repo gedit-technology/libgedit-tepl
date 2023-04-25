@@ -21,7 +21,7 @@ TEPL_API_VERSION = '6'
 TEPL_PUBLIC_DEPS = [
   dependency('gio-2.0', version: '>= 2.62'),
   dependency('gtk+-3.0', version: '>= 3.22'),
-  dependency('libgedit-gtksourceview-300'),
+  dependency('libgedit-gtksourceview-300', version: '>= 299.0.1'),
   dependency('amtk-5', version: '>= 5.0')
 ]
 tepl_private_deps = [
