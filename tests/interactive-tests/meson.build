@@ -4,8 +4,8 @@ interactive_tests = [
   ['test-fold-region', 'test-fold-region.c'],
   ['test-language-chooser-dialog', 'test-language-chooser-dialog.c'],
   ['test-language-chooser-widget', 'test-language-chooser-widget.c'],
+  ['test-panel-switcher-menu', 'test-panel-switcher-menu.c'],
   ['test-space-drawer-prefs', 'test-space-drawer-prefs.c'],
-  ['test-stack-switcher-menu', 'test-stack-switcher-menu.c'],
   ['test-tab', 'test-tab.c'],
 
   ['test-gutter-renderer-folds',
