@@ -271,6 +271,14 @@
           <link linkend="TeplPanel1">TeplPanel1</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <code>TeplStack</code>, <code>TeplStackItem</code> and
+          <code>TeplStackSwitcherMenu</code> classes have been removed. They are
+          superseded by <link linkend="TeplPanel">TeplPanel</link> (and related
+          classes and interfaces).
+        </para>
+      </listitem>
     </itemizedlist>
   </chapter>
 </part>
