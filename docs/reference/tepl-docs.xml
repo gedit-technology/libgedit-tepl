@@ -101,14 +101,11 @@
     <chapter id="gtk-extras-other">
       <title>GTK Extras - Other</title>
       <xi:include href="xml/file-chooser.xml"/>
-      <xi:include href="xml/panel1.xml"/>
       <xi:include href="xml/panel.xml"/>
       <xi:include href="xml/panel-item.xml"/>
       <xi:include href="xml/panel-container.xml"/>
       <xi:include href="xml/panel-switcher-menu.xml"/>
-      <xi:include href="xml/stack.xml"/>
-      <xi:include href="xml/stack-item.xml"/>
-      <xi:include href="xml/stack-switcher-menu.xml"/>
+      <xi:include href="xml/panel1.xml"/>
     </chapter>
 
     <chapter id="other-extras">
