@@ -250,6 +250,68 @@ tepl_panel_container_get_active_item (TeplPanelContainer *container)
 }
 
 /**
+ * tepl_panel_container_get_active_item_name:
+ * @container: a #TeplPanelContainer.
+ *
+ * Returns: (nullable): the name of the #TeplPanelItem currently shown in
+ *   @container.
+ * Since: 6.8
+ */
+const gchar *
+tepl_panel_container_get_active_item_name (TeplPanelContainer *container)
+{
+	TeplPanelItem *item;
+
+	g_return_val_if_fail (TEPL_IS_PANEL_CONTAINER (container), NULL);
+
+	item = tepl_panel_container_get_active_item (container);
+	if (item == NULL)
+	{
+		return NULL;
+	}
+
+	return tepl_panel_item_get_name (item);
+}
+
+/**
+ * tepl_panel_container_set_active_item_name:
+ * @container: a #TeplPanelContainer.
+ * @name: a name.
+ *
+ * Calls tepl_panel_set_active() with the #TeplPanelItem named @name (if found).
+ *
+ * Since: 6.8
+ */
+void
+tepl_panel_container_set_active_item_name (TeplPanelContainer *container,
+					   const gchar        *name)
+{
+	GList *items;
+	GList *l;
+
+	g_return_if_fail (TEPL_IS_PANEL_CONTAINER (container));
+	g_return_if_fail (name != NULL);
+
+	items = tepl_panel_container_get_items (container);
+
+	for (l = items; l != NULL; l = l->next)
+	{
+		TeplPanelItem *cur_item = TEPL_PANEL_ITEM (l->data);
+		const gchar *cur_item_name;
+
+		cur_item_name = tepl_panel_item_get_name (cur_item);
+
+		if (g_strcmp0 (cur_item_name, name) == 0)
+		{
+			tepl_panel_set_active (TEPL_PANEL (container), cur_item);
+			break;
+		}
+	}
+
+	g_list_free_full (items, g_object_unref);
+}
+
+/**
  * tepl_panel_container_has_several_items:
  * @container: a #TeplPanelContainer.
  *

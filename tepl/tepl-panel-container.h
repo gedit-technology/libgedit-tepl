@@ -39,19 +39,26 @@ struct _TeplPanelContainerClass
 };
 
 _TEPL_EXTERN
-GType			tepl_panel_container_get_type		(void);
+GType			tepl_panel_container_get_type			(void);
 
 _TEPL_EXTERN
-TeplPanelContainer *	tepl_panel_container_new		(void);
+TeplPanelContainer *	tepl_panel_container_new			(void);
 
 _TEPL_EXTERN
-GList *			tepl_panel_container_get_items		(TeplPanelContainer *container);
+GList *			tepl_panel_container_get_items			(TeplPanelContainer *container);
 
 _TEPL_EXTERN
-TeplPanelItem *		tepl_panel_container_get_active_item	(TeplPanelContainer *container);
+TeplPanelItem *		tepl_panel_container_get_active_item		(TeplPanelContainer *container);
 
 _TEPL_EXTERN
-gboolean		tepl_panel_container_has_several_items	(TeplPanelContainer *container);
+const gchar *		tepl_panel_container_get_active_item_name	(TeplPanelContainer *container);
+
+_TEPL_EXTERN
+void			tepl_panel_container_set_active_item_name	(TeplPanelContainer *container,
+									 const gchar        *name);
+
+_TEPL_EXTERN
+gboolean		tepl_panel_container_has_several_items		(TeplPanelContainer *container);
 
 G_END_DECLS
 
