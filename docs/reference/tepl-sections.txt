@@ -456,6 +456,22 @@ tepl_panel1_get_type
 </SECTION>
 
 <SECTION>
+<FILE>panel-item</FILE>
+TeplPanelItem
+TeplPanelItemInterface
+tepl_panel_item_get_widget
+tepl_panel_item_get_name
+tepl_panel_item_get_title
+tepl_panel_item_get_icon_name
+<SUBSECTION Standard>
+TEPL_IS_PANEL_ITEM
+TEPL_PANEL_ITEM
+TEPL_PANEL_ITEM_GET_INTERFACE
+TEPL_TYPE_PANEL_ITEM
+tepl_panel_item_get_type
+</SECTION>
+
+<SECTION>
 <FILE>pango</FILE>
 tepl_pango_font_description_to_css
 </SECTION>

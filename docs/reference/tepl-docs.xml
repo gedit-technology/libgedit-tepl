@@ -102,6 +102,7 @@
       <title>GTK Extras - Other</title>
       <xi:include href="xml/file-chooser.xml"/>
       <xi:include href="xml/panel1.xml"/>
+      <xi:include href="xml/panel-item.xml"/>
       <xi:include href="xml/stack.xml"/>
       <xi:include href="xml/stack-item.xml"/>
       <xi:include href="xml/stack-switcher-menu.xml"/>
