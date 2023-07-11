@@ -260,5 +260,17 @@
         </para>
       </listitem>
     </itemizedlist>
+
+    <para>
+      Tepl 6.6 to Tepl 6.8:
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          The <code>TeplPanel</code> class has been renamed to
+          <link linkend="TeplPanel1">TeplPanel1</link>.
+        </para>
+      </listitem>
+    </itemizedlist>
   </chapter>
 </part>
