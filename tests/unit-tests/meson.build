@@ -9,6 +9,7 @@ unit_tests = [
   'test-metadata',
   'test-metadata-manager',
   'test-notebook',
+  'test-panel-item',
   'test-utils',
   'test-view',
 ]
