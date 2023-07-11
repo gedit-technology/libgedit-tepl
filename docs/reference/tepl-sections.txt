@@ -434,25 +434,25 @@ tepl_overwrite_indicator_get_type
 </SECTION>
 
 <SECTION>
-<FILE>panel</FILE>
-TeplPanel
-tepl_panel_new
-tepl_panel_new_for_left_side_panel
-tepl_panel_get_stack
-tepl_panel_add_component
-tepl_panel_provide_active_component_gsetting
-tepl_panel_restore_state_from_gsettings
-tepl_panel_save_state_to_gsettings
+<FILE>panel1</FILE>
+TeplPanel1
+tepl_panel1_new
+tepl_panel1_new_for_left_side_panel
+tepl_panel1_get_stack
+tepl_panel1_add_component
+tepl_panel1_provide_active_component_gsetting
+tepl_panel1_restore_state_from_gsettings
+tepl_panel1_save_state_to_gsettings
 <SUBSECTION Standard>
-TEPL_IS_PANEL
-TEPL_IS_PANEL_CLASS
-TEPL_PANEL
-TEPL_PANEL_CLASS
-TEPL_PANEL_GET_CLASS
-TEPL_TYPE_PANEL
-TeplPanelClass
-TeplPanelPrivate
-tepl_panel_get_type
+TEPL_IS_PANEL1
+TEPL_IS_PANEL1_CLASS
+TEPL_PANEL1
+TEPL_PANEL1_CLASS
+TEPL_PANEL1_GET_CLASS
+TEPL_TYPE_PANEL1
+TeplPanel1Class
+TeplPanel1Private
+tepl_panel1_get_type
 </SECTION>
 
 <SECTION>

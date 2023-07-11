@@ -3,23 +3,26 @@
  */
 
 #include "config.h"
-#include "tepl-panel.h"
+#include "tepl-panel1.h"
 #include <glib/gi18n-lib.h>
 #include "tepl-utils.h"
 
 /**
- * SECTION:panel
- * @Title: TeplPanel
+ * SECTION:panel1
+ * @Title: TeplPanel1
  * @Short_description: Side or bottom panel container
  *
- * #TeplPanel permits to create a side or bottom panel that contains several
+ * #TeplPanel1 permits to create a side or bottom panel that contains several
  * components.
  *
- * #TeplPanel is a #GtkGrid subclass containing only one child #GtkWidget by
- * default: the #GtkStack that can be retrieved with tepl_panel_get_stack().
+ * #TeplPanel1 is a #GtkGrid subclass containing only one child #GtkWidget by
+ * default: the #GtkStack that can be retrieved with tepl_panel1_get_stack().
+ *
+ * #TeplPanel1 has the "1" suffix because it's the version 1 of the TeplPanel
+ * API.
  */
 
-struct _TeplPanelPrivate
+struct _TeplPanel1Private
 {
 	GtkStack *stack;
 
@@ -27,33 +30,33 @@ struct _TeplPanelPrivate
 	gchar *active_component_setting_key;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (TeplPanel, tepl_panel, GTK_TYPE_GRID)
+G_DEFINE_TYPE_WITH_PRIVATE (TeplPanel1, tepl_panel1, GTK_TYPE_GRID)
 
 static void
-tepl_panel_dispose (GObject *object)
+tepl_panel1_dispose (GObject *object)
 {
-	TeplPanel *panel = TEPL_PANEL (object);
+	TeplPanel1 *panel = TEPL_PANEL1 (object);
 
 	panel->priv->stack = NULL;
 
 	g_clear_object (&panel->priv->settings);
 	g_clear_pointer (&panel->priv->active_component_setting_key, g_free);
 
-	G_OBJECT_CLASS (tepl_panel_parent_class)->dispose (object);
+	G_OBJECT_CLASS (tepl_panel1_parent_class)->dispose (object);
 }
 
 static void
-tepl_panel_class_init (TeplPanelClass *klass)
+tepl_panel1_class_init (TeplPanel1Class *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	object_class->dispose = tepl_panel_dispose;
+	object_class->dispose = tepl_panel1_dispose;
 }
 
 static void
-tepl_panel_init (TeplPanel *panel)
+tepl_panel1_init (TeplPanel1 *panel)
 {
-	panel->priv = tepl_panel_get_instance_private (panel);
+	panel->priv = tepl_panel1_get_instance_private (panel);
 
 	panel->priv->stack = GTK_STACK (gtk_stack_new ());
 	gtk_widget_show (GTK_WIDGET (panel->priv->stack));
@@ -62,29 +65,29 @@ tepl_panel_init (TeplPanel *panel)
 }
 
 /**
- * tepl_panel_new:
+ * tepl_panel1_new:
  *
- * Creates a new #TeplPanel containing only an empty #GtkStack that can be
- * retrieved with tepl_panel_get_stack().
+ * Creates a new #TeplPanel1 containing only an empty #GtkStack that can be
+ * retrieved with tepl_panel1_get_stack().
  *
- * Returns: (transfer floating): a new #TeplPanel.
+ * Returns: (transfer floating): a new #TeplPanel1.
  * Since: 5.0
  */
-TeplPanel *
-tepl_panel_new (void)
+TeplPanel1 *
+tepl_panel1_new (void)
 {
-	return g_object_new (TEPL_TYPE_PANEL, NULL);
+	return g_object_new (TEPL_TYPE_PANEL1, NULL);
 }
 
 static void
-close_button_clicked_cb (GtkButton *close_button,
-			 TeplPanel *panel)
+close_button_clicked_cb (GtkButton  *close_button,
+			 TeplPanel1 *panel)
 {
 	gtk_widget_hide (GTK_WIDGET (panel));
 }
 
 static GtkWidget *
-create_close_button (TeplPanel *panel)
+create_close_button (TeplPanel1 *panel)
 {
 	GtkWidget *close_button;
 
@@ -100,14 +103,14 @@ create_close_button (TeplPanel *panel)
 	return close_button;
 }
 
-static TeplPanel *
+static TeplPanel1 *
 new_for_side_panel (void)
 {
-	TeplPanel *panel;
+	TeplPanel1 *panel;
 	GtkStackSwitcher *stack_switcher;
 	GtkActionBar *action_bar;
 
-	panel = tepl_panel_new ();
+	panel = tepl_panel1_new ();
 	gtk_orientable_set_orientation (GTK_ORIENTABLE (panel), GTK_ORIENTATION_VERTICAL);
 
 	stack_switcher = GTK_STACK_SWITCHER (gtk_stack_switcher_new ());
@@ -128,23 +131,23 @@ new_for_side_panel (void)
 }
 
 /**
- * tepl_panel_new_for_left_side_panel:
+ * tepl_panel1_new_for_left_side_panel:
  *
- * Creates a new #TeplPanel intended to be used as a side panel added on the
+ * Creates a new #TeplPanel1 intended to be used as a side panel added on the
  * left side inside a #GtkWindow.
  *
  * It contains:
  * - A #GtkStackSwitcher.
- * - A close button that hides the #TeplPanel when clicked.
- * - A #GtkStack that can be retrieved with tepl_panel_get_stack().
+ * - A close button that hides the #TeplPanel1 when clicked.
+ * - A #GtkStack that can be retrieved with tepl_panel1_get_stack().
  *
- * Returns: (transfer floating): a new left side #TeplPanel.
+ * Returns: (transfer floating): a new left side #TeplPanel1.
  * Since: 5.0
  */
-TeplPanel *
-tepl_panel_new_for_left_side_panel (void)
+TeplPanel1 *
+tepl_panel1_new_for_left_side_panel (void)
 {
-	TeplPanel *panel;
+	TeplPanel1 *panel;
 
 	panel = new_for_side_panel ();
 	gtk_widget_set_margin_start (GTK_WIDGET (panel), 6);
@@ -153,24 +156,24 @@ tepl_panel_new_for_left_side_panel (void)
 }
 
 /**
- * tepl_panel_get_stack:
- * @panel: a #TeplPanel.
+ * tepl_panel1_get_stack:
+ * @panel: a #TeplPanel1.
  *
  * Returns: (transfer none): the #GtkStack widget of @panel (a direct child
  * #GtkWidget of @panel).
  * Since: 5.0
  */
 GtkStack *
-tepl_panel_get_stack (TeplPanel *panel)
+tepl_panel1_get_stack (TeplPanel1 *panel)
 {
-	g_return_val_if_fail (TEPL_IS_PANEL (panel), NULL);
+	g_return_val_if_fail (TEPL_IS_PANEL1 (panel), NULL);
 
 	return panel->priv->stack;
 }
 
 /**
- * tepl_panel_add_component:
- * @panel: a #TeplPanel.
+ * tepl_panel1_add_component:
+ * @panel: a #TeplPanel1.
  * @component: the child #GtkWidget to add to the #GtkStack of @panel.
  * @name: the name for @component.
  * @title: a human-readable title for @component.
@@ -182,13 +185,13 @@ tepl_panel_get_stack (TeplPanel *panel)
  * Since: 5.0
  */
 void
-tepl_panel_add_component (TeplPanel   *panel,
-			  GtkWidget   *component,
-			  const gchar *name,
-			  const gchar *title,
-			  const gchar *icon_name)
+tepl_panel1_add_component (TeplPanel1  *panel,
+			   GtkWidget   *component,
+			   const gchar *name,
+			   const gchar *title,
+			   const gchar *icon_name)
 {
-	g_return_if_fail (TEPL_IS_PANEL (panel));
+	g_return_if_fail (TEPL_IS_PANEL1 (panel));
 	g_return_if_fail (GTK_IS_WIDGET (component));
 	g_return_if_fail (name != NULL);
 	g_return_if_fail (title != NULL);
@@ -205,8 +208,8 @@ tepl_panel_add_component (TeplPanel   *panel,
 }
 
 /**
- * tepl_panel_provide_active_component_gsetting:
- * @panel: a #TeplPanel.
+ * tepl_panel1_provide_active_component_gsetting:
+ * @panel: a #TeplPanel1.
  * @settings: a #GSettings object.
  * @setting_key: a #GSettings key of type string.
  *
@@ -214,11 +217,11 @@ tepl_panel_add_component (TeplPanel   *panel,
  * #GtkStack:visible-child-name property of the #GtkStack belonging to @panel.
  *
  * This function just stores @settings and @setting_key for further use by
- * tepl_panel_restore_state_from_gsettings() and
- * tepl_panel_save_state_to_gsettings(). It doesn't bind the #GSettings key to
- * the property, because each main window containing a #TeplPanel needs to be
+ * tepl_panel1_restore_state_from_gsettings() and
+ * tepl_panel1_save_state_to_gsettings(). It doesn't bind the #GSettings key to
+ * the property, because each main window containing a #TeplPanel1 needs to be
  * able to have a different state, and have more control over when that state is
- * restored and saved. Once a #TeplPanel is created and fully populated, the
+ * restored and saved. Once a #TeplPanel1 is created and fully populated, the
  * setting can be restored. The setting can be saved according to the current
  * main window before creating a new main window, and of course on application
  * exit.
@@ -230,11 +233,11 @@ tepl_panel_add_component (TeplPanel   *panel,
  * Since: 5.0
  */
 void
-tepl_panel_provide_active_component_gsetting (TeplPanel   *panel,
-					      GSettings   *settings,
-					      const gchar *setting_key)
+tepl_panel1_provide_active_component_gsetting (TeplPanel1  *panel,
+					       GSettings   *settings,
+					       const gchar *setting_key)
 {
-	g_return_if_fail (TEPL_IS_PANEL (panel));
+	g_return_if_fail (TEPL_IS_PANEL1 (panel));
 	g_return_if_fail (G_IS_SETTINGS (settings));
 	g_return_if_fail (setting_key != NULL);
 
@@ -245,8 +248,8 @@ tepl_panel_provide_active_component_gsetting (TeplPanel   *panel,
 }
 
 /**
- * tepl_panel_restore_state_from_gsettings:
- * @panel: a #TeplPanel.
+ * tepl_panel1_restore_state_from_gsettings:
+ * @panel: a #TeplPanel1.
  *
  * Restores the state of @panel according to the provided #GSettings.
  *
@@ -256,12 +259,12 @@ tepl_panel_provide_active_component_gsetting (TeplPanel   *panel,
  * Since: 5.0
  */
 void
-tepl_panel_restore_state_from_gsettings (TeplPanel *panel)
+tepl_panel1_restore_state_from_gsettings (TeplPanel1 *panel)
 {
 	gchar *active_component_name;
 	GtkWidget *child_widget;
 
-	g_return_if_fail (TEPL_IS_PANEL (panel));
+	g_return_if_fail (TEPL_IS_PANEL1 (panel));
 
 	if (panel->priv->settings == NULL)
 	{
@@ -287,19 +290,19 @@ tepl_panel_restore_state_from_gsettings (TeplPanel *panel)
 }
 
 /**
- * tepl_panel_save_state_to_gsettings:
- * @panel: a #TeplPanel.
+ * tepl_panel1_save_state_to_gsettings:
+ * @panel: a #TeplPanel1.
  *
  * Saves the current state of @panel to the provided #GSettings.
  *
  * Since: 5.0
  */
 void
-tepl_panel_save_state_to_gsettings (TeplPanel *panel)
+tepl_panel1_save_state_to_gsettings (TeplPanel1 *panel)
 {
 	const gchar *visible_child_name;
 
-	g_return_if_fail (TEPL_IS_PANEL (panel));
+	g_return_if_fail (TEPL_IS_PANEL1 (panel));
 
 	if (panel->priv->settings == NULL)
 	{
