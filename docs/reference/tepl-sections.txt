@@ -474,6 +474,9 @@ tepl_panel_get_type
 <FILE>panel-container</FILE>
 TeplPanelContainer
 tepl_panel_container_new
+tepl_panel_container_get_items
+tepl_panel_container_get_active_item
+tepl_panel_container_has_several_items
 <SUBSECTION Standard>
 TEPL_IS_PANEL_CONTAINER
 TEPL_IS_PANEL_CONTAINER_CLASS

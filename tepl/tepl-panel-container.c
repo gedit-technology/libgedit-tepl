@@ -152,3 +152,80 @@ tepl_panel_container_new (void)
 {
 	return g_object_new (TEPL_TYPE_PANEL_CONTAINER, NULL);
 }
+
+/**
+ * tepl_panel_container_get_items:
+ * @container: a #TeplPanelContainer.
+ *
+ * Returns: (transfer full) (element-type TeplPanelItem): all the items of
+ *   @container.
+ * Since: 6.8
+ */
+GList *
+tepl_panel_container_get_items (TeplPanelContainer *container)
+{
+	GList *ret;
+	GList *l;
+
+	g_return_val_if_fail (TEPL_IS_PANEL_CONTAINER (container), NULL);
+
+	ret = g_list_copy (container->priv->items);
+
+	for (l = ret; l != NULL; l = l->next)
+	{
+		g_object_ref (l->data);
+	}
+
+	return ret;
+}
+
+/**
+ * tepl_panel_container_get_active_item:
+ * @container: a #TeplPanelContainer.
+ *
+ * Returns: (transfer none) (nullable): the #TeplPanelItem currently shown in
+ *   @container.
+ * Since: 6.8
+ */
+TeplPanelItem *
+tepl_panel_container_get_active_item (TeplPanelContainer *container)
+{
+	GtkWidget *active_widget;
+	GList *l;
+
+	g_return_val_if_fail (TEPL_IS_PANEL_CONTAINER (container), NULL);
+
+	active_widget = gtk_stack_get_visible_child (container->priv->stack);
+
+	for (l = container->priv->items; l != NULL; l = l->next)
+	{
+		TeplPanelItem *cur_item = TEPL_PANEL_ITEM (l->data);
+		GtkWidget *cur_widget;
+
+		cur_widget = tepl_panel_item_get_widget (cur_item);
+		if (cur_widget == active_widget)
+		{
+			return cur_item;
+		}
+	}
+
+	return NULL;
+}
+
+/**
+ * tepl_panel_container_has_several_items:
+ * @container: a #TeplPanelContainer.
+ *
+ * Convenience function. Useful to implement a switcher widget.
+ *
+ * Returns: whether @container has more than one #TeplPanelItem.
+ * Since: 6.8
+ */
+gboolean
+tepl_panel_container_has_several_items (TeplPanelContainer *container)
+{
+	g_return_val_if_fail (TEPL_IS_PANEL_CONTAINER (container), FALSE);
+
+	return (container->priv->items != NULL &&
+		container->priv->items->next != NULL);
+}
