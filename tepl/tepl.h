@@ -40,6 +40,7 @@
 #include <tepl/tepl-overwrite-indicator.h>
 #include <tepl/tepl-panel1.h>
 #include <tepl/tepl-panel.h>
+#include <tepl/tepl-panel-container.h>
 #include <tepl/tepl-panel-item.h>
 #include <tepl/tepl-pango.h>
 #include <tepl/tepl-prefs.h>

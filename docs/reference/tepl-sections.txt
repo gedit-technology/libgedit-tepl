@@ -471,6 +471,22 @@ tepl_panel_get_type
 </SECTION>
 
 <SECTION>
+<FILE>panel-container</FILE>
+TeplPanelContainer
+tepl_panel_container_new
+<SUBSECTION Standard>
+TEPL_IS_PANEL_CONTAINER
+TEPL_IS_PANEL_CONTAINER_CLASS
+TEPL_PANEL_CONTAINER
+TEPL_PANEL_CONTAINER_CLASS
+TEPL_PANEL_CONTAINER_GET_CLASS
+TEPL_TYPE_PANEL_CONTAINER
+TeplPanelContainerClass
+TeplPanelContainerPrivate
+tepl_panel_container_get_type
+</SECTION>
+
+<SECTION>
 <FILE>panel-item</FILE>
 TeplPanelItem
 TeplPanelItemInterface
