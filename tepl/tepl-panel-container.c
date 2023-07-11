@@ -10,6 +10,11 @@
  * SECTION:panel-container
  * @Title: TeplPanelContainer
  * @Short_description: Side or bottom panel container
+ *
+ * #TeplPanelContainer is an implementation of the #TeplPanel interface.
+ *
+ * #TeplPanelContainer contains API useful to implement a switcher widget, like
+ * #TeplPanelSwitcherMenu.
  */
 
 struct _TeplPanelContainerPrivate

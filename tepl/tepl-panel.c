@@ -53,9 +53,17 @@ tepl_panel_default_init (TeplPanelInterface *interface)
  * @title: (nullable): the title.
  * @icon_name: (nullable): the icon-name.
  *
- * Adds an item to the panel.
+ * Adds an item to the panel. See #TeplPanelItem for the meaning of the parameters.
  *
- * See #TeplPanelItem for the meaning of the parameters.
+ * @widget should have its #GtkWidget:visible property set to %TRUE in order to
+ * be correctly shown in the panel.
+ *
+ * A #TeplPanelItem object is returned, which can be used as a parameter to
+ * other #TeplPanel functions (#TeplPanelItem serves as a kind of handle).
+ *
+ * Note that #TeplPanel also owns a reference to the #TeplPanelItem. So either
+ * store the #TeplPanelItem for later use, or unref it directly after calling
+ * this function.
  *
  * Returns: (transfer full) (nullable): a new #TeplPanelItem object.
  * Since: 6.8
@@ -102,6 +110,10 @@ tepl_panel_remove (TeplPanel     *panel,
  * @item: a #TeplPanelItem.
  *
  * Sets @item to be the one that is currently shown in @panel.
+ *
+ * This is different than setting the #GtkWidget:visible property to %TRUE. All
+ * #GtkWidget's of a @panel should have their #GtkWidget:visible property set to
+ * %TRUE all the time, but only one #TeplPanelItem is shown at a time.
  *
  * Since: 6.8
  */
