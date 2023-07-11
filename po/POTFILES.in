@@ -29,6 +29,7 @@ tepl/tepl-notebook.c
 tepl/tepl-overwrite-indicator.c
 tepl/tepl-panel1.c
 tepl/tepl-panel-item.c
+tepl/tepl-panel-item-simple.c
 tepl/tepl-pango.c
 tepl/tepl-prefs.c
 tepl/tepl-progress-info-bar.c
