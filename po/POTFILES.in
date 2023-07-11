@@ -28,6 +28,7 @@ tepl/tepl-metadata-parser.c
 tepl/tepl-notebook.c
 tepl/tepl-overwrite-indicator.c
 tepl/tepl-panel1.c
+tepl/tepl-panel.c
 tepl/tepl-panel-item.c
 tepl/tepl-panel-item-simple.c
 tepl/tepl-pango.c

@@ -456,6 +456,21 @@ tepl_panel1_get_type
 </SECTION>
 
 <SECTION>
+<FILE>panel</FILE>
+TeplPanel
+TeplPanelInterface
+tepl_panel_add
+tepl_panel_remove
+tepl_panel_set_active
+<SUBSECTION Standard>
+TEPL_IS_PANEL
+TEPL_PANEL
+TEPL_PANEL_GET_INTERFACE
+TEPL_TYPE_PANEL
+tepl_panel_get_type
+</SECTION>
+
+<SECTION>
 <FILE>panel-item</FILE>
 TeplPanelItem
 TeplPanelItemInterface
