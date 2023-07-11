@@ -334,3 +334,31 @@ tepl_stack_set_visible_item (TeplStack     *stack,
 
 	tepl_stack_changed (stack);
 }
+
+/**
+ * tepl_stack_get_visible_item_name:
+ * @stack: a #TeplStack.
+ *
+ * Convenience function.
+ *
+ * Returns: (transfer full) (nullable): the name of the #TeplStackItem
+ *   returned by tepl_stack_get_visible_item().
+ * Since: 6.8
+ */
+gchar *
+tepl_stack_get_visible_item_name (TeplStack *stack)
+{
+	TeplStackItem *item;
+	gchar *name = NULL;
+
+	g_return_val_if_fail (TEPL_IS_STACK (stack), NULL);
+
+	item = tepl_stack_get_visible_item (stack);
+	if (item == NULL)
+	{
+		return NULL;
+	}
+
+	tepl_stack_item_get_infos (item, &name, NULL, NULL);
+	return name;
+}
