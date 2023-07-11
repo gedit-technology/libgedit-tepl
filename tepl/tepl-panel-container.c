@@ -20,6 +20,14 @@ struct _TeplPanelContainerPrivate
 	GList *items;
 };
 
+enum
+{
+	SIGNAL_CHANGED,
+	N_SIGNALS
+};
+
+static guint signals[N_SIGNALS];
+
 static void tepl_panel_interface_init (gpointer g_iface,
 				       gpointer iface_data);
 
@@ -29,6 +37,12 @@ G_DEFINE_TYPE_WITH_CODE (TeplPanelContainer,
 			 G_ADD_PRIVATE (TeplPanelContainer)
 			 G_IMPLEMENT_INTERFACE (TEPL_TYPE_PANEL,
 						tepl_panel_interface_init))
+
+static void
+emit_changed_signal (TeplPanelContainer *container)
+{
+	g_signal_emit (container, signals[SIGNAL_CHANGED], 0);
+}
 
 static void
 tepl_panel_container_dispose (GObject *object)
@@ -49,6 +63,23 @@ tepl_panel_container_class_init (TeplPanelContainerClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->dispose = tepl_panel_container_dispose;
+
+	/**
+	 * TeplPanelContainer::changed:
+	 * @container: the #TeplPanelContainer emitting the signal.
+	 *
+	 * The ::changed signal is emitted when:
+	 * - A #TeplPanelItem is added or removed from @container.
+	 * - The active #TeplPanelItem of @container has changed.
+	 *
+	 * Since: 6.8
+	 */
+	signals[SIGNAL_CHANGED] =
+		g_signal_new ("changed",
+			      G_TYPE_FROM_CLASS (klass),
+			      G_SIGNAL_RUN_FIRST,
+			      0, NULL, NULL, NULL,
+			      G_TYPE_NONE, 0);
 }
 
 static void
@@ -88,6 +119,8 @@ tepl_panel_container_add (TeplPanel   *panel,
 	container->priv->items = g_list_prepend (container->priv->items,
 						 g_object_ref (item));
 
+	emit_changed_signal (container);
+
 	return item;
 }
 
@@ -114,6 +147,8 @@ tepl_panel_container_remove (TeplPanel     *panel,
 
 	g_object_unref (node->data);
 	container->priv->items = g_list_delete_link (container->priv->items, node);
+
+	emit_changed_signal (container);
 }
 
 static void
@@ -128,6 +163,8 @@ tepl_panel_container_set_active (TeplPanel     *panel,
 	{
 		gtk_stack_set_visible_child (container->priv->stack, widget);
 	}
+
+	emit_changed_signal (container);
 }
 
 static void
