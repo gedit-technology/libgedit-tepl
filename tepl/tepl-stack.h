@@ -74,6 +74,10 @@ void		tepl_stack_set_visible_item	(TeplStack     *stack,
 _TEPL_EXTERN
 gchar *		tepl_stack_get_visible_item_name	(TeplStack *stack);
 
+_TEPL_EXTERN
+void		tepl_stack_set_visible_item_name	(TeplStack   *stack,
+							 const gchar *item_name);
+
 G_END_DECLS
 
 #endif /* TEPL_STACK_H */

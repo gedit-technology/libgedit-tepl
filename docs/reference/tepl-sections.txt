@@ -566,6 +566,7 @@ tepl_stack_get_n_visible_items
 tepl_stack_get_visible_item
 tepl_stack_set_visible_item
 tepl_stack_get_visible_item_name
+tepl_stack_set_visible_item_name
 <SUBSECTION Standard>
 TEPL_IS_STACK
 TEPL_IS_STACK_CLASS

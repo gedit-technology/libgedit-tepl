@@ -362,3 +362,45 @@ tepl_stack_get_visible_item_name (TeplStack *stack)
 	tepl_stack_item_get_infos (item, &name, NULL, NULL);
 	return name;
 }
+
+/**
+ * tepl_stack_set_visible_item_name:
+ * @stack: a #TeplStack.
+ * @item_name: the name of a #TeplStackItem.
+ *
+ * Convenience function that calls tepl_stack_set_visible_item(), by providing a
+ * name. Does nothing if no #TeplStackItem match.
+ *
+ * Since: 6.8
+ */
+void
+tepl_stack_set_visible_item_name (TeplStack   *stack,
+				  const gchar *item_name)
+{
+	GList *items;
+	GList *l;
+
+	g_return_if_fail (TEPL_IS_STACK (stack));
+	g_return_if_fail (item_name != NULL);
+
+	items = tepl_stack_get_items (stack);
+
+	for (l = items; l != NULL; l = l->next)
+	{
+		TeplStackItem *cur_item = TEPL_STACK_ITEM (l->data);
+		gchar *cur_name = NULL;
+
+		tepl_stack_item_get_infos (cur_item, &cur_name, NULL, NULL);
+
+		if (g_strcmp0 (cur_name, item_name) == 0)
+		{
+			tepl_stack_set_visible_item (stack, cur_item);
+			g_free (cur_name);
+			break;
+		}
+
+		g_free (cur_name);
+	}
+
+	g_list_free_full (items, g_object_unref);
+}
