@@ -6,7 +6,7 @@
 project(
   'tepl', 'c',
   meson_version: '>= 0.64',
-  version: '6.6.0',
+  version: '6.7.1',
   default_options: ['warning_level=2']
 )
 
@@ -19,7 +19,7 @@ FS = import('fs')
 TEPL_API_VERSION = '6'
 
 TEPL_PUBLIC_DEPS = [
-  dependency('gio-2.0', version: '>= 2.62'),
+  dependency('gio-2.0', version: '>= 2.74'),
   dependency('gtk+-3.0', version: '>= 3.22'),
   dependency('libgedit-gtksourceview-300', version: '>= 299.0.1'),
   dependency('amtk-5', version: '>= 5.0')
