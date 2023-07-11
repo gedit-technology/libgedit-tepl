@@ -507,6 +507,22 @@ tepl_panel_item_get_type
 </SECTION>
 
 <SECTION>
+<FILE>panel-switcher-menu</FILE>
+TeplPanelSwitcherMenu
+tepl_panel_switcher_menu_new
+<SUBSECTION Standard>
+TEPL_IS_PANEL_SWITCHER_MENU
+TEPL_IS_PANEL_SWITCHER_MENU_CLASS
+TEPL_PANEL_SWITCHER_MENU
+TEPL_PANEL_SWITCHER_MENU_CLASS
+TEPL_PANEL_SWITCHER_MENU_GET_CLASS
+TEPL_TYPE_PANEL_SWITCHER_MENU
+TeplPanelSwitcherMenuClass
+TeplPanelSwitcherMenuPrivate
+tepl_panel_switcher_menu_get_type
+</SECTION>
+
+<SECTION>
 <FILE>pango</FILE>
 tepl_pango_font_description_to_css
 </SECTION>

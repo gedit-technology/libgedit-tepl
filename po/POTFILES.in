@@ -32,6 +32,7 @@ tepl/tepl-panel.c
 tepl/tepl-panel-container.c
 tepl/tepl-panel-item.c
 tepl/tepl-panel-item-simple.c
+tepl/tepl-panel-switcher-menu.c
 tepl/tepl-pango.c
 tepl/tepl-prefs.c
 tepl/tepl-progress-info-bar.c
