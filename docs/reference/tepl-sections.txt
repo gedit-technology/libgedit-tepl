@@ -639,6 +639,23 @@ tepl_statusbar_get_type
 </SECTION>
 
 <SECTION>
+<FILE>status-menu-button</FILE>
+TeplStatusMenuButton
+tepl_status_menu_button_new
+tepl_status_menu_button_set_label_text
+<SUBSECTION Standard>
+TEPL_IS_STATUS_MENU_BUTTON
+TEPL_IS_STATUS_MENU_BUTTON_CLASS
+TEPL_STATUS_MENU_BUTTON
+TEPL_STATUS_MENU_BUTTON_CLASS
+TEPL_STATUS_MENU_BUTTON_GET_CLASS
+TEPL_TYPE_STATUS_MENU_BUTTON
+TeplStatusMenuButtonClass
+TeplStatusMenuButtonPrivate
+tepl_status_menu_button_get_type
+</SECTION>
+
+<SECTION>
 <FILE>style-scheme-chooser-widget</FILE>
 TeplStyleSchemeChooserWidget
 tepl_style_scheme_chooser_widget_new
