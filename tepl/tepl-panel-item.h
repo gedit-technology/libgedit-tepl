@@ -66,6 +66,10 @@ const gchar *	tepl_panel_item_get_title		(TeplPanelItem *item);
 _TEPL_EXTERN
 const gchar *	tepl_panel_item_get_icon_name		(TeplPanelItem *item);
 
+_TEPL_EXTERN
+gint		tepl_panel_item_compare_by_title	(TeplPanelItem *a,
+							 TeplPanelItem *b);
+
 G_END_DECLS
 
 #endif /* TEPL_PANEL_ITEM_H */

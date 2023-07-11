@@ -118,3 +118,60 @@ tepl_panel_item_get_icon_name (TeplPanelItem *item)
 
 	return TEPL_PANEL_ITEM_GET_INTERFACE (item)->get_icon_name (item);
 }
+
+/**
+ * tepl_panel_item_compare_by_title:
+ * @a: a #TeplPanelItem.
+ * @b: a #TeplPanelItem.
+ *
+ * A #GCompareFunc for the #TeplPanelItem's "title" attribute.
+ *
+ * Returns: the usual return value for a #GCompareFunc.
+ * Since: 6.8
+ */
+gint
+tepl_panel_item_compare_by_title (TeplPanelItem *a,
+				  TeplPanelItem *b)
+{
+	const gchar *title_a;
+	const gchar *title_b;
+	gchar *normalized_title_a = NULL;
+	gchar *normalized_title_b = NULL;
+	gint result = 0;
+
+	g_return_val_if_fail (TEPL_IS_PANEL_ITEM (a), 0);
+	g_return_val_if_fail (TEPL_IS_PANEL_ITEM (b), 0);
+
+	title_a = tepl_panel_item_get_title (a);
+	title_b = tepl_panel_item_get_title (b);
+
+	/* Put untitled items at the end */
+
+	if (title_a == NULL && title_b == NULL)
+	{
+		result = 0;
+		goto out;
+	}
+	if (title_a == NULL)
+	{
+		result = 1;
+		goto out;
+	}
+	if (title_b == NULL)
+	{
+		result = -1;
+		goto out;
+	}
+
+	/* UTF-8 comparison */
+
+	normalized_title_a = g_utf8_normalize (title_a, -1, G_NORMALIZE_ALL);
+	normalized_title_b = g_utf8_normalize (title_b, -1, G_NORMALIZE_ALL);
+
+	result = g_utf8_collate (normalized_title_a, normalized_title_b);
+
+out:
+	g_free (normalized_title_a);
+	g_free (normalized_title_b);
+	return result;
+}
