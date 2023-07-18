@@ -1219,8 +1219,9 @@ tepl_utils_setup_statusbar (GtkStatusbar *statusbar)
 {
 	g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
 
-	gtk_widget_set_margin_top (GTK_WIDGET (statusbar), 0);
-	gtk_widget_set_margin_bottom (GTK_WIDGET (statusbar), 0);
+	g_object_set (statusbar,
+		      "margin", 0,
+		      NULL);
 }
 
 /**
