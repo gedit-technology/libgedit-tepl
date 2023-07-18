@@ -29,12 +29,13 @@ create_status_button (void)
 static GtkWidget *
 create_statusbar (void)
 {
-	TeplStatusbar *statusbar;
+	GtkStatusbar *statusbar;
 
-	statusbar = tepl_statusbar_new ();
+	statusbar = GTK_STATUSBAR (gtk_statusbar_new ());
+	tepl_utils_setup_statusbar (statusbar);
 
-	gtk_statusbar_push (GTK_STATUSBAR (statusbar),
-			    gtk_statusbar_get_context_id (GTK_STATUSBAR (statusbar), "foo"),
+	gtk_statusbar_push (statusbar,
+			    gtk_statusbar_get_context_id (statusbar, "foo"),
 			    "Status bar");
 
 	gtk_box_pack_end (GTK_BOX (statusbar),
