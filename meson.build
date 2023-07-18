@@ -22,7 +22,7 @@ TEPL_PUBLIC_DEPS = [
   dependency('gio-2.0', version: '>= 2.74'),
   dependency('gtk+-3.0', version: '>= 3.22'),
   dependency('libgedit-gtksourceview-300', version: '>= 299.0.1'),
-  dependency('amtk-5', version: '>= 5.0')
+  dependency('libgedit-amtk-5')
 ]
 tepl_private_deps = [
   dependency('icu-uc'),
