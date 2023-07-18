@@ -1207,6 +1207,23 @@ tepl_utils_get_titled_component (const gchar *title,
 }
 
 /**
+ * tepl_utils_setup_statusbar:
+ * @statusbar: a #GtkStatusbar.
+ *
+ * To better configure a #GtkStatusbar (to make it smaller).
+ *
+ * Since: 6.8
+ */
+void
+tepl_utils_setup_statusbar (GtkStatusbar *statusbar)
+{
+	g_return_if_fail (GTK_IS_STATUSBAR (statusbar));
+
+	gtk_widget_set_margin_top (GTK_WIDGET (statusbar), 0);
+	gtk_widget_set_margin_bottom (GTK_WIDGET (statusbar), 0);
+}
+
+/**
  * tepl_utils_binding_transform_func_smart_bool:
  * @binding: a #GBinding.
  * @from_value: the #GValue containing the value to transform.

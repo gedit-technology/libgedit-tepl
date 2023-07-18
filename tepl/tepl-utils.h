@@ -146,6 +146,9 @@ _TEPL_EXTERN
 GtkWidget *	tepl_utils_get_titled_component			(const gchar *title,
 								 GtkWidget   *component);
 
+_TEPL_EXTERN
+void		tepl_utils_setup_statusbar			(GtkStatusbar *statusbar);
+
 /* Other */
 
 _TEPL_EXTERN
