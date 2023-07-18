@@ -279,6 +279,12 @@
           classes and interfaces).
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <code>TeplStatusbar</code> class has been removed, and is replaced
+          by <link linkend="tepl-utils-setup-statusbar">tepl_utils_setup_statusbar()</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </chapter>
 </part>
