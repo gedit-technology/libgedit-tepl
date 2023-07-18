@@ -65,6 +65,7 @@ apply_css (TeplStatusMenuButton *button)
 		"button {\n"
 		"  padding: 0px 3px;\n"
 		"  border: none;\n"
+		"  border-radius: 0;\n"
 		"  outline-style: none;\n"
 		"}\n";
 
