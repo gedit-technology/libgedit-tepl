@@ -78,7 +78,7 @@ _TEPL_EXTERN
 gchar *		tepl_settings_get_selected_font			(TeplSettings *self);
 
 _TEPL_EXTERN
-void		tepl_settings_handle_prefer_dark_theme		(TeplSettings *self,
+void		tepl_settings_handle_theme_variant		(TeplSettings *self,
 								 GSettings    *theme_variant_settings,
 								 const gchar  *theme_variant_setting_key);
 

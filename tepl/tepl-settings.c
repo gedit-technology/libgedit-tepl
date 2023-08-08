@@ -3,8 +3,7 @@
  */
 
 #include "tepl-settings.h"
-#include <gtk/gtk.h>
-#include <gdesktop-enums.h>
+#include <handy.h>
 
 /**
  * SECTION:settings
@@ -42,7 +41,7 @@ struct _TeplSettingsPrivate
 	GSettings *settings_theme_variant;
 	gchar *key_theme_variant;
 
-	guint handle_prefer_dark_theme : 1;
+	guint handle_theme_variant : 1;
 };
 
 enum
@@ -327,22 +326,16 @@ tepl_settings_get_selected_font (TeplSettings *self)
 }
 
 static void
-set_prefer_dark_theme (gboolean prefer_dark)
+update_theme_variant (TeplSettings *self)
 {
-	GtkSettings *gtk_settings = gtk_settings_get_default ();
-
-	if (gtk_settings != NULL)
-	{
-		g_object_set (gtk_settings,
-			      "gtk-application-prefer-dark-theme", prefer_dark,
-			      NULL);
-	}
-}
-
-static void
-update_prefer_dark_theme (TeplSettings *self)
-{
-	GDesktopColorScheme system_setting;
+	/* For a text editor, prefer a light theme. See the documentation of the
+	 * GtkSettings:gtk-application-prefer-dark-theme property:
+	 *
+	 * "Dark themes should not be used for documents, where large spaces are
+	 * white/light and the dark chrome creates too much contrast (web
+	 * browser, text editor...)."
+	 */
+	HdyColorScheme color_scheme = HDY_COLOR_SCHEME_PREFER_LIGHT;
 
 	if (self->priv->settings_theme_variant != NULL)
 	{
@@ -357,47 +350,20 @@ update_prefer_dark_theme (TeplSettings *self)
 				break;
 
 			case TEPL_SETTINGS_THEME_VARIANT_LIGHT:
-				set_prefer_dark_theme (FALSE);
-				return;
+				color_scheme = HDY_COLOR_SCHEME_FORCE_LIGHT;
+				break;
 
 			case TEPL_SETTINGS_THEME_VARIANT_DARK:
-				set_prefer_dark_theme (TRUE);
-				return;
+				color_scheme = HDY_COLOR_SCHEME_FORCE_DARK;
+				break;
 
 			default:
 				g_return_if_reached ();
 		}
 	}
 
-	system_setting = g_settings_get_enum (self->priv->settings_desktop_interface,
-					      KEY_SYSTEM_COLOR_SCHEME);
-
-	switch (system_setting)
-	{
-		case G_DESKTOP_COLOR_SCHEME_DEFAULT:
-			/* Here we have the choice. Choose a light theme according to the documentation
-			 * of the GtkSettings:gtk-application-prefer-dark-theme property:
-			 *
-			 * "Dark themes should not be used for documents, where large spaces are
-			 * white/light and the dark chrome creates too much contrast (web browser,
-			 * text editor...)."
-			 *
-			 * (It's for a text editor here).
-			 */
-			set_prefer_dark_theme (FALSE);
-			break;
-
-		case G_DESKTOP_COLOR_SCHEME_PREFER_DARK:
-			set_prefer_dark_theme (TRUE);
-			break;
-
-		case G_DESKTOP_COLOR_SCHEME_PREFER_LIGHT:
-			set_prefer_dark_theme (FALSE);
-			break;
-
-		default:
-			g_return_if_reached ();
-	}
+	hdy_style_manager_set_color_scheme (hdy_style_manager_get_default (),
+					    color_scheme);
 }
 
 static void
@@ -405,29 +371,20 @@ theme_variant_changed_cb (GSettings    *settings,
 			  const gchar  *key,
 			  TeplSettings *self)
 {
-	update_prefer_dark_theme (self);
-}
-
-static void
-system_color_scheme_changed_cb (GSettings    *settings,
-				const gchar  *key,
-				TeplSettings *self)
-{
-	update_prefer_dark_theme (self);
+	update_theme_variant (self);
 }
 
 /**
- * tepl_settings_handle_prefer_dark_theme:
+ * tepl_settings_handle_theme_variant:
  * @self: the #TeplSettings instance.
  * @theme_variant_settings: (nullable): a #GSettings object, or %NULL.
  * @theme_variant_setting_key: (nullable): a #GSettings key of type enum
  *   #TeplSettingsThemeVariant, or %NULL.
  *
- * This function permits to have a correct and updated value for the
- * #GtkSettings:gtk-application-prefer-dark-theme property.
+ * This function permits to setup correctly the GTK theme variant to use.
  *
- * If @theme_variant_settings and @theme_variant_setting_key are %NULL,
- * #TeplSettings will take into account only the system's settings.
+ * If @theme_variant_settings and @theme_variant_setting_key are %NULL, only the
+ * system's settings will be taken into account.
  *
  * If @theme_variant_settings and @theme_variant_setting_key are provided, they
  * are taken into account according to #TeplSettingsThemeVariant.
@@ -435,14 +392,14 @@ system_color_scheme_changed_cb (GSettings    *settings,
  * Since: 6.10
  */
 void
-tepl_settings_handle_prefer_dark_theme (TeplSettings *self,
-					GSettings    *theme_variant_settings,
-					const gchar  *theme_variant_setting_key)
+tepl_settings_handle_theme_variant (TeplSettings *self,
+				    GSettings    *theme_variant_settings,
+				    const gchar  *theme_variant_setting_key)
 {
 	g_return_if_fail (TEPL_IS_SETTINGS (self));
 	g_return_if_fail (theme_variant_settings == NULL || G_IS_SETTINGS (theme_variant_settings));
 
-	if (self->priv->handle_prefer_dark_theme)
+	if (self->priv->handle_theme_variant)
 	{
 		/* Already done. */
 		return;
@@ -450,6 +407,8 @@ tepl_settings_handle_prefer_dark_theme (TeplSettings *self,
 
 	g_return_if_fail (self->priv->settings_theme_variant == NULL);
 	g_return_if_fail (self->priv->key_theme_variant == NULL);
+
+	hdy_init ();
 
 	if (theme_variant_settings != NULL &&
 	    theme_variant_setting_key != NULL)
@@ -468,15 +427,9 @@ tepl_settings_handle_prefer_dark_theme (TeplSettings *self,
 		g_free (detailed_signal);
 	}
 
-	g_signal_connect_object (self->priv->settings_desktop_interface,
-				 "changed::" KEY_SYSTEM_COLOR_SCHEME,
-				 G_CALLBACK (system_color_scheme_changed_cb),
-				 self,
-				 G_CONNECT_DEFAULT);
+	update_theme_variant (self);
 
-	update_prefer_dark_theme (self);
-
-	self->priv->handle_prefer_dark_theme = TRUE;
+	self->priv->handle_theme_variant = TRUE;
 }
 
 /**

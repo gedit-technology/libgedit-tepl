@@ -22,12 +22,13 @@ TEPL_PUBLIC_DEPS = [
   dependency('gio-2.0', version: '>= 2.74'),
   dependency('gtk+-3.0', version: '>= 3.22'),
   dependency('libgedit-gtksourceview-300', version: '>= 299.0.4'),
-  dependency('libgedit-amtk-5')
+  dependency('libgedit-amtk-5'),
 ]
 tepl_private_deps = [
   dependency('icu-uc'),
   dependency('icu-i18n'),
-  dependency('gsettings-desktop-schemas', version: '>= 42')
+  dependency('gsettings-desktop-schemas', version: '>= 42'),
+  dependency('libhandy-1', version: '>= 1.6'),
 ]
 TEPL_DEPS = [TEPL_PUBLIC_DEPS, tepl_private_deps]
 
