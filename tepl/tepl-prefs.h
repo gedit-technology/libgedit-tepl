@@ -47,6 +47,10 @@ GtkWidget *	tepl_prefs_create_files_component			(GSettings   *settings,
 									 const gchar *auto_save_key,
 									 const gchar *auto_save_interval);
 
+_TEPL_EXTERN
+GtkWidget *	tepl_prefs_create_theme_variant_combo_box		(GSettings   *settings,
+									 const gchar *theme_variant_key);
+
 G_END_DECLS
 
 #endif /* TEPL_PREFS_H */

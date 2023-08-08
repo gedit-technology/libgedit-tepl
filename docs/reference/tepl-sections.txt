@@ -538,6 +538,7 @@ tepl_prefs_create_tab_width_spinbutton
 tepl_prefs_create_insert_spaces_component
 tepl_prefs_create_highlighting_component
 tepl_prefs_create_files_component
+tepl_prefs_create_theme_variant_combo_box
 </SECTION>
 
 <SECTION>

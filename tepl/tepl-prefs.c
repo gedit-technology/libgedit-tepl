@@ -439,3 +439,38 @@ tepl_prefs_create_files_component (GSettings   *settings,
 
 	return tepl_utils_get_titled_component (_("Files"), vgrid);
 }
+
+/**
+ * tepl_prefs_create_theme_variant_combo_box:
+ * @settings: a #GSettings.
+ * @theme_variant_key: a key part of @settings. Its type must be an enum for
+ *   #TeplSettingsThemeVariant.
+ *
+ * Returns: (transfer floating): A widget containing a #GtkComboBoxText intended
+ *   to choose a #TeplSettingsThemeVariant.
+ * Since: 6.10
+ */
+GtkWidget *
+tepl_prefs_create_theme_variant_combo_box (GSettings   *settings,
+					   const gchar *theme_variant_key)
+{
+	GtkComboBoxText *combo_box_text;
+
+	g_return_val_if_fail (G_IS_SETTINGS (settings), NULL);
+	g_return_val_if_fail (theme_variant_key != NULL, NULL);
+
+	combo_box_text = GTK_COMBO_BOX_TEXT (gtk_combo_box_text_new ());
+	gtk_widget_show (GTK_WIDGET (combo_box_text));
+	gtk_widget_set_halign (GTK_WIDGET (combo_box_text), GTK_ALIGN_START);
+
+	gtk_combo_box_text_append (combo_box_text, "system", _("Default"));
+	gtk_combo_box_text_append (combo_box_text, "light", _("Light"));
+	gtk_combo_box_text_append (combo_box_text, "dark", _("Dark"));
+
+	g_settings_bind (settings, theme_variant_key,
+			 combo_box_text, "active-id",
+			 G_SETTINGS_BIND_DEFAULT);
+
+	return tepl_utils_get_titled_component (_("Theme Variant"),
+						GTK_WIDGET (combo_box_text));
+}
