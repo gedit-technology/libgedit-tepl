@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2022 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2022-2023 - Sébastien Wilmet <swilmet@gnome.org>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
@@ -473,4 +473,64 @@ tepl_prefs_create_theme_variant_combo_box (GSettings   *settings,
 
 	return tepl_utils_get_titled_component (_("Theme Variant"),
 						GTK_WIDGET (combo_box_text));
+}
+
+/**
+ * tepl_prefs_create_right_margin_component:
+ * @settings: a #GSettings.
+ * @display_right_margin_key: a key part of @settings. The type of the key must
+ *   be a boolean.
+ * @right_margin_position_key: a key part of @settings. The type of the key must
+ *   be an unsigned integer.
+ *
+ * Returns: (transfer floating): a component intended for
+ *   #GtkSourceView:show-right-margin and #GtkSourceView:right-margin-position.
+ * Since: 6.10
+ */
+GtkWidget *
+tepl_prefs_create_right_margin_component (GSettings   *settings,
+					  const gchar *display_right_margin_key,
+					  const gchar *right_margin_position_key)
+{
+	GtkWidget *check_button;
+	GtkWidget *spin_button;
+	GtkGrid *spin_button_wrapper;
+	GtkGrid *hgrid;
+
+	g_return_val_if_fail (G_IS_SETTINGS (settings), NULL);
+	g_return_val_if_fail (display_right_margin_key != NULL, NULL);
+	g_return_val_if_fail (right_margin_position_key != NULL, NULL);
+
+	/* Check button */
+	check_button = create_checkbutton_simple (settings,
+						  display_right_margin_key,
+						  _("Display right _margin at column:"));
+
+	/* Spin button */
+	spin_button = gtk_spin_button_new_with_range (1.0, 1000.0, 1.0);
+
+	// Note that this creates a binding between the writability of the
+	// GSettings key with the "sensitive" property of the spin_button.
+	// Hence the need for spin_button_wrapper.
+	g_settings_bind (settings, right_margin_position_key,
+			 spin_button, "value",
+			 G_SETTINGS_BIND_DEFAULT);
+
+	/* Sensitivity */
+	spin_button_wrapper = GTK_GRID (gtk_grid_new ());
+	gtk_container_add (GTK_CONTAINER (spin_button_wrapper), spin_button);
+
+	g_object_bind_property (check_button, "active",
+				spin_button_wrapper, "sensitive",
+				G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
+
+	/* Main packing */
+	hgrid = GTK_GRID (gtk_grid_new ());
+	gtk_grid_set_column_spacing (hgrid, 6);
+
+	gtk_container_add (GTK_CONTAINER (hgrid), check_button);
+	gtk_container_add (GTK_CONTAINER (hgrid), GTK_WIDGET (spin_button_wrapper));
+	gtk_widget_show_all (GTK_WIDGET (hgrid));
+
+	return GTK_WIDGET (hgrid);
 }

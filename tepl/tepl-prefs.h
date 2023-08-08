@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2022 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2022-2023 - Sébastien Wilmet <swilmet@gnome.org>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
@@ -50,6 +50,11 @@ GtkWidget *	tepl_prefs_create_files_component			(GSettings   *settings,
 _TEPL_EXTERN
 GtkWidget *	tepl_prefs_create_theme_variant_combo_box		(GSettings   *settings,
 									 const gchar *theme_variant_key);
+
+_TEPL_EXTERN
+GtkWidget *	tepl_prefs_create_right_margin_component		(GSettings   *settings,
+									 const gchar *display_right_margin_key,
+									 const gchar *right_margin_position_key);
 
 G_END_DECLS
 
