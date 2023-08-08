@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2022 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2022-2023 - Sébastien Wilmet <swilmet@gnome.org>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
@@ -39,6 +39,23 @@ struct _TeplSettingsClass
 	gpointer padding[12];
 };
 
+/**
+ * TeplSettingsThemeVariant:
+ * @TEPL_SETTINGS_THEME_VARIANT_SYSTEM: Follow the system's preference.
+ * @TEPL_SETTINGS_THEME_VARIANT_LIGHT: Force a light theme.
+ * @TEPL_SETTINGS_THEME_VARIANT_DARK: Force a dark theme.
+ *
+ * This enum is intended to be used for controlling the GTK theme preference.
+ *
+ * Since: 6.10
+ */
+typedef enum
+{
+	TEPL_SETTINGS_THEME_VARIANT_SYSTEM = 0,
+	TEPL_SETTINGS_THEME_VARIANT_LIGHT = 1,
+	TEPL_SETTINGS_THEME_VARIANT_DARK = 2,
+} TeplSettingsThemeVariant;
+
 _TEPL_EXTERN
 GType		tepl_settings_get_type				(void);
 
@@ -59,6 +76,11 @@ void		tepl_settings_provide_font_settings		(TeplSettings *self,
 
 _TEPL_EXTERN
 gchar *		tepl_settings_get_selected_font			(TeplSettings *self);
+
+_TEPL_EXTERN
+void		tepl_settings_handle_prefer_dark_theme		(TeplSettings *self,
+								 GSettings    *theme_variant_settings,
+								 const gchar  *theme_variant_setting_key);
 
 _TEPL_EXTERN
 gboolean	tepl_settings_get_range_uint			(GSettings   *settings,

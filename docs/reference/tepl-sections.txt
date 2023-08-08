@@ -580,10 +580,12 @@ tepl_progress_info_bar_get_type
 <SECTION>
 <FILE>settings</FILE>
 TeplSettings
+TeplSettingsThemeVariant
 tepl_settings_get_singleton
 tepl_settings_peek_desktop_interface_settings
 tepl_settings_provide_font_settings
 tepl_settings_get_selected_font
+tepl_settings_handle_prefer_dark_theme
 tepl_settings_get_range_uint
 <SUBSECTION Standard>
 TEPL_IS_SETTINGS
@@ -595,6 +597,8 @@ TEPL_TYPE_SETTINGS
 TeplSettingsClass
 TeplSettingsPrivate
 tepl_settings_get_type
+TEPL_TYPE_SETTINGS_THEME_VARIANT
+tepl_settings_theme_variant_get_type
 </SECTION>
 
 <SECTION>

@@ -1,8 +1,10 @@
-/* SPDX-FileCopyrightText: 2022 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2022-2023 - Sébastien Wilmet <swilmet@gnome.org>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
 #include "tepl-settings.h"
+#include <gtk/gtk.h>
+#include <gdesktop-enums.h>
 
 /**
  * SECTION:settings
@@ -21,6 +23,7 @@
  */
 
 #define KEY_SYSTEM_FONT "monospace-font-name"
+#define KEY_SYSTEM_COLOR_SCHEME "color-scheme"
 
 struct _TeplSettingsPrivate
 {
@@ -32,6 +35,14 @@ struct _TeplSettingsPrivate
 	GSettings *settings_font;
 	gchar *key_use_default_font;
 	gchar *key_editor_font;
+
+	/* Invariant: the following 2 instance variables are either all NULL or
+	 * all set.
+	 */
+	GSettings *settings_theme_variant;
+	gchar *key_theme_variant;
+
+	guint handle_prefer_dark_theme : 1;
 };
 
 enum
@@ -53,9 +64,13 @@ tepl_settings_dispose (GObject *object)
 	TeplSettings *self = TEPL_SETTINGS (object);
 
 	g_clear_object (&self->priv->settings_desktop_interface);
+
 	g_clear_object (&self->priv->settings_font);
 	g_clear_pointer (&self->priv->key_use_default_font, g_free);
 	g_clear_pointer (&self->priv->key_editor_font, g_free);
+
+	g_clear_object (&self->priv->settings_theme_variant);
+	g_clear_pointer (&self->priv->key_theme_variant, g_free);
 
 	G_OBJECT_CLASS (tepl_settings_parent_class)->dispose (object);
 }
@@ -309,6 +324,159 @@ tepl_settings_get_selected_font (TeplSettings *self)
 
 	return g_settings_get_string (self->priv->settings_font,
 				      self->priv->key_editor_font);
+}
+
+static void
+set_prefer_dark_theme (gboolean prefer_dark)
+{
+	GtkSettings *gtk_settings = gtk_settings_get_default ();
+
+	if (gtk_settings != NULL)
+	{
+		g_object_set (gtk_settings,
+			      "gtk-application-prefer-dark-theme", prefer_dark,
+			      NULL);
+	}
+}
+
+static void
+update_prefer_dark_theme (TeplSettings *self)
+{
+	GDesktopColorScheme system_setting;
+
+	if (self->priv->settings_theme_variant != NULL)
+	{
+		TeplSettingsThemeVariant variant;
+
+		variant = g_settings_get_enum (self->priv->settings_theme_variant,
+					       self->priv->key_theme_variant);
+
+		switch (variant)
+		{
+			case TEPL_SETTINGS_THEME_VARIANT_SYSTEM:
+				break;
+
+			case TEPL_SETTINGS_THEME_VARIANT_LIGHT:
+				set_prefer_dark_theme (FALSE);
+				return;
+
+			case TEPL_SETTINGS_THEME_VARIANT_DARK:
+				set_prefer_dark_theme (TRUE);
+				return;
+
+			default:
+				g_return_if_reached ();
+		}
+	}
+
+	system_setting = g_settings_get_enum (self->priv->settings_desktop_interface,
+					      KEY_SYSTEM_COLOR_SCHEME);
+
+	switch (system_setting)
+	{
+		case G_DESKTOP_COLOR_SCHEME_DEFAULT:
+			/* Here we have the choice. Choose a light theme according to the documentation
+			 * of the GtkSettings:gtk-application-prefer-dark-theme property:
+			 *
+			 * "Dark themes should not be used for documents, where large spaces are
+			 * white/light and the dark chrome creates too much contrast (web browser,
+			 * text editor...)."
+			 *
+			 * (It's for a text editor here).
+			 */
+			set_prefer_dark_theme (FALSE);
+			break;
+
+		case G_DESKTOP_COLOR_SCHEME_PREFER_DARK:
+			set_prefer_dark_theme (TRUE);
+			break;
+
+		case G_DESKTOP_COLOR_SCHEME_PREFER_LIGHT:
+			set_prefer_dark_theme (FALSE);
+			break;
+
+		default:
+			g_return_if_reached ();
+	}
+}
+
+static void
+theme_variant_changed_cb (GSettings    *settings,
+			  const gchar  *key,
+			  TeplSettings *self)
+{
+	update_prefer_dark_theme (self);
+}
+
+static void
+system_color_scheme_changed_cb (GSettings    *settings,
+				const gchar  *key,
+				TeplSettings *self)
+{
+	update_prefer_dark_theme (self);
+}
+
+/**
+ * tepl_settings_handle_prefer_dark_theme:
+ * @self: the #TeplSettings instance.
+ * @theme_variant_settings: (nullable): a #GSettings object, or %NULL.
+ * @theme_variant_setting_key: (nullable): a #GSettings key of type enum
+ *   #TeplSettingsThemeVariant, or %NULL.
+ *
+ * This function permits to have a correct and updated value for the
+ * #GtkSettings:gtk-application-prefer-dark-theme property.
+ *
+ * If @theme_variant_settings and @theme_variant_setting_key are %NULL,
+ * #TeplSettings will take into account only the system's settings.
+ *
+ * If @theme_variant_settings and @theme_variant_setting_key are provided, they
+ * are taken into account according to #TeplSettingsThemeVariant.
+ *
+ * Since: 6.10
+ */
+void
+tepl_settings_handle_prefer_dark_theme (TeplSettings *self,
+					GSettings    *theme_variant_settings,
+					const gchar  *theme_variant_setting_key)
+{
+	g_return_if_fail (TEPL_IS_SETTINGS (self));
+	g_return_if_fail (theme_variant_settings == NULL || G_IS_SETTINGS (theme_variant_settings));
+
+	if (self->priv->handle_prefer_dark_theme)
+	{
+		/* Already done. */
+		return;
+	}
+
+	g_return_if_fail (self->priv->settings_theme_variant == NULL);
+	g_return_if_fail (self->priv->key_theme_variant == NULL);
+
+	if (theme_variant_settings != NULL &&
+	    theme_variant_setting_key != NULL)
+	{
+		gchar *detailed_signal;
+
+		self->priv->settings_theme_variant = g_object_ref (theme_variant_settings);
+		self->priv->key_theme_variant = g_strdup (theme_variant_setting_key);
+
+		detailed_signal = g_strconcat ("changed::", theme_variant_setting_key, NULL);
+		g_signal_connect_object (theme_variant_settings,
+					 detailed_signal,
+					 G_CALLBACK (theme_variant_changed_cb),
+					 self,
+					 G_CONNECT_DEFAULT);
+		g_free (detailed_signal);
+	}
+
+	g_signal_connect_object (self->priv->settings_desktop_interface,
+				 "changed::" KEY_SYSTEM_COLOR_SCHEME,
+				 G_CALLBACK (system_color_scheme_changed_cb),
+				 self,
+				 G_CONNECT_DEFAULT);
+
+	update_prefer_dark_theme (self);
+
+	self->priv->handle_prefer_dark_theme = TRUE;
 }
 
 /**

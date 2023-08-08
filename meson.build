@@ -27,7 +27,7 @@ TEPL_PUBLIC_DEPS = [
 tepl_private_deps = [
   dependency('icu-uc'),
   dependency('icu-i18n'),
-  dependency('gsettings-desktop-schemas')
+  dependency('gsettings-desktop-schemas', version: '>= 42')
 ]
 TEPL_DEPS = [TEPL_PUBLIC_DEPS, tepl_private_deps]
 
