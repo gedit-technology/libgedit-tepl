@@ -4,10 +4,6 @@ Tepl roadmap
 This page contains the plans for major code changes we hope to get done in the
 future.
 
-See the [roadmap-done.md](roadmap-done.md) file for done tasks.
-
-See the [NEWS file](../NEWS) for a detailed history.
-
 A complete overhaul of the file loading and saving
 --------------------------------------------------
 
