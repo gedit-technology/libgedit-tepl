@@ -60,6 +60,10 @@ _TEPL_EXTERN
 GtkWidget *	tepl_prefs_create_display_statusbar_checkbutton		(GSettings   *settings,
 									 const gchar *display_statusbar_key);
 
+_TEPL_EXTERN
+GtkWidget *	tepl_prefs_create_display_grid_checkbutton		(GSettings   *settings,
+									 const gchar *background_pattern_key);
+
 G_END_DECLS
 
 #endif /* TEPL_PREFS_H */

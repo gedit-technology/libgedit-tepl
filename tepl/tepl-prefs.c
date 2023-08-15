@@ -556,3 +556,69 @@ tepl_prefs_create_display_statusbar_checkbutton (GSettings   *settings,
 					  display_statusbar_key,
 					  _("Display _statusbar"));
 }
+
+static gboolean
+background_pattern_get_mapping (GValue   *to_value,
+				GVariant *from_variant,
+				gpointer  user_data)
+{
+	const gchar *enum_value_str;
+	gboolean is_grid;
+
+	g_return_val_if_fail (g_variant_is_of_type (from_variant, G_VARIANT_TYPE_STRING), FALSE);
+	g_return_val_if_fail (G_VALUE_TYPE (to_value) == G_TYPE_BOOLEAN, FALSE);
+
+	enum_value_str = g_variant_get_string (from_variant, NULL);
+	is_grid = g_strcmp0 (enum_value_str, "grid") == 0;
+
+	g_value_set_boolean (to_value, is_grid);
+
+	return TRUE;
+}
+
+static GVariant *
+background_pattern_set_mapping (const GValue       *from_value,
+				const GVariantType *to_expected_type,
+				gpointer            user_data)
+{
+	gboolean bool_value;
+
+	g_return_val_if_fail (G_VALUE_TYPE (from_value) == G_TYPE_BOOLEAN, NULL);
+	g_return_val_if_fail (g_variant_type_equal (to_expected_type, G_VARIANT_TYPE_STRING), NULL);
+
+	bool_value = g_value_get_boolean (from_value);
+
+	return g_variant_new_string (bool_value ? "grid" : "none");
+}
+
+/**
+ * tepl_prefs_create_display_grid_checkbutton:
+ * @settings: a #GSettings.
+ * @background_pattern_key: a key part of @settings. Its type must be an enum
+ *   for #GtkSourceBackgroundPatternType.
+ *
+ * Returns: (transfer floating): a #GtkCheckButton intended for
+ *   %GTK_SOURCE_BACKGROUND_PATTERN_TYPE_GRID.
+ * Since: 6.10
+ */
+GtkWidget *
+tepl_prefs_create_display_grid_checkbutton (GSettings   *settings,
+					    const gchar *background_pattern_key)
+{
+	GtkWidget *display_grid_checkbutton;
+
+	g_return_val_if_fail (G_IS_SETTINGS (settings), NULL);
+	g_return_val_if_fail (background_pattern_key != NULL, NULL);
+
+	display_grid_checkbutton = gtk_check_button_new_with_mnemonic (_("Display _grid pattern"));
+	gtk_widget_show (display_grid_checkbutton);
+
+	g_settings_bind_with_mapping (settings, background_pattern_key,
+				      display_grid_checkbutton, "active",
+				      G_SETTINGS_BIND_DEFAULT,
+				      background_pattern_get_mapping,
+				      background_pattern_set_mapping,
+				      NULL, NULL);
+
+	return display_grid_checkbutton;
+}

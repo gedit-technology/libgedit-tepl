@@ -541,6 +541,7 @@ tepl_prefs_create_files_component
 tepl_prefs_create_theme_variant_combo_box
 tepl_prefs_create_right_margin_component
 tepl_prefs_create_display_statusbar_checkbutton
+tepl_prefs_create_display_grid_checkbutton
 </SECTION>
 
 <SECTION>
