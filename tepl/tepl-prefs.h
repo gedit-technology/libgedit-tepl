@@ -56,6 +56,10 @@ GtkWidget *	tepl_prefs_create_right_margin_component		(GSettings   *settings,
 									 const gchar *display_right_margin_key,
 									 const gchar *right_margin_position_key);
 
+_TEPL_EXTERN
+GtkWidget *	tepl_prefs_create_display_statusbar_checkbutton		(GSettings   *settings,
+									 const gchar *display_statusbar_key);
+
 G_END_DECLS
 
 #endif /* TEPL_PREFS_H */

@@ -534,3 +534,25 @@ tepl_prefs_create_right_margin_component (GSettings   *settings,
 
 	return GTK_WIDGET (hgrid);
 }
+
+/**
+ * tepl_prefs_create_display_statusbar_checkbutton:
+ * @settings: a #GSettings.
+ * @display_statusbar_key: a key part of @settings. The type of the key must be
+ *   a boolean.
+ *
+ * Returns: (transfer floating): A #GtkCheckButton intended for configuring the
+ *   visibility of a #GtkStatusbar.
+ * Since: 6.10
+ */
+GtkWidget *
+tepl_prefs_create_display_statusbar_checkbutton (GSettings   *settings,
+						 const gchar *display_statusbar_key)
+{
+	g_return_val_if_fail (G_IS_SETTINGS (settings), NULL);
+	g_return_val_if_fail (display_statusbar_key != NULL, NULL);
+
+	return create_checkbutton_simple (settings,
+					  display_statusbar_key,
+					  _("Display _statusbar"));
+}
