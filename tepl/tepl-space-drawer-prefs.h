@@ -10,7 +10,6 @@
 #endif
 
 #include <gtksourceview/gtksource.h>
-#include <tepl/tepl-macros.h>
 
 G_BEGIN_DECLS
 
@@ -39,13 +38,13 @@ struct _TeplSpaceDrawerPrefsClass
 	gpointer padding[12];
 };
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType			tepl_space_drawer_prefs_get_type		(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplSpaceDrawerPrefs *	tepl_space_drawer_prefs_new			(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GtkSourceSpaceDrawer *	tepl_space_drawer_prefs_get_space_drawer	(TeplSpaceDrawerPrefs *prefs);
 
 G_END_DECLS

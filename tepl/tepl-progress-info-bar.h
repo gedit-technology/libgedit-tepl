@@ -40,27 +40,27 @@ struct _TeplProgressInfoBarClass
 	gpointer padding[12];
 };
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType			tepl_progress_info_bar_get_type		(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplProgressInfoBar *	tepl_progress_info_bar_new		(const gchar *icon_name,
 								 const gchar *markup,
 								 gboolean     has_cancel_button);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_progress_info_bar_set_markup	(TeplProgressInfoBar *info_bar,
 								 const gchar         *markup);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_progress_info_bar_set_text		(TeplProgressInfoBar *info_bar,
 								 const gchar         *text);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_progress_info_bar_set_fraction	(TeplProgressInfoBar *info_bar,
 								 gdouble              fraction);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_progress_info_bar_pulse		(TeplProgressInfoBar *info_bar);
 
 G_END_DECLS

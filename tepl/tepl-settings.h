@@ -10,7 +10,6 @@
 #endif
 
 #include <gio/gio.h>
-#include <tepl/tepl-macros.h>
 
 G_BEGIN_DECLS
 
@@ -56,33 +55,33 @@ typedef enum
 	TEPL_SETTINGS_THEME_VARIANT_DARK = 2,
 } TeplSettingsThemeVariant;
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType		tepl_settings_get_type				(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplSettings *	tepl_settings_get_singleton			(void);
 
 G_GNUC_INTERNAL
 void		_tepl_settings_unref_singleton			(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GSettings *	tepl_settings_peek_desktop_interface_settings	(TeplSettings *self);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void		tepl_settings_provide_font_settings		(TeplSettings *self,
 								 GSettings    *font_settings,
 								 const gchar  *use_default_font_key,
 								 const gchar  *editor_font_key);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gchar *		tepl_settings_get_selected_font			(TeplSettings *self);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void		tepl_settings_handle_theme_variant		(TeplSettings *self,
 								 GSettings    *theme_variant_settings,
 								 const gchar  *theme_variant_setting_key);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gboolean	tepl_settings_get_range_uint			(GSettings   *settings,
 								 const gchar *key,
 								 guint32     *min,

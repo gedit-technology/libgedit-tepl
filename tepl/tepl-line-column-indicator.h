@@ -10,7 +10,6 @@
 #endif
 
 #include <tepl/tepl-tab-group.h>
-#include <tepl/tepl-macros.h>
 
 G_BEGIN_DECLS
 
@@ -39,18 +38,18 @@ struct _TeplLineColumnIndicatorClass
 	gpointer padding[12];
 };
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType		tepl_line_column_indicator_get_type		(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplLineColumnIndicator *
 		tepl_line_column_indicator_new			(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void		tepl_line_column_indicator_set_view		(TeplLineColumnIndicator *indicator,
 								 TeplView                *view);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void		tepl_line_column_indicator_set_tab_group	(TeplLineColumnIndicator *indicator,
 								 TeplTabGroup            *tab_group);
 

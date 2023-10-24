@@ -10,7 +10,6 @@
 #endif
 
 #include <gtk/gtk.h>
-#include <tepl/tepl-macros.h>
 
 G_BEGIN_DECLS
 
@@ -65,59 +64,59 @@ typedef enum
 	TEPL_INFO_BAR_LOCATION_BELOW_ICON
 } TeplInfoBarLocation;
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType			tepl_info_bar_get_type				(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplInfoBar *		tepl_info_bar_new				(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplInfoBar *		tepl_info_bar_new_simple			(GtkMessageType  msg_type,
 									 const gchar    *primary_msg,
 									 const gchar    *secondary_msg);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gboolean		tepl_info_bar_get_icon_from_message_type	(TeplInfoBar *info_bar);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_info_bar_set_icon_from_message_type	(TeplInfoBar *info_bar,
 									 gboolean     icon_from_message_type);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 const gchar *		tepl_info_bar_get_icon_name			(TeplInfoBar *info_bar);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_info_bar_set_icon_name			(TeplInfoBar *info_bar,
 									 const gchar *icon_name);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_info_bar_add_primary_message		(TeplInfoBar *info_bar,
 									 const gchar *primary_msg);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_info_bar_add_secondary_message		(TeplInfoBar *info_bar,
 									 const gchar *secondary_msg);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_info_bar_add_content_widget		(TeplInfoBar         *info_bar,
 									 GtkWidget           *widget,
 									 TeplInfoBarLocation  location);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gboolean		tepl_info_bar_get_handle_close_response		(TeplInfoBar *info_bar);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_info_bar_set_handle_close_response		(TeplInfoBar *info_bar,
 									 gboolean     handle_close_response);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_info_bar_setup_close_button		(TeplInfoBar *info_bar);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_info_bar_set_buttons_orientation		(GtkInfoBar     *info_bar,
 									 GtkOrientation  buttons_orientation);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GtkLabel *		tepl_info_bar_create_label			(void);
 
 G_GNUC_INTERNAL

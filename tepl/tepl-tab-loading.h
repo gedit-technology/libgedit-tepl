@@ -13,7 +13,7 @@
 
 G_BEGIN_DECLS
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void	tepl_tab_load_file	(TeplTab *tab,
 				 GFile   *location);
 

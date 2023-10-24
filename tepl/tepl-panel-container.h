@@ -38,26 +38,26 @@ struct _TeplPanelContainerClass
 	gpointer padding[12];
 };
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType			tepl_panel_container_get_type			(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplPanelContainer *	tepl_panel_container_new			(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GList *			tepl_panel_container_get_items			(TeplPanelContainer *container);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplPanelItem *		tepl_panel_container_get_active_item		(TeplPanelContainer *container);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 const gchar *		tepl_panel_container_get_active_item_name	(TeplPanelContainer *container);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_panel_container_set_active_item_name	(TeplPanelContainer *container,
 									 const gchar        *name);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gboolean		tepl_panel_container_has_several_items		(TeplPanelContainer *container);
 
 G_END_DECLS

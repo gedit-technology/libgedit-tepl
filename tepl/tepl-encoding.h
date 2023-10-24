@@ -9,8 +9,7 @@
 #error "Only <tepl/tepl.h> can be included directly."
 #endif
 
-#include <glib.h>
-#include <tepl/tepl-macros.h>
+#include <gmodule.h>
 
 G_BEGIN_DECLS
 
@@ -49,10 +48,10 @@ struct _TeplEncodingVtable
 	const gchar *	(* get_category_name)	(const TeplEncoding *enc);
 };
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 const gchar *	tepl_encoding_get_name			(const TeplEncoding *enc);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 const gchar *	tepl_encoding_get_category_name		(const TeplEncoding *enc);
 
 G_END_DECLS

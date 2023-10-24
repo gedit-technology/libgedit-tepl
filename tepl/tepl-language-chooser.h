@@ -10,7 +10,6 @@
 #endif
 
 #include <gtksourceview/gtksource.h>
-#include <tepl/tepl-macros.h>
 
 G_BEGIN_DECLS
 
@@ -47,10 +46,10 @@ struct _TeplLanguageChooserInterface
 					 GtkSourceLanguage   *language);
 };
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType	tepl_language_chooser_get_type		(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void	tepl_language_chooser_select_language	(TeplLanguageChooser *chooser,
 						 GtkSourceLanguage   *language);
 

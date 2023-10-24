@@ -61,32 +61,32 @@ struct _TeplTabGroupInterface
 						 TeplTab      *tab);
 };
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType		tepl_tab_group_get_type			(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GList *		tepl_tab_group_get_tabs			(TeplTabGroup *tab_group);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GList *		tepl_tab_group_get_views		(TeplTabGroup *tab_group);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GList *		tepl_tab_group_get_buffers		(TeplTabGroup *tab_group);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplTab *	tepl_tab_group_get_active_tab		(TeplTabGroup *tab_group);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void		tepl_tab_group_set_active_tab		(TeplTabGroup *tab_group,
 							 TeplTab      *tab);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplView *	tepl_tab_group_get_active_view		(TeplTabGroup *tab_group);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplBuffer *	tepl_tab_group_get_active_buffer	(TeplTabGroup *tab_group);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void		tepl_tab_group_append_tab		(TeplTabGroup *tab_group,
 							 TeplTab      *tab,
 							 gboolean      jump_to);

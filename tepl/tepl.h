@@ -10,7 +10,6 @@
 #include <amtk/amtk.h>
 
 #include <tepl/tepl-enum-types.h>
-#include <tepl/tepl-macros.h>
 
 #include <tepl/tepl-abstract-factory.h>
 #include <tepl/tepl-application.h>

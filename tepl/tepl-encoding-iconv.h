@@ -16,38 +16,38 @@ G_BEGIN_DECLS
 
 typedef struct _TeplEncodingIconv TeplEncodingIconv;
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 const TeplEncoding *	tepl_encoding_iconv_to_base_type	(const TeplEncodingIconv *enc);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplEncodingIconv *	tepl_encoding_iconv_new			(const gchar *charset);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplEncodingIconv *	tepl_encoding_iconv_new_utf8		(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplEncodingIconv *	tepl_encoding_iconv_new_from_locale	(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplEncodingIconv *	tepl_encoding_iconv_copy		(const TeplEncodingIconv *enc);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_encoding_iconv_free		(TeplEncodingIconv *enc);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gchar *			tepl_encoding_iconv_to_string		(const TeplEncodingIconv *enc);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gboolean		tepl_encoding_iconv_is_utf8		(const TeplEncodingIconv *enc);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gboolean		tepl_encoding_iconv_equals		(const TeplEncodingIconv *enc1,
 								 const TeplEncodingIconv *enc2);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GSList *		tepl_encoding_iconv_get_all		(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GSList *		tepl_encoding_iconv_get_default_candidates (void);
 
 G_END_DECLS

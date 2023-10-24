@@ -10,7 +10,6 @@
 #endif
 
 #include <gtk/gtk.h>
-#include <tepl/tepl-macros.h>
 
 G_BEGIN_DECLS
 
@@ -51,22 +50,22 @@ struct _TeplPanelItemInterface
 	const gchar *	(*get_icon_name)	(TeplPanelItem *item);
 };
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType		tepl_panel_item_get_type		(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GtkWidget *	tepl_panel_item_get_widget		(TeplPanelItem *item);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 const gchar *	tepl_panel_item_get_name		(TeplPanelItem *item);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 const gchar *	tepl_panel_item_get_title		(TeplPanelItem *item);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 const gchar *	tepl_panel_item_get_icon_name		(TeplPanelItem *item);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gint		tepl_panel_item_compare_by_title	(TeplPanelItem *a,
 							 TeplPanelItem *b);
 

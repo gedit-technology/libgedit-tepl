@@ -10,7 +10,6 @@
 #endif
 
 #include <gtk/gtk.h>
-#include <tepl/tepl-macros.h>
 
 G_BEGIN_DECLS
 
@@ -39,20 +38,20 @@ struct _TeplOverwriteIndicatorClass
 	gpointer padding[12];
 };
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType				tepl_overwrite_indicator_get_type	(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplOverwriteIndicator *	tepl_overwrite_indicator_new		(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gboolean			tepl_overwrite_indicator_get_overwrite	(TeplOverwriteIndicator *indicator);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void				tepl_overwrite_indicator_set_overwrite	(TeplOverwriteIndicator *indicator,
 									 gboolean                overwrite);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void				tepl_overwrite_indicator_set_view	(TeplOverwriteIndicator *indicator,
 									 GtkTextView            *view);
 

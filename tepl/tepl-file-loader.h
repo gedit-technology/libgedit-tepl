@@ -40,30 +40,30 @@ struct _TeplFileLoaderClass
 	gpointer padding[12];
 };
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType			tepl_file_loader_get_type		(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplFileLoader *	tepl_file_loader_new			(TeplBuffer *buffer,
 								 TeplFile   *file);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplBuffer *		tepl_file_loader_get_buffer		(TeplFileLoader *loader);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplFile *		tepl_file_loader_get_file		(TeplFileLoader *loader);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GFile *			tepl_file_loader_get_location		(TeplFileLoader *loader);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_file_loader_load_async		(TeplFileLoader      *loader,
 								 gint                 io_priority,
 								 GCancellable        *cancellable,
 								 GAsyncReadyCallback  callback,
 								 gpointer             user_data);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gboolean		tepl_file_loader_load_finish		(TeplFileLoader  *loader,
 								 GAsyncResult    *result,
 								 GError         **error);

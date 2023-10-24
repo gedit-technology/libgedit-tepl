@@ -10,7 +10,6 @@
 #endif
 
 #include <gtksourceview/gtksource.h>
-#include <tepl/tepl-macros.h>
 
 G_BEGIN_DECLS
 
@@ -39,10 +38,10 @@ struct _TeplLanguageChooserWidgetClass
 	gpointer padding[12];
 };
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType		tepl_language_chooser_widget_get_type				(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplLanguageChooserWidget *
 		tepl_language_chooser_widget_new				(void);
 

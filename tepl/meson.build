@@ -21,7 +21,6 @@ tepl_public_headers = [
   'tepl-language-chooser-dialog.h',
   'tepl-language-chooser-widget.h',
   'tepl-line-column-indicator.h',
-  'tepl-macros.h',
   'tepl-menu-shell.h',
   'tepl-metadata.h',
   'tepl-metadata-manager.h',
@@ -131,17 +130,12 @@ install_headers(
 
 tepl_enum_types = GNOME.mkenums_simple(
   'tepl-enum-types',
-  decorator: '_TEPL_EXTERN',
-  header_prefix: '#include <tepl/tepl-macros.h>',
+  decorator: 'G_MODULE_EXPORT',
+  header_prefix: '#include <gmodule.h>',
   sources: tepl_public_headers,
   install_header: true,
   install_dir: headers_install_dir
 )
-
-tepl_static_lib_c_args = [ '-DTEPL_COMPILATION' ]
-if meson.get_compiler('c').get_argument_syntax() == 'msvc'
-  tepl_static_lib_c_args += '-D_TEPL_EXTERN=__declspec(dllexport) extern'
-endif
 
 tepl_static_lib = static_library(
   'tepl-static',
@@ -151,7 +145,7 @@ tepl_static_lib = static_library(
   pic: true, # tepl_static_lib is linked in a shared library.
   include_directories: ROOT_INCLUDE_DIR,
   dependencies: TEPL_DEPS,
-  c_args: tepl_static_lib_c_args
+  c_args: '-DTEPL_COMPILATION'
 )
 
 # For unit tests, to be able to test private functions.

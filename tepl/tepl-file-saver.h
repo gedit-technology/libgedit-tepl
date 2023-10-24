@@ -57,49 +57,49 @@ struct _TeplFileSaverClass
 	gpointer padding[12];
 };
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType			 tepl_file_saver_get_type		(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplFileSaver *		 tepl_file_saver_new			(TeplBuffer *buffer,
 								 TeplFile   *file);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplFileSaver *		 tepl_file_saver_new_with_target	(TeplBuffer *buffer,
 								 TeplFile   *file,
 								 GFile      *target_location);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplBuffer *		 tepl_file_saver_get_buffer		(TeplFileSaver *saver);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplFile *		 tepl_file_saver_get_file		(TeplFileSaver *saver);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GFile *			 tepl_file_saver_get_location		(TeplFileSaver *saver);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			 tepl_file_saver_set_newline_type	(TeplFileSaver   *saver,
 								 TeplNewlineType  newline_type);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplNewlineType		 tepl_file_saver_get_newline_type	(TeplFileSaver *saver);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			 tepl_file_saver_set_flags		(TeplFileSaver      *saver,
 								 TeplFileSaverFlags  flags);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplFileSaverFlags	 tepl_file_saver_get_flags		(TeplFileSaver *saver);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			 tepl_file_saver_save_async		(TeplFileSaver       *saver,
 								 gint                 io_priority,
 								 GCancellable        *cancellable,
 								 GAsyncReadyCallback  callback,
 								 gpointer             user_data);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gboolean		 tepl_file_saver_save_finish		(TeplFileSaver  *saver,
 								 GAsyncResult   *result,
 								 GError        **error);

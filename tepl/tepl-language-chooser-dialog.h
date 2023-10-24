@@ -10,7 +10,6 @@
 #endif
 
 #include <gtk/gtk.h>
-#include <tepl/tepl-macros.h>
 
 G_BEGIN_DECLS
 
@@ -39,10 +38,10 @@ struct _TeplLanguageChooserDialogClass
 	gpointer padding[12];
 };
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType				tepl_language_chooser_dialog_get_type	(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplLanguageChooserDialog *	tepl_language_chooser_dialog_new	(GtkWindow *parent);
 
 G_END_DECLS

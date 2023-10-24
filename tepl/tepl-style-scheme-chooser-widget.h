@@ -10,7 +10,6 @@
 #endif
 
 #include <gtk/gtk.h>
-#include <tepl/tepl-macros.h>
 
 G_BEGIN_DECLS
 
@@ -39,17 +38,17 @@ struct _TeplStyleSchemeChooserWidgetClass
 	gpointer padding[12];
 };
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType		tepl_style_scheme_chooser_widget_get_type		(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplStyleSchemeChooserWidget *
 		tepl_style_scheme_chooser_widget_new			(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gchar *		tepl_style_scheme_chooser_widget_get_style_scheme_id	(TeplStyleSchemeChooserWidget *chooser);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void		tepl_style_scheme_chooser_widget_set_style_scheme_id	(TeplStyleSchemeChooserWidget *chooser,
 									 const gchar                  *style_scheme_id);
 

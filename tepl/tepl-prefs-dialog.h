@@ -10,7 +10,6 @@
 #endif
 
 #include <gtk/gtk.h>
-#include <tepl/tepl-macros.h>
 
 G_BEGIN_DECLS
 
@@ -39,16 +38,16 @@ struct _TeplPrefsDialogClass
 	gpointer padding[12];
 };
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType			tepl_prefs_dialog_get_type		(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplPrefsDialog *	tepl_prefs_dialog_get_singleton		(void);
 
 G_GNUC_INTERNAL
 void			_tepl_prefs_dialog_unref_singleton	(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_prefs_dialog_show_for_parent	(TeplPrefsDialog *dialog,
 								 GtkWindow       *parent_window);
 

@@ -11,7 +11,6 @@
 #endif
 
 #include <gtk/gtk.h>
-#include <tepl/tepl-macros.h>
 
 G_BEGIN_DECLS
 
@@ -40,13 +39,13 @@ struct _TeplStatusMenuButtonClass
 	gpointer padding[12];
 };
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType			tepl_status_menu_button_get_type	(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplStatusMenuButton *	tepl_status_menu_button_new		(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_status_menu_button_set_label_text	(TeplStatusMenuButton *button,
 								 const gchar          *str);
 

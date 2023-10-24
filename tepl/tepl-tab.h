@@ -73,25 +73,25 @@ struct _TeplTabClass
 	gpointer padding[12];
 };
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType		tepl_tab_get_type		(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplTab *	tepl_tab_new			(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplTab *	tepl_tab_new_with_view		(TeplView *view);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplView *	tepl_tab_get_view		(TeplTab *tab);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplBuffer *	tepl_tab_get_buffer		(TeplTab *tab);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplGotoLineBar *tepl_tab_get_goto_line_bar	(TeplTab *tab);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void		tepl_tab_add_info_bar		(TeplTab    *tab,
 						 GtkInfoBar *info_bar);
 

@@ -10,19 +10,19 @@
 #endif
 
 #include <glib-object.h>
-#include <tepl/tepl-macros.h>
+#include <gmodule.h>
 
 G_BEGIN_DECLS
 
 typedef struct _TeplSignalGroup TeplSignalGroup;
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplSignalGroup *	tepl_signal_group_new		(GObject *object);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_signal_group_clear		(TeplSignalGroup **group_pointer);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_signal_group_add		(TeplSignalGroup *group,
 							 gulong           signal_handler_id);
 

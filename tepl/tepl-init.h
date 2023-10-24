@@ -9,15 +9,14 @@
 #error "Only <tepl/tepl.h> can be included directly."
 #endif
 
-#include <glib.h>
-#include <tepl/tepl-macros.h>
+#include <gmodule.h>
 
 G_BEGIN_DECLS
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void	tepl_init		(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void	tepl_finalize		(void);
 
 G_END_DECLS

@@ -16,7 +16,7 @@
 G_BEGIN_DECLS
 
 #define TEPL_TYPE_BUFFER (tepl_buffer_get_type ())
-_TEPL_EXTERN
+G_MODULE_EXPORT
 G_DECLARE_DERIVABLE_TYPE (TeplBuffer, tepl_buffer,
 			  TEPL, BUFFER,
 			  GtkSourceBuffer)
@@ -47,47 +47,47 @@ typedef enum _TeplSelectionType
 	TEPL_SELECTION_TYPE_MULTIPLE_LINES
 } TeplSelectionType;
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplBuffer *		tepl_buffer_new				(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplFile *		tepl_buffer_get_file			(TeplBuffer *buffer);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplMetadata *		tepl_buffer_get_metadata		(TeplBuffer *buffer);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_buffer_load_metadata_from_metadata_manager
 								(TeplBuffer *buffer);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_buffer_save_metadata_into_metadata_manager
 								(TeplBuffer *buffer);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gboolean		tepl_buffer_is_untouched		(TeplBuffer *buffer);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gchar *			tepl_buffer_get_short_title		(TeplBuffer *buffer);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gchar *			tepl_buffer_get_full_title		(TeplBuffer *buffer);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_buffer_provide_style_scheme_id_gsetting
 								(TeplBuffer  *buffer,
 								 GSettings   *settings,
 								 const gchar *setting_key,
 								 gboolean     bind_to_property);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gchar *			tepl_buffer_get_style_scheme_id		(TeplBuffer *buffer);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_buffer_set_style_scheme_id		(TeplBuffer  *buffer,
 								 const gchar *style_scheme_id);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplSelectionType	tepl_buffer_get_selection_type		(TeplBuffer *buffer);
 
 G_GNUC_INTERNAL

@@ -10,7 +10,6 @@
 #endif
 
 #include <gtk/gtk.h>
-#include <tepl/tepl-macros.h>
 
 G_BEGIN_DECLS
 
@@ -39,34 +38,34 @@ struct _TeplPanel1Class
 	gpointer padding[12];
 };
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType		tepl_panel1_get_type				(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplPanel1 *	tepl_panel1_new					(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplPanel1 *	tepl_panel1_new_for_left_side_panel		(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GtkStack *	tepl_panel1_get_stack				(TeplPanel1 *panel);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void		tepl_panel1_add_component			(TeplPanel1   *panel,
 								 GtkWidget   *component,
 								 const gchar *name,
 								 const gchar *title,
 								 const gchar *icon_name);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void		tepl_panel1_provide_active_component_gsetting	(TeplPanel1   *panel,
 								 GSettings   *settings,
 								 const gchar *setting_key);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void		tepl_panel1_restore_state_from_gsettings	(TeplPanel1 *panel);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void		tepl_panel1_save_state_to_gsettings 		(TeplPanel1 *panel);
 
 G_END_DECLS

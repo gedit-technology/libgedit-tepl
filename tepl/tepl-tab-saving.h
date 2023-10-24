@@ -13,28 +13,28 @@
 
 G_BEGIN_DECLS
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void		tepl_tab_save_async		(TeplTab             *tab,
 						 GAsyncReadyCallback  callback,
 						 gpointer             user_data);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gboolean	tepl_tab_save_finish		(TeplTab      *tab,
 						 GAsyncResult *result);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void		tepl_tab_save_async_simple	(TeplTab *tab);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void		tepl_tab_save_as_async		(TeplTab             *tab,
 						 GAsyncReadyCallback  callback,
 						 gpointer             user_data);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gboolean	tepl_tab_save_as_finish		(TeplTab      *tab,
 						 GAsyncResult *result);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void		tepl_tab_save_as_async_simple	(TeplTab *tab);
 
 G_END_DECLS

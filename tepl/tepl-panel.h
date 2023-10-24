@@ -52,21 +52,21 @@ struct _TeplPanelInterface
 					 TeplPanelItem *item);
 };
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType		tepl_panel_get_type	(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplPanelItem *	tepl_panel_add		(TeplPanel   *panel,
 					 GtkWidget   *widget,
 					 const gchar *name,
 					 const gchar *title,
 					 const gchar *icon_name);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void		tepl_panel_remove	(TeplPanel     *panel,
 					 TeplPanelItem *item);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void		tepl_panel_set_active	(TeplPanel     *panel,
 					 TeplPanelItem *item);
 

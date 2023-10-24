@@ -9,12 +9,12 @@
 #error "Only <tepl/tepl.h> can be included directly."
 #endif
 
-#include <tepl/tepl-macros.h>
 #include <pango/pango.h>
+#include <gmodule.h>
 
 G_BEGIN_DECLS
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gchar *		tepl_pango_font_description_to_css	(const PangoFontDescription *desc);
 
 G_END_DECLS

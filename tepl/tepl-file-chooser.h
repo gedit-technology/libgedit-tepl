@@ -10,19 +10,18 @@
 #endif
 
 #include <gtk/gtk.h>
-#include <tepl/tepl-macros.h>
 
 G_BEGIN_DECLS
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void	tepl_file_chooser_set_modal		(GtkFileChooser *chooser,
 						 gboolean        modal);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void	tepl_file_chooser_set_parent		(GtkFileChooser *chooser,
 						 GtkWindow      *parent);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void	tepl_file_chooser_show			(GtkFileChooser *chooser);
 
 G_END_DECLS

@@ -39,33 +39,33 @@ struct _TeplApplicationWindowClass
 	gpointer padding[12];
 };
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType			tepl_application_window_get_type			(void) G_GNUC_CONST;
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplApplicationWindow *	tepl_application_window_get_from_gtk_application_window	(GtkApplicationWindow *gtk_window);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GtkApplicationWindow *	tepl_application_window_get_application_window		(TeplApplicationWindow *tepl_window);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_application_window_set_tab_group			(TeplApplicationWindow *tepl_window,
 										 TeplTabGroup          *tab_group);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gboolean		tepl_application_window_is_main_window			(GtkApplicationWindow *gtk_window);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GtkWindowGroup *	tepl_application_window_get_window_group		(TeplApplicationWindow *tepl_window);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gboolean		tepl_application_window_get_handle_title		(TeplApplicationWindow *tepl_window);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_application_window_set_handle_title		(TeplApplicationWindow *tepl_window,
 										 gboolean               handle_title);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_application_window_open_file			(TeplApplicationWindow *tepl_window,
 										 GFile                 *location,
 										 gboolean               jump_to);

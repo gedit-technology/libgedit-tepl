@@ -75,34 +75,34 @@ struct _TeplAbstractFactoryClass
 	gpointer padding[12];
 };
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType			tepl_abstract_factory_get_type			(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_abstract_factory_set_singleton		(TeplAbstractFactory *factory);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplAbstractFactory *	tepl_abstract_factory_get_singleton		(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GtkApplicationWindow *	tepl_abstract_factory_create_main_window	(TeplAbstractFactory *factory,
 									 GtkApplication      *app);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplTab *		tepl_abstract_factory_create_tab		(TeplAbstractFactory *factory);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GtkWidget *		tepl_abstract_factory_create_tab_label		(TeplAbstractFactory *factory,
 									 TeplTab             *tab);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplFile *		tepl_abstract_factory_create_file		(TeplAbstractFactory *factory);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GFile *			tepl_abstract_factory_create_metadata_manager_file
 									(TeplAbstractFactory *factory);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_abstract_factory_fill_prefs_dialog		(TeplAbstractFactory *factory,
 									 TeplPrefsDialog     *dialog);
 

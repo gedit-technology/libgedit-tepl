@@ -9,7 +9,6 @@
 #error "Only <tepl/tepl.h> can be included directly."
 #endif
 
-#include <tepl/tepl-macros.h>
 #include <gio/gio.h>
 
 G_BEGIN_DECLS
@@ -93,39 +92,39 @@ typedef enum
 #define TEPL_NEWLINE_TYPE_DEFAULT TEPL_NEWLINE_TYPE_LF
 #endif
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType			tepl_file_get_type			(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplFile *		tepl_file_new				(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GFile *			tepl_file_get_location			(TeplFile *file);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_file_set_location			(TeplFile *file,
 								 GFile    *location);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gchar *			tepl_file_get_short_name		(TeplFile *file);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 gchar *			tepl_file_get_full_name			(TeplFile *file);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_file_set_untitled_file_callback	(TeplFile                 *file,
 								 TeplUntitledFileCallback  callback);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplNewlineType		tepl_file_get_newline_type		(TeplFile *file);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void		 	tepl_file_set_mount_operation_factory	(TeplFile                  *file,
 								 TeplMountOperationFactory  callback,
 								 gpointer                   user_data,
 								 GDestroyNotify             notify);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 void			tepl_file_add_uri_to_recent_manager	(TeplFile *file);
 
 G_GNUC_INTERNAL

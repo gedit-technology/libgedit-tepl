@@ -38,10 +38,10 @@ struct _TeplPanelSwitcherMenuClass
 	gpointer padding[12];
 };
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 GType			tepl_panel_switcher_menu_get_type	(void);
 
-_TEPL_EXTERN
+G_MODULE_EXPORT
 TeplPanelSwitcherMenu *	tepl_panel_switcher_menu_new		(TeplPanelContainer *panel);
 
 G_END_DECLS
