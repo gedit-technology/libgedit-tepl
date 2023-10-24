@@ -419,6 +419,8 @@ null_ptr (gchar **ptr)
  * @port: (out) (optional): return value pointer for the uri port, or %NULL
  * @path: (out) (optional): return value pointer for the uri path, or %NULL
  *
+ * This function is deprecated, use the #GUri functions instead.
+ *
  * Parse and break an uri apart in its individual components like the uri
  * scheme, user info, host, port and path. The return value pointer can be
  * %NULL to ignore certain parts of the uri. If the function returns %TRUE, then
