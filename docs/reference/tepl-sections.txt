@@ -415,6 +415,14 @@ tepl_metadata_manager_get_type
 </SECTION>
 
 <SECTION>
+<FILE>object-counters</FILE>
+tepl_object_counters_init
+tepl_object_counters_increment
+tepl_object_counters_decrement
+tepl_object_counters_final_check
+</SECTION>
+
+<SECTION>
 <FILE>overwrite-indicator</FILE>
 TeplOverwriteIndicator
 tepl_overwrite_indicator_new

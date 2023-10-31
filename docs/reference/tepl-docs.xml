@@ -82,6 +82,7 @@
 
     <chapter id="gobject-extras">
       <title>GObject Extras</title>
+      <xi:include href="xml/object-counters.xml"/>
       <xi:include href="xml/signal-group.xml"/>
     </chapter>
 
