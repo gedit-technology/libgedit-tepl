@@ -1,3 +1,9 @@
+News in 6.9.0, 2024-02-16
+-------------------------
+* libhandy-1 is used as a new dependency (for dark style preference handling).
+* Replace _TEPL_EXTERN custom macro by G_MODULE_EXPORT.
+* New APIs: see the API docs.
+
 News in 6.8.0, 2023-07-29
 -------------------------
 * Update for Amtk -> libgedit-amtk rename.
