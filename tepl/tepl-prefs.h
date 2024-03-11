@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2022-2023 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2022-2024 - Sébastien Wilmet <swilmet@gnome.org>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
@@ -48,6 +48,10 @@ GtkWidget *	tepl_prefs_create_files_component			(GSettings   *settings,
 
 G_MODULE_EXPORT
 GtkWidget *	tepl_prefs_create_theme_variant_combo_box		(GSettings   *settings,
+									 const gchar *theme_variant_key);
+
+G_MODULE_EXPORT
+GtkWidget *	tepl_prefs_create_simple_theme_variant_combo_box	(GSettings   *settings,
 									 const gchar *theme_variant_key);
 
 G_MODULE_EXPORT
