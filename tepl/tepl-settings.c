@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2022-2023 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2022-2024 - Sébastien Wilmet <swilmet@gnome.org>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
@@ -42,6 +42,7 @@ struct _TeplSettingsPrivate
 	gchar *key_theme_variant;
 
 	guint handle_theme_variant : 1;
+	guint simple_theme_variant : 1;
 };
 
 enum
@@ -328,6 +329,8 @@ tepl_settings_get_selected_font (TeplSettings *self)
 static void
 update_theme_variant (TeplSettings *self)
 {
+	HdyColorScheme color_scheme;
+
 	/* For a text editor, prefer a light theme. See the documentation of the
 	 * GtkSettings:gtk-application-prefer-dark-theme property:
 	 *
@@ -335,30 +338,61 @@ update_theme_variant (TeplSettings *self)
 	 * white/light and the dark chrome creates too much contrast (web
 	 * browser, text editor...)."
 	 */
-	HdyColorScheme color_scheme = HDY_COLOR_SCHEME_PREFER_LIGHT;
+	if (self->priv->simple_theme_variant)
+	{
+		color_scheme = HDY_COLOR_SCHEME_FORCE_LIGHT;
+	}
+	else
+	{
+		color_scheme = HDY_COLOR_SCHEME_PREFER_LIGHT;
+	}
 
 	if (self->priv->settings_theme_variant != NULL)
 	{
-		TeplSettingsThemeVariant variant;
-
-		variant = g_settings_get_enum (self->priv->settings_theme_variant,
-					       self->priv->key_theme_variant);
-
-		switch (variant)
+		if (self->priv->simple_theme_variant)
 		{
-			case TEPL_SETTINGS_THEME_VARIANT_SYSTEM:
-				break;
+			TeplSettingsSimpleThemeVariant variant;
 
-			case TEPL_SETTINGS_THEME_VARIANT_LIGHT:
-				color_scheme = HDY_COLOR_SCHEME_FORCE_LIGHT;
-				break;
+			variant = g_settings_get_enum (self->priv->settings_theme_variant,
+						       self->priv->key_theme_variant);
 
-			case TEPL_SETTINGS_THEME_VARIANT_DARK:
-				color_scheme = HDY_COLOR_SCHEME_FORCE_DARK;
-				break;
+			switch (variant)
+			{
+				case TEPL_SETTINGS_SIMPLE_THEME_VARIANT_LIGHT:
+					color_scheme = HDY_COLOR_SCHEME_FORCE_LIGHT;
+					break;
 
-			default:
-				g_return_if_reached ();
+				case TEPL_SETTINGS_SIMPLE_THEME_VARIANT_DARK:
+					color_scheme = HDY_COLOR_SCHEME_FORCE_DARK;
+					break;
+
+				default:
+					g_return_if_reached ();
+			}
+		}
+		else
+		{
+			TeplSettingsThemeVariant variant;
+
+			variant = g_settings_get_enum (self->priv->settings_theme_variant,
+						       self->priv->key_theme_variant);
+
+			switch (variant)
+			{
+				case TEPL_SETTINGS_THEME_VARIANT_SYSTEM:
+					break;
+
+				case TEPL_SETTINGS_THEME_VARIANT_LIGHT:
+					color_scheme = HDY_COLOR_SCHEME_FORCE_LIGHT;
+					break;
+
+				case TEPL_SETTINGS_THEME_VARIANT_DARK:
+					color_scheme = HDY_COLOR_SCHEME_FORCE_DARK;
+					break;
+
+				default:
+					g_return_if_reached ();
+			}
 		}
 	}
 
@@ -372,6 +406,49 @@ theme_variant_changed_cb (GSettings    *settings,
 			  TeplSettings *self)
 {
 	update_theme_variant (self);
+}
+
+static void
+handle_theme_variant_common (TeplSettings *self,
+			     GSettings    *theme_variant_settings,
+			     const gchar  *theme_variant_setting_key,
+			     gboolean      simple_theme_variant)
+{
+	g_return_if_fail (TEPL_IS_SETTINGS (self));
+	g_return_if_fail (theme_variant_settings == NULL || G_IS_SETTINGS (theme_variant_settings));
+
+	if (self->priv->handle_theme_variant)
+	{
+		/* Already done. Cannot be re-configured. */
+		return;
+	}
+
+	g_return_if_fail (self->priv->settings_theme_variant == NULL);
+	g_return_if_fail (self->priv->key_theme_variant == NULL);
+
+	hdy_init ();
+
+	if (theme_variant_settings != NULL &&
+	    theme_variant_setting_key != NULL)
+	{
+		gchar *detailed_signal;
+
+		self->priv->settings_theme_variant = g_object_ref (theme_variant_settings);
+		self->priv->key_theme_variant = g_strdup (theme_variant_setting_key);
+		self->priv->simple_theme_variant = simple_theme_variant != FALSE;
+
+		detailed_signal = g_strconcat ("changed::", theme_variant_setting_key, NULL);
+		g_signal_connect_object (theme_variant_settings,
+					 detailed_signal,
+					 G_CALLBACK (theme_variant_changed_cb),
+					 self,
+					 G_CONNECT_DEFAULT);
+		g_free (detailed_signal);
+	}
+
+	update_theme_variant (self);
+
+	self->priv->handle_theme_variant = TRUE;
 }
 
 /**
@@ -389,6 +466,10 @@ theme_variant_changed_cb (GSettings    *settings,
  * If @theme_variant_settings and @theme_variant_setting_key are provided, they
  * are taken into account according to #TeplSettingsThemeVariant.
  *
+ * You should call this function or tepl_settings_handle_simple_theme_variant()
+ * only once, as subsequent calls are ignored (the setting used cannot be
+ * reconfigured).
+ *
  * Since: 6.10
  */
 void
@@ -396,40 +477,40 @@ tepl_settings_handle_theme_variant (TeplSettings *self,
 				    GSettings    *theme_variant_settings,
 				    const gchar  *theme_variant_setting_key)
 {
-	g_return_if_fail (TEPL_IS_SETTINGS (self));
-	g_return_if_fail (theme_variant_settings == NULL || G_IS_SETTINGS (theme_variant_settings));
+	handle_theme_variant_common (self,
+				     theme_variant_settings,
+				     theme_variant_setting_key,
+				     FALSE);
+}
 
-	if (self->priv->handle_theme_variant)
-	{
-		/* Already done. */
-		return;
-	}
-
-	g_return_if_fail (self->priv->settings_theme_variant == NULL);
-	g_return_if_fail (self->priv->key_theme_variant == NULL);
-
-	hdy_init ();
-
-	if (theme_variant_settings != NULL &&
-	    theme_variant_setting_key != NULL)
-	{
-		gchar *detailed_signal;
-
-		self->priv->settings_theme_variant = g_object_ref (theme_variant_settings);
-		self->priv->key_theme_variant = g_strdup (theme_variant_setting_key);
-
-		detailed_signal = g_strconcat ("changed::", theme_variant_setting_key, NULL);
-		g_signal_connect_object (theme_variant_settings,
-					 detailed_signal,
-					 G_CALLBACK (theme_variant_changed_cb),
-					 self,
-					 G_CONNECT_DEFAULT);
-		g_free (detailed_signal);
-	}
-
-	update_theme_variant (self);
-
-	self->priv->handle_theme_variant = TRUE;
+/**
+ * tepl_settings_handle_simple_theme_variant:
+ * @self: the #TeplSettings instance.
+ * @theme_variant_settings: (nullable): a #GSettings object, or %NULL.
+ * @theme_variant_setting_key: (nullable): a #GSettings key of type enum
+ *   #TeplSettingsSimpleThemeVariant, or %NULL.
+ *
+ * Like tepl_settings_handle_theme_variant() but uses the
+ * #TeplSettingsSimpleThemeVariant enum instead.
+ *
+ * If @theme_variant_settings and @theme_variant_setting_key are %NULL, the
+ * light GTK theme variant is forced.
+ *
+ * You should call this function or tepl_settings_handle_theme_variant() only
+ * once, as subsequent calls are ignored (the setting used cannot be
+ * reconfigured).
+ *
+ * Since: 6.10
+ */
+void
+tepl_settings_handle_simple_theme_variant (TeplSettings *self,
+					   GSettings    *theme_variant_settings,
+					   const gchar  *theme_variant_setting_key)
+{
+	handle_theme_variant_common (self,
+				     theme_variant_settings,
+				     theme_variant_setting_key,
+				     TRUE);
 }
 
 /**
