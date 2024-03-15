@@ -533,6 +533,22 @@ tepl_panel_switcher_menu_get_type
 </SECTION>
 
 <SECTION>
+<FILE>panel-switcher-notebook</FILE>
+TeplPanelSwitcherNotebook
+tepl_panel_switcher_notebook_new
+<SUBSECTION Standard>
+TEPL_IS_PANEL_SWITCHER_NOTEBOOK
+TEPL_IS_PANEL_SWITCHER_NOTEBOOK_CLASS
+TEPL_PANEL_SWITCHER_NOTEBOOK
+TEPL_PANEL_SWITCHER_NOTEBOOK_CLASS
+TEPL_PANEL_SWITCHER_NOTEBOOK_GET_CLASS
+TEPL_TYPE_PANEL_SWITCHER_NOTEBOOK
+TeplPanelSwitcherNotebookClass
+TeplPanelSwitcherNotebookPrivate
+tepl_panel_switcher_notebook_get_type
+</SECTION>
+
+<SECTION>
 <FILE>pango</FILE>
 tepl_pango_font_description_to_css
 </SECTION>
