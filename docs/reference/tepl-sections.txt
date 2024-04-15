@@ -131,7 +131,6 @@ tepl_encoding_iconv_get_default_candidates
 TeplFile
 TeplNewlineType
 TEPL_NEWLINE_TYPE_DEFAULT
-TeplUntitledFileCallback
 TeplMountOperationFactory
 <SUBSECTION>
 tepl_file_new
@@ -139,7 +138,6 @@ tepl_file_get_location
 tepl_file_set_location
 tepl_file_get_short_name
 tepl_file_get_full_name
-tepl_file_set_untitled_file_callback
 tepl_file_get_newline_type
 tepl_file_set_mount_operation_factory
 tepl_file_add_uri_to_recent_manager

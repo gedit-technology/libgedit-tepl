@@ -23,6 +23,7 @@ TEPL_PUBLIC_DEPS = [
   dependency('gtk+-3.0', version: '>= 3.22'),
   dependency('libgedit-gtksourceview-300', version: '>= 299.1.0'),
   dependency('libgedit-amtk-5'),
+  dependency('libgedit-gfls-1'),
 ]
 tepl_private_deps = [
   dependency('icu-uc'),

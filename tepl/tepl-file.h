@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2014-2020 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2014-2024 - Sébastien Wilmet <swilmet@gnome.org>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
@@ -52,18 +52,6 @@ typedef GMountOperation *(*TeplMountOperationFactory) (TeplFile *file,
 						       gpointer  user_data);
 
 /**
- * TeplUntitledFileCallback:
- * @untitled_file_number: the number.
- *
- * Type definition for a function that will be called to create a string
- * containing @untitled_file_number, to give a name to a file not yet present on
- * disk.
- *
- * Since: 6.2
- */
-typedef gchar *(*TeplUntitledFileCallback) (gint untitled_file_number);
-
-/**
  * TeplNewlineType:
  * @TEPL_NEWLINE_TYPE_LF: line feed, used on UNIX.
  * @TEPL_NEWLINE_TYPE_CR: carriage return, used on Mac.
@@ -110,10 +98,6 @@ gchar *			tepl_file_get_short_name		(TeplFile *file);
 
 G_MODULE_EXPORT
 gchar *			tepl_file_get_full_name			(TeplFile *file);
-
-G_MODULE_EXPORT
-void			tepl_file_set_untitled_file_callback	(TeplFile                 *file,
-								 TeplUntitledFileCallback  callback);
 
 G_MODULE_EXPORT
 TeplNewlineType		tepl_file_get_newline_type		(TeplFile *file);

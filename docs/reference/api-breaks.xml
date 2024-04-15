@@ -286,5 +286,21 @@
         </para>
       </listitem>
     </itemizedlist>
+
+    <para>
+      Tepl next:
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <link linkend="TeplFile">TeplFile</link> now uses
+          <link linkend="GflsUnsavedDocumentTitles">GflsUnsavedDocumentTitles</link>.
+          This affects the
+          <link linkend="TeplFile--short-name">TeplFile:short-name</link>
+          property. Also, <code>tepl_file_set_untitled_file_callback()</code>
+          and <code>TeplUntitledFileCallback</code> have been removed.
+        </para>
+      </listitem>
+    </itemizedlist>
   </chapter>
 </part>

@@ -14,6 +14,7 @@ gio_docpath = dependency('gio-2.0').get_variable(pkgconfig: 'prefix') / 'share/g
 gtk_docpath = dependency('gtk+-3.0').get_variable(pkgconfig: 'prefix') / 'share/gtk-doc/html/gtk3'
 gsv_docpath = dependency('libgedit-gtksourceview-300').get_variable(pkgconfig: 'prefix') / 'share/gtk-doc/html/libgedit-gtksourceview-300'
 amtk_docpath = dependency('libgedit-amtk-5').get_variable(pkgconfig: 'prefix') / 'share/gtk-doc/html/libgedit-amtk-5'
+gfls_docpath = dependency('libgedit-gfls-1').get_variable(pkgconfig: 'prefix') / 'share/gtk-doc/html/libgedit-gfls-1'
 
 GNOME.gtkdoc(
   gtkdoc_module_name,
@@ -29,7 +30,8 @@ GNOME.gtkdoc(
     '--extra-dir=@0@'.format(gio_docpath),
     '--extra-dir=@0@'.format(gtk_docpath),
     '--extra-dir=@0@'.format(gsv_docpath),
-    '--extra-dir=@0@'.format(amtk_docpath)
+    '--extra-dir=@0@'.format(amtk_docpath),
+    '--extra-dir=@0@'.format(gfls_docpath)
   ],
   content_files: [
     'api-breaks.xml',

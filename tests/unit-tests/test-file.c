@@ -1,26 +1,15 @@
-/* SPDX-FileCopyrightText: 2016-2020 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2016-2024 - Sébastien Wilmet <swilmet@gnome.org>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
-#include "config.h"
 #include <tepl/tepl.h>
-#include <glib/gi18n-lib.h>
+#include <gfls/gfls.h>
 #include "tepl-test-utils.h"
 
 static gchar *
-default_untitled_file_cb (gint untitled_file_number)
+unsaved_document_title_cb (gint num)
 {
-	/* For the translation it needs to be the exact same string as in the
-	 * TeplFile implementation, to be able to run the unit test with any
-	 * locale.
-	 */
-	return g_strdup_printf (_("Untitled File %d"), untitled_file_number);
-}
-
-static gchar *
-custom_untitled_file_cb (gint untitled_file_number)
-{
-	return g_strdup_printf ("Unsaved Document %d", untitled_file_number);
+	return g_strdup_printf ("Unsaved Document %d", num);
 }
 
 static void
@@ -46,83 +35,66 @@ check_full_name (TeplFile    *file,
 }
 
 static void
-check_short_name_is_untitled_file_number (TeplFile *file,
-					  gint      untitled_number)
+check_short_name_is_unsaved_document_number (TeplFile *file,
+					     gint      num)
 {
 	gchar *expected_short_name;
 
-	expected_short_name = default_untitled_file_cb (untitled_number);
+	expected_short_name = unsaved_document_title_cb (num);
 	check_short_name (file, expected_short_name);
 	g_free (expected_short_name);
 }
 
 static void
-check_full_name_is_untitled_file_number (TeplFile *file,
-					 gint      untitled_number)
+check_full_name_is_unsaved_document_number (TeplFile *file,
+					    gint      num)
 {
 	gchar *expected_full_name;
 
-	expected_full_name = default_untitled_file_cb (untitled_number);
+	expected_full_name = unsaved_document_title_cb (num);
 	check_full_name (file, expected_full_name);
 	g_free (expected_full_name);
 }
 
 static void
-test_untitled_files (void)
+test_unsaved_document_titles (void)
 {
+	GflsUnsavedDocumentTitles *titles;
 	TeplFile *file1;
 	TeplFile *file2;
 	TeplFile *file3;
 	GFile *location;
 
+	titles = gfls_unsaved_document_titles_get_default ();
+	gfls_unsaved_document_titles_set_title_callback (titles, unsaved_document_title_cb);
+
 	file1 = tepl_file_new ();
-	check_short_name_is_untitled_file_number (file1, 1);
+	check_short_name_is_unsaved_document_number (file1, 1);
 
 	file2 = tepl_file_new ();
-	check_short_name_is_untitled_file_number (file2, 2);
+	check_short_name_is_unsaved_document_number (file2, 2);
 
-	/* Release an untitled number by destroying a file. */
+	/* Release a number by destroying a file. */
 	g_object_unref (file1);
-	check_short_name_is_untitled_file_number (file2, 2); // still the same.
+	check_short_name_is_unsaved_document_number (file2, 2); // still the same.
 	file1 = tepl_file_new ();
-	check_short_name_is_untitled_file_number (file1, 1);
+	check_short_name_is_unsaved_document_number (file1, 1);
 
-	/* Release an untitled number by setting a location. */
+	/* Release a number by setting a location. */
 	location = g_file_new_for_path ("location");
 	tepl_file_set_location (file1, location);
-	check_short_name_is_untitled_file_number (file2, 2); // still the same.
+	check_short_name_is_unsaved_document_number (file2, 2); // still the same.
 	file3 = tepl_file_new ();
-	check_short_name_is_untitled_file_number (file3, 1);
+	check_short_name_is_unsaved_document_number (file3, 1);
 
 	/* Reset location to NULL. */
 	tepl_file_set_location (file1, NULL);
-	check_short_name_is_untitled_file_number (file1, 3);
+	check_short_name_is_unsaved_document_number (file1, 3);
 
 	g_object_unref (file1);
 	g_object_unref (file2);
 	g_object_unref (file3);
 	g_object_unref (location);
-}
-
-static void
-test_custom_untitled_file_name (void)
-{
-	TeplFile *file;
-	gchar *short_name;
-	gchar *expected_short_name;
-
-	file = tepl_file_new ();
-	/* Not yet custom. */
-	check_short_name_is_untitled_file_number (file, 1);
-
-	tepl_file_set_untitled_file_callback (file, custom_untitled_file_cb);
-	short_name = tepl_file_get_short_name (file);
-	expected_short_name = custom_untitled_file_cb (1);
-	g_assert_cmpstr (short_name, ==, expected_short_name);
-	g_free (short_name);
-	g_free (expected_short_name);
-
-	g_object_unref (file);
 }
 
 static void
@@ -187,11 +159,15 @@ test_short_name (void)
 static void
 test_full_name (void)
 {
+	GflsUnsavedDocumentTitles *titles;
 	TeplFile *file;
 	GFile *location;
 
+	titles = gfls_unsaved_document_titles_get_default ();
+	gfls_unsaved_document_titles_set_title_callback (titles, unsaved_document_title_cb);
+
 	file = tepl_file_new ();
-	check_full_name_is_untitled_file_number (file, 1);
+	check_full_name_is_unsaved_document_number (file, 1);
 
 	location = g_file_new_for_path ("/one/path");
 	tepl_file_set_location (file, location);
@@ -443,8 +419,7 @@ main (int    argc,
 {
 	gtk_test_init (&argc, &argv);
 
-	g_test_add_func ("/file/untitled_files", test_untitled_files);
-	g_test_add_func ("/file/custom_untitled_file_name", test_custom_untitled_file_name);
+	g_test_add_func ("/file/unsaved_document_titles", test_unsaved_document_titles);
 	g_test_add_func ("/file/short_name", test_short_name);
 	g_test_add_func ("/file/full_name", test_full_name);
 

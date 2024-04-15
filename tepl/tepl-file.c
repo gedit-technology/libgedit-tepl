@@ -1,9 +1,10 @@
-/* SPDX-FileCopyrightText: 2016-2020 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2016-2024 - Sébastien Wilmet <swilmet@gnome.org>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
 #include "config.h"
 #include "tepl-file.h"
+#include <gfls/gfls.h>
 #include <glib/gi18n-lib.h>
 #include "tepl-utils.h"
 #include "tepl-enum-types.h"
@@ -37,8 +38,7 @@ struct _TeplFilePrivate
 	TeplNewlineType newline_type;
 
 	/* For the short-name. */
-	TeplUntitledFileCallback untitled_file_callback;
-	gint untitled_number;
+	gint unsaved_document_number;
 	gchar *display_name;
 
 	TeplMountOperationFactory mount_operation_factory;
@@ -63,66 +63,7 @@ enum
 
 static GParamSpec *properties[N_PROPERTIES];
 
-/* The list is sorted. */
-static GSList *allocated_untitled_numbers;
-
 G_DEFINE_TYPE_WITH_PRIVATE (TeplFile, tepl_file, G_TYPE_OBJECT)
-
-static gint
-compare_untitled_numbers (gconstpointer a,
-			  gconstpointer b)
-{
-	gint num_a = GPOINTER_TO_INT (a);
-	gint num_b = GPOINTER_TO_INT (b);
-
-	return num_a - num_b;
-}
-
-/* Starts at 1. O(n). But n is normally always very small. */
-static gint
-allocate_first_available_untitled_number (void)
-{
-	gint num = 1;
-	GSList *l;
-
-	for (l = allocated_untitled_numbers; l != NULL; l = l->next)
-	{
-		gint cur_num = GPOINTER_TO_INT (l->data);
-
-		if (num != cur_num)
-		{
-			g_assert_cmpint (num, <, cur_num);
-			break;
-		}
-
-		num++;
-	}
-
-	g_assert (g_slist_find (allocated_untitled_numbers, GINT_TO_POINTER (num)) == NULL);
-
-	allocated_untitled_numbers = g_slist_insert_sorted (allocated_untitled_numbers,
-							    GINT_TO_POINTER (num),
-							    compare_untitled_numbers);
-
-	return num;
-}
-
-static void
-release_untitled_number (gint num)
-{
-	g_assert (g_slist_find (allocated_untitled_numbers, GINT_TO_POINTER (num)) != NULL);
-
-	allocated_untitled_numbers = g_slist_remove (allocated_untitled_numbers,
-						     GINT_TO_POINTER (num));
-
-	g_assert (g_slist_find (allocated_untitled_numbers, GINT_TO_POINTER (num)) == NULL);
-}
-
-static gchar *
-default_untitled_file_cb (gint untitled_file_number)
-{
-	return g_strdup_printf (_("Untitled File %d"), untitled_file_number);
-}
 
 static void
 tepl_file_get_property (GObject    *object,
@@ -197,9 +138,12 @@ tepl_file_finalize (GObject *object)
 {
 	TeplFile *file = TEPL_FILE (object);
 
-	if (file->priv->untitled_number > 0)
+	if (file->priv->unsaved_document_number > 0)
 	{
-		release_untitled_number (file->priv->untitled_number);
+		GflsUnsavedDocumentTitles *titles;
+
+		titles = gfls_unsaved_document_titles_get_default ();
+		gfls_unsaved_document_titles_release_number (titles, file->priv->unsaved_document_number);
 	}
 
 	g_free (file->priv->display_name);
@@ -255,15 +199,8 @@ tepl_file_class_init (TeplFileClass *klass)
 	 *
 	 * The file short name.
 	 *
-	 * When the #TeplFile:location is %NULL, this property contains by
-	 * default "Untitled File N" (translated), with N the Nth untitled file
-	 * of the application, starting at 1. When an untitled file is closed
-	 * (when the #TeplFile is freed) or its #TeplFile:location is set, its
-	 * untitled number is released and can be used by a later file.
-	 *
-	 * See tepl_file_set_untitled_file_callback() to customize the string.
-	 * Other examples: "Unsaved" instead of "Untitled", or "Document"
-	 * instead of "File".
+	 * When the #TeplFile:location is %NULL, the default instance of
+	 * #GflsUnsavedDocumentTitles is used to get a title.
 	 *
 	 * When the #TeplFile:location is not %NULL, this property contains the
 	 * display-name (see #G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME). However,
@@ -347,24 +284,28 @@ query_display_name_cb (GObject      *source_object,
 static void
 update_short_name (TeplFile *file)
 {
+	GflsUnsavedDocumentTitles *titles;
+
+	titles = gfls_unsaved_document_titles_get_default ();
+
 	if (file->priv->location == NULL)
 	{
 		g_free (file->priv->display_name);
 		file->priv->display_name = NULL;
 
-		if (file->priv->untitled_number == 0)
+		if (file->priv->unsaved_document_number == 0)
 		{
-			file->priv->untitled_number = allocate_first_available_untitled_number ();
+			file->priv->unsaved_document_number = gfls_unsaved_document_titles_allocate_number (titles);
 		}
 
 		g_object_notify_by_pspec (G_OBJECT (file), properties[PROP_SHORT_NAME]);
 		return;
 	}
 
-	if (file->priv->untitled_number > 0)
+	if (file->priv->unsaved_document_number > 0)
 	{
-		release_untitled_number (file->priv->untitled_number);
-		file->priv->untitled_number = 0;
+		gfls_unsaved_document_titles_release_number (titles, file->priv->unsaved_document_number);
+		file->priv->unsaved_document_number = 0;
 	}
 
 	/* Special case for URIs like "https://example.net". Querying the
@@ -404,7 +345,6 @@ tepl_file_init (TeplFile *file)
 	file->priv = tepl_file_get_instance_private (file);
 
 	file->priv->newline_type = TEPL_NEWLINE_TYPE_DEFAULT;
-	file->priv->untitled_file_callback = default_untitled_file_cb;
 	update_short_name (file);
 }
 
@@ -478,9 +418,12 @@ tepl_file_get_short_name (TeplFile *file)
 {
 	g_return_val_if_fail (TEPL_IS_FILE (file), NULL);
 
-	if (file->priv->untitled_number > 0)
+	if (file->priv->unsaved_document_number > 0)
 	{
-		return file->priv->untitled_file_callback (file->priv->untitled_number);
+		GflsUnsavedDocumentTitles *titles;
+
+		titles = gfls_unsaved_document_titles_get_default ();
+		return gfls_unsaved_document_titles_get_title (titles, file->priv->unsaved_document_number);
 	}
 
 	if (file->priv->display_name != NULL)
@@ -516,34 +459,6 @@ tepl_file_get_full_name (TeplFile *file)
 	g_free (parse_name);
 
 	return full_name;
-}
-
-/**
- * tepl_file_set_untitled_file_callback: (skip)
- * @file: a #TeplFile.
- * @callback: (nullable): a #TeplUntitledFileCallback, or %NULL to unset.
- *
- * Sets a #TeplUntitledFileCallback, useful to customize the
- * #TeplFile:short-name.
- *
- * Since: 6.2
- */
-void
-tepl_file_set_untitled_file_callback (TeplFile                 *file,
-				      TeplUntitledFileCallback  callback)
-{
-	g_return_if_fail (TEPL_IS_FILE (file));
-
-	if (callback != NULL)
-	{
-		file->priv->untitled_file_callback = callback;
-	}
-	else
-	{
-		file->priv->untitled_file_callback = default_untitled_file_cb;
-	}
-
-	g_object_notify_by_pspec (G_OBJECT (file), properties[PROP_SHORT_NAME]);
 }
 
 void
