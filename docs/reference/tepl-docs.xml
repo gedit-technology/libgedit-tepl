@@ -8,8 +8,8 @@
 ]>
 <book id="index">
   <bookinfo>
-    <title>Tepl &package_api_version; Reference Manual</title>
-    <releaseinfo>for &package_string;</releaseinfo>
+    <title>libgedit-tepl &package_api_version; Reference Manual</title>
+    <releaseinfo>For &package_string;</releaseinfo>
   </bookinfo>
 
   <xi:include href="intro.xml"/>

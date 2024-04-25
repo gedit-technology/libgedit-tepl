@@ -288,9 +288,14 @@
     </itemizedlist>
 
     <para>
-      Tepl 6.8 to Tepl 6.10:
+      Tepl 6.8 to libgedit-tepl 6.10:
     </para>
     <itemizedlist>
+      <listitem>
+        <para>
+          Tepl has been renamed to libgedit-tepl.
+        </para>
+      </listitem>
       <listitem>
         <para>
           <link linkend="TeplFile">TeplFile</link> now uses
