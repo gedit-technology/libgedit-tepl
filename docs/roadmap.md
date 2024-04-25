@@ -1,5 +1,5 @@
-Tepl roadmap
-============
+libgedit-tepl roadmap
+=====================
 
 This page contains the plans for major code changes we hope to get done in the
 future.
@@ -58,5 +58,5 @@ High-level spell-checking API
 
 - Status: **todo**
 
-Integrate [gspell](https://gitlab.gnome.org/GNOME/gspell/) with the Tepl
-framework.
+Integrate [gspell](https://gitlab.gnome.org/GNOME/gspell/) with the
+libgedit-tepl framework.
