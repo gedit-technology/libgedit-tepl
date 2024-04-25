@@ -28,6 +28,7 @@ Dependencies
 
 From [Gedit Technology](https://gedit-technology.github.io/):
 - libgedit-amtk
+- libgedit-gfls
 - libgedit-gtksourceview
 
 Documentation
