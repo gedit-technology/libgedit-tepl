@@ -126,7 +126,7 @@ tepl_private_c_files = [
   'tepl-window-actions-search.c'
 ]
 
-headers_install_dir = get_option('includedir') / 'tepl-@0@/tepl/'.format(TEPL_API_VERSION)
+headers_install_dir = get_option('includedir') / '@0@-@1@/tepl/'.format(meson.project_name(), TEPL_API_VERSION)
 install_headers(
   tepl_public_headers,
   install_dir: headers_install_dir
@@ -166,13 +166,13 @@ tepl_lib_link_args = c_compiler.get_supported_link_arguments([
 ])
 
 tepl_lib = library(
-  'tepl-@0@'.format(TEPL_API_VERSION),
+  'gedit-tepl-@0@'.format(TEPL_API_VERSION),
   dependencies: TEPL_DEPS,
   link_args: tepl_lib_link_args,
   link_depends: symbol_map,
   # link_whole is not supported with MSVC, so we use extract_all_objects().
   objects: tepl_static_lib.extract_all_objects(recursive: false),
-  soversion: 4,
+  soversion: 0,
   install: true
 )
 
@@ -184,17 +184,17 @@ TEPL_LIB_DEP = declare_dependency(
 )
 
 PKG_CONFIG.generate(tepl_lib,
-  filebase: 'tepl-@0@'.format(TEPL_API_VERSION),
-  name: 'Tepl',
+  filebase: '@0@-@1@'.format(meson.project_name(), TEPL_API_VERSION),
+  name: meson.project_name(),
   description: 'Text editor product line',
-  subdirs: 'tepl-@0@'.format(TEPL_API_VERSION),
+  subdirs: '@0@-@1@'.format(meson.project_name(), TEPL_API_VERSION),
   libraries: TEPL_PUBLIC_DEPS,
 )
 
 if get_option('gobject_introspection')
   GNOME.generate_gir(
     tepl_lib,
-    export_packages: 'tepl-@0@'.format(TEPL_API_VERSION),
+    export_packages: '@0@-@1@'.format(meson.project_name(), TEPL_API_VERSION),
     header: 'tepl/tepl.h',
     identifier_prefix: 'Tepl',
     include_directories: ROOT_INCLUDE_DIR,

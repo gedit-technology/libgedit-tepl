@@ -1,11 +1,12 @@
 subdir('xml')
 
+gtkdoc_module_name = '@0@-@1@'.format(meson.project_name(), TEPL_API_VERSION)
+
 FS.copyfile(
-  'tepl-sections.txt',
-  'tepl-@0@-sections.txt'.format(TEPL_API_VERSION)
+  '@0@-sections.txt'.format(meson.project_name()),
+  '@0@-sections.txt'.format(gtkdoc_module_name)
 )
 
-gtkdoc_module_name = 'tepl-@0@'.format(TEPL_API_VERSION)
 html_dir = get_option('prefix') / GNOME.gtkdoc_html_dir(gtkdoc_module_name)
 
 glib_docpath = dependency('glib-2.0').get_variable(pkgconfig: 'prefix') / 'share/gtk-doc/html/glib'
@@ -18,11 +19,11 @@ gfls_docpath = dependency('libgedit-gfls-1').get_variable(pkgconfig: 'prefix') /
 
 GNOME.gtkdoc(
   gtkdoc_module_name,
-  main_xml: 'tepl-docs.xml',
+  main_xml: '@0@-docs.xml'.format(meson.project_name()),
   src_dir: include_directories('../../tepl/'),
   dependencies: TEPL_LIB_DEP,
   scan_args: ['--rebuild-types'],
-  gobject_typesfile: 'tepl-@0@.types'.format(TEPL_API_VERSION),
+  gobject_typesfile: '@0@.types'.format(gtkdoc_module_name),
   fixxref_args: [
     '--html-dir=@0@'.format(html_dir),
     '--extra-dir=@0@'.format(glib_docpath),

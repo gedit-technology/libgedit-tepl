@@ -4,7 +4,7 @@
 # See: https://github.com/mesonbuild/meson/issues/2607
 
 project(
-  'tepl', 'c',
+  'libgedit-tepl', 'c',
   meson_version: '>= 0.64',
   version: '6.9.1',
   default_options: ['warning_level=2']
@@ -36,7 +36,7 @@ TEPL_DEPS = [TEPL_PUBLIC_DEPS, tepl_private_deps]
 # config.h
 
 config_data = configuration_data()
-GETTEXT_PACKAGE_NAME = 'tepl-' + TEPL_API_VERSION
+GETTEXT_PACKAGE_NAME = '@0@-@1@'.format(meson.project_name(), TEPL_API_VERSION)
 config_data.set_quoted('GETTEXT_PACKAGE', GETTEXT_PACKAGE_NAME)
 config_data.set_quoted('TEPL_LOCALEDIR', get_option('prefix') / get_option('localedir'))
 
