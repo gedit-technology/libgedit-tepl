@@ -6,6 +6,7 @@
 #include "tepl-init.h"
 #include <glib/gi18n-lib.h>
 #include <amtk/amtk.h>
+#include <gfls/gfls.h>
 #include <gtksourceview/gtksource.h>
 #include <unicode/uclean.h>
 #include "tepl-abstract-factory.h"
@@ -38,7 +39,7 @@ get_locale_directory (void)
  * This function can be called several times, but is meant to be called at the
  * beginning of main(), before any other Tepl function call.
  *
- * This function also calls amtk_init() and gtk_source_init().
+ * This function also calls amtk_init(), gfls_init() and gtk_source_init().
  *
  * Since: 3.0
  */
@@ -52,6 +53,7 @@ tepl_init (void)
 		gchar *locale_dir;
 
 		amtk_init ();
+		gfls_init ();
 		gtk_source_init ();
 
 		locale_dir = get_locale_directory ();
@@ -70,7 +72,8 @@ tepl_init (void)
  * Free the resources allocated by Tepl. For example it unrefs the singleton
  * objects.
  *
- * This function also calls amtk_finalize() and gtk_source_finalize().
+ * This function also calls amtk_finalize(), gfls_finalize() and
+ * gtk_source_finalize().
  *
  * It is not mandatory to call this function, it's just to be friendlier to
  * memory debugging tools. This function is meant to be called at the end of
@@ -108,6 +111,7 @@ tepl_finalize (void)
 		 * GtkSourceView.
 		 */
 		gtk_source_finalize ();
+		gfls_finalize ();
 		amtk_finalize ();
 		u_cleanup ();
 
