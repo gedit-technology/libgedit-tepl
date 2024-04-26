@@ -1,3 +1,12 @@
+News in 6.10.0, 2024-04-27 (stable version)
+-------------------------------------------
+* Rename the project from Tepl to libgedit-tepl.
+* The project is now hosted here:
+  https://gedit-technology.github.io/
+  https://github.com/gedit-technology/libgedit-tepl
+* libgedit-gfls is used as a new dependency.
+* New APIs: see the API docs.
+
 News in 6.9.0, 2024-02-16
 -------------------------
 * libhandy-1 is used as a new dependency (for dark style preference handling).
