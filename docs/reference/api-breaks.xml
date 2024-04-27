@@ -293,7 +293,8 @@
     <itemizedlist>
       <listitem>
         <para>
-          Tepl has been renamed to libgedit-tepl.
+          Tepl has been renamed to libgedit-tepl. The new pkg-config name is:
+          <code>libgedit-tepl-6</code>
         </para>
       </listitem>
       <listitem>
