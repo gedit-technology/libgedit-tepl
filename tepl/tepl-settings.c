@@ -328,6 +328,8 @@ tepl_settings_get_selected_font (TeplSettings *self)
 static void
 update_theme_variant (TeplSettings *self)
 {
+	HdyStyleManager *style_manager = hdy_style_manager_get_default ();
+
 	/* For a text editor, prefer a light theme. See the documentation of the
 	 * GtkSettings:gtk-application-prefer-dark-theme property:
 	 *
@@ -347,6 +349,13 @@ update_theme_variant (TeplSettings *self)
 		switch (variant)
 		{
 			case TEPL_SETTINGS_THEME_VARIANT_SYSTEM:
+				if (!hdy_style_manager_get_system_supports_color_schemes (style_manager))
+				{
+					/* Do as if the 'system' enum value didn't exist,
+					 * with 'light' as the default.
+					 */
+					color_scheme = HDY_COLOR_SCHEME_FORCE_LIGHT;
+				}
 				break;
 
 			case TEPL_SETTINGS_THEME_VARIANT_LIGHT:
@@ -362,8 +371,7 @@ update_theme_variant (TeplSettings *self)
 		}
 	}
 
-	hdy_style_manager_set_color_scheme (hdy_style_manager_get_default (),
-					    color_scheme);
+	hdy_style_manager_set_color_scheme (style_manager, color_scheme);
 }
 
 static void

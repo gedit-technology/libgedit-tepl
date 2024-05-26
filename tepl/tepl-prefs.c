@@ -5,6 +5,7 @@
 #include "config.h"
 #include "tepl-prefs.h"
 #include <glib/gi18n-lib.h>
+#include <handy.h>
 #include "tepl-settings.h"
 #include "tepl-style-scheme-chooser-widget.h"
 #include "tepl-utils.h"
@@ -455,6 +456,7 @@ tepl_prefs_create_theme_variant_combo_box (GSettings   *settings,
 					   const gchar *theme_variant_key)
 {
 	GtkComboBoxText *combo_box_text;
+	HdyStyleManager *style_manager;
 
 	g_return_val_if_fail (G_IS_SETTINGS (settings), NULL);
 	g_return_val_if_fail (theme_variant_key != NULL, NULL);
@@ -463,7 +465,12 @@ tepl_prefs_create_theme_variant_combo_box (GSettings   *settings,
 	gtk_widget_show (GTK_WIDGET (combo_box_text));
 	gtk_widget_set_halign (GTK_WIDGET (combo_box_text), GTK_ALIGN_START);
 
-	gtk_combo_box_text_append (combo_box_text, "system", _("Follow system style"));
+	style_manager = hdy_style_manager_get_default ();
+	if (hdy_style_manager_get_system_supports_color_schemes (style_manager))
+	{
+		gtk_combo_box_text_append (combo_box_text, "system", _("Follow system style"));
+	}
+
 	gtk_combo_box_text_append (combo_box_text, "light", _("Light style"));
 	gtk_combo_box_text_append (combo_box_text, "dark", _("Dark style"));
 
