@@ -463,9 +463,9 @@ tepl_prefs_create_theme_variant_combo_box (GSettings   *settings,
 	gtk_widget_show (GTK_WIDGET (combo_box_text));
 	gtk_widget_set_halign (GTK_WIDGET (combo_box_text), GTK_ALIGN_START);
 
-	gtk_combo_box_text_append (combo_box_text, "system", _("Default"));
-	gtk_combo_box_text_append (combo_box_text, "light", _("Light"));
-	gtk_combo_box_text_append (combo_box_text, "dark", _("Dark"));
+	gtk_combo_box_text_append (combo_box_text, "system", _("Follow system style"));
+	gtk_combo_box_text_append (combo_box_text, "light", _("Light style"));
+	gtk_combo_box_text_append (combo_box_text, "dark", _("Dark style"));
 
 	g_settings_bind (settings, theme_variant_key,
 			 combo_box_text, "active-id",
