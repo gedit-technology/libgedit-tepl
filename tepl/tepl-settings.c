@@ -41,6 +41,13 @@ struct _TeplSettingsPrivate
 	GSettings *settings_theme_variant;
 	gchar *key_theme_variant;
 
+	/* Invariant: the following 3 instance variables are either all NULL or
+	 * all set.
+	 */
+	GSettings *settings_style_scheme;
+	gchar *key_style_scheme_id_for_light_theme;
+	gchar *key_style_scheme_id_for_dark_theme;
+
 	guint handle_theme_variant : 1;
 };
 
@@ -50,12 +57,40 @@ enum
 	N_SIGNALS
 };
 
+enum
+{
+	PROP_0,
+	PROP_STYLE_SCHEME_ID,
+	N_PROPERTIES
+};
+
 static guint signals[N_SIGNALS];
+static GParamSpec *properties[N_PROPERTIES];
 
 /* TeplSettings is a singleton. */
 static TeplSettings *singleton = NULL;
 
 G_DEFINE_TYPE_WITH_PRIVATE (TeplSettings, tepl_settings, G_TYPE_OBJECT)
+
+static void
+tepl_settings_get_property (GObject    *object,
+			    guint       prop_id,
+			    GValue     *value,
+			    GParamSpec *pspec)
+{
+	TeplSettings *settings = TEPL_SETTINGS (object);
+
+	switch (prop_id)
+	{
+		case PROP_STYLE_SCHEME_ID:
+			g_value_take_string (value, tepl_settings_get_style_scheme_id (settings));
+			break;
+
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+			break;
+	}
+}
 
 static void
 tepl_settings_dispose (GObject *object)
@@ -70,6 +105,10 @@ tepl_settings_dispose (GObject *object)
 
 	g_clear_object (&self->priv->settings_theme_variant);
 	g_clear_pointer (&self->priv->key_theme_variant, g_free);
+
+	g_clear_object (&self->priv->settings_style_scheme);
+	g_clear_pointer (&self->priv->key_style_scheme_id_for_light_theme, g_free);
+	g_clear_pointer (&self->priv->key_style_scheme_id_for_dark_theme, g_free);
 
 	G_OBJECT_CLASS (tepl_settings_parent_class)->dispose (object);
 }
@@ -90,6 +129,7 @@ tepl_settings_class_init (TeplSettingsClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+	object_class->get_property = tepl_settings_get_property;
 	object_class->dispose = tepl_settings_dispose;
 	object_class->finalize = tepl_settings_finalize;
 
@@ -123,6 +163,26 @@ tepl_settings_class_init (TeplSettingsClass *klass)
 			      G_SIGNAL_RUN_FIRST,
 			      0, NULL, NULL, NULL,
 			      G_TYPE_NONE, 0);
+
+	/**
+	 * TeplSettings:style-scheme-id:
+	 *
+	 * See tepl_settings_provide_style_scheme_settings().
+	 *
+	 * The value of this property depends on whether the GTK theme is light
+	 * or dark, and uses the corresponding #GSettings key.
+	 *
+	 * Since: 6.12
+	 */
+	properties[PROP_STYLE_SCHEME_ID] =
+		g_param_spec_string ("style-scheme-id",
+				     "style-scheme-id",
+				     "",
+				     NULL,
+				     G_PARAM_READABLE |
+				     G_PARAM_STATIC_STRINGS);
+
+	g_object_class_install_properties (object_class, N_PROPERTIES, properties);
 }
 
 static gboolean
@@ -441,6 +501,119 @@ tepl_settings_handle_theme_variant (TeplSettings *self,
 	update_theme_variant (self);
 
 	self->priv->handle_theme_variant = TRUE;
+}
+
+static void
+style_scheme_setting_changed_cb (GSettings    *style_scheme_settings,
+				 const gchar  *key,
+				 TeplSettings *self)
+{
+	g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STYLE_SCHEME_ID]);
+}
+
+static void
+style_manager_dark_notify_cb (HdyStyleManager *style_manager,
+			      GParamSpec      *pspec,
+			      TeplSettings    *self)
+{
+	g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STYLE_SCHEME_ID]);
+}
+
+/**
+ * tepl_settings_provide_style_scheme_settings:
+ * @self: the #TeplSettings instance.
+ * @style_scheme_settings: the #GSettings object containing the keys.
+ * @key_for_light_theme_variant: a key of type string.
+ * @key_for_dark_theme_variant: a key of type string.
+ *
+ * This function can only be called once, to provide two keys:
+ * - @key_for_light_theme_variant: must be of type string, containing the ID of
+ *   a #GtkSourceStyleScheme that should be used when the GTK theme variant is
+ *   light.
+ * - @key_for_dark_theme_variant: the same, but when the GTK theme variant is
+ *   dark.
+ *
+ * See tepl_settings_get_style_scheme_id().
+ *
+ * Since: 6.12
+ */
+void
+tepl_settings_provide_style_scheme_settings (TeplSettings *self,
+					     GSettings    *style_scheme_settings,
+					     const gchar  *key_for_light_theme_variant,
+					     const gchar  *key_for_dark_theme_variant)
+{
+	gchar *detailed_signal;
+	HdyStyleManager *style_manager;
+
+	g_return_if_fail (TEPL_IS_SETTINGS (self));
+	g_return_if_fail (G_IS_SETTINGS (style_scheme_settings));
+	g_return_if_fail (key_for_light_theme_variant != NULL);
+	g_return_if_fail (key_for_dark_theme_variant != NULL);
+
+	g_return_if_fail (self->priv->settings_style_scheme == NULL);
+	g_return_if_fail (self->priv->key_style_scheme_id_for_light_theme == NULL);
+	g_return_if_fail (self->priv->key_style_scheme_id_for_dark_theme == NULL);
+
+	self->priv->settings_style_scheme = g_object_ref (style_scheme_settings);
+	self->priv->key_style_scheme_id_for_light_theme = g_strdup (key_for_light_theme_variant);
+	self->priv->key_style_scheme_id_for_dark_theme = g_strdup (key_for_dark_theme_variant);
+
+	detailed_signal = g_strconcat ("changed::", key_for_light_theme_variant, NULL);
+	g_signal_connect_object (style_scheme_settings,
+				 detailed_signal,
+				 G_CALLBACK (style_scheme_setting_changed_cb),
+				 self,
+				 G_CONNECT_DEFAULT);
+	g_free (detailed_signal);
+
+	detailed_signal = g_strconcat ("changed::", key_for_dark_theme_variant, NULL);
+	g_signal_connect_object (style_scheme_settings,
+				 detailed_signal,
+				 G_CALLBACK (style_scheme_setting_changed_cb),
+				 self,
+				 G_CONNECT_DEFAULT);
+	g_free (detailed_signal);
+
+	style_manager = hdy_style_manager_get_default ();
+	g_signal_connect_object (style_manager,
+				 "notify::dark",
+				 G_CALLBACK (style_manager_dark_notify_cb),
+				 self,
+				 G_CONNECT_DEFAULT);
+
+	g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STYLE_SCHEME_ID]);
+}
+
+/**
+ * tepl_settings_get_style_scheme_id:
+ * @self: the #TeplSettings instance.
+ *
+ * Returns: (transfer full): the value of the #TeplSettings:style-scheme-id
+ *   property.
+ * Since: 6.12
+ */
+gchar *
+tepl_settings_get_style_scheme_id (TeplSettings *self)
+{
+	HdyStyleManager *style_manager;
+
+	g_return_val_if_fail (TEPL_IS_SETTINGS (self), NULL);
+
+	if (self->priv->settings_style_scheme == NULL)
+	{
+		return NULL;
+	}
+
+	style_manager = hdy_style_manager_get_default ();
+	if (hdy_style_manager_get_dark (style_manager))
+	{
+		return g_settings_get_string (self->priv->settings_style_scheme,
+					      self->priv->key_style_scheme_id_for_dark_theme);
+	}
+
+	return g_settings_get_string (self->priv->settings_style_scheme,
+				      self->priv->key_style_scheme_id_for_light_theme);
 }
 
 /**

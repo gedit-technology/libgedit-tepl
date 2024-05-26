@@ -82,6 +82,15 @@ void		tepl_settings_handle_theme_variant		(TeplSettings *self,
 								 const gchar  *theme_variant_setting_key);
 
 G_MODULE_EXPORT
+void		tepl_settings_provide_style_scheme_settings	(TeplSettings *self,
+								 GSettings    *style_scheme_settings,
+								 const gchar  *key_for_light_theme_variant,
+								 const gchar  *key_for_dark_theme_variant);
+
+G_MODULE_EXPORT
+gchar *		tepl_settings_get_style_scheme_id		(TeplSettings *self);
+
+G_MODULE_EXPORT
 gboolean	tepl_settings_get_range_uint			(GSettings   *settings,
 								 const gchar *key,
 								 guint32     *min,
