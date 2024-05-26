@@ -46,8 +46,6 @@ struct _TeplSettingsClass
  *
  * This enum is intended to be used for controlling the GTK theme preference.
  *
- * See also #TeplSettingsSimpleThemeVariant.
- *
  * Since: 6.10
  */
 typedef enum
@@ -56,23 +54,6 @@ typedef enum
 	TEPL_SETTINGS_THEME_VARIANT_LIGHT = 1,
 	TEPL_SETTINGS_THEME_VARIANT_DARK = 2,
 } TeplSettingsThemeVariant;
-
-/**
- * TeplSettingsSimpleThemeVariant:
- * @TEPL_SETTINGS_SIMPLE_THEME_VARIANT_LIGHT: Force a light theme.
- * @TEPL_SETTINGS_SIMPLE_THEME_VARIANT_DARK: Force a dark theme.
- *
- * This enum is intended to be used for controlling the GTK theme preference.
- *
- * See also #TeplSettingsThemeVariant.
- *
- * Since: 6.10
- */
-typedef enum
-{
-	TEPL_SETTINGS_SIMPLE_THEME_VARIANT_LIGHT = 0,
-	TEPL_SETTINGS_SIMPLE_THEME_VARIANT_DARK = 1,
-} TeplSettingsSimpleThemeVariant;
 
 G_MODULE_EXPORT
 GType		tepl_settings_get_type				(void);
@@ -97,11 +78,6 @@ gchar *		tepl_settings_get_selected_font			(TeplSettings *self);
 
 G_MODULE_EXPORT
 void		tepl_settings_handle_theme_variant		(TeplSettings *self,
-								 GSettings    *theme_variant_settings,
-								 const gchar  *theme_variant_setting_key);
-
-G_MODULE_EXPORT
-void		tepl_settings_handle_simple_theme_variant	(TeplSettings *self,
 								 GSettings    *theme_variant_settings,
 								 const gchar  *theme_variant_setting_key);
 

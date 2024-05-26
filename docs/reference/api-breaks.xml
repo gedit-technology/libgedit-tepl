@@ -308,5 +308,21 @@
         </para>
       </listitem>
     </itemizedlist>
+
+    <para>
+      libgedit-tepl 6.10 to libgedit-tepl 6.12:
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          The <code>TeplSettingsSimpleThemeVariant</code> enum,
+          <code>tepl_settings_handle_simple_theme_variant()</code> and
+          <code>tepl_prefs_create_simple_theme_variant_combo_box()</code> have
+          all been removed. You can use instead the more complete
+          <link linkend="TeplSettingsThemeVariant">TeplSettingsThemeVariant</link>
+          enum and the functions using it.
+        </para>
+      </listitem>
+    </itemizedlist>
   </chapter>
 </part>

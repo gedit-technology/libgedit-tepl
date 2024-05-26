@@ -51,10 +51,6 @@ GtkWidget *	tepl_prefs_create_theme_variant_combo_box		(GSettings   *settings,
 									 const gchar *theme_variant_key);
 
 G_MODULE_EXPORT
-GtkWidget *	tepl_prefs_create_simple_theme_variant_combo_box	(GSettings   *settings,
-									 const gchar *theme_variant_key);
-
-G_MODULE_EXPORT
 GtkWidget *	tepl_prefs_create_right_margin_component		(GSettings   *settings,
 									 const gchar *display_right_margin_key,
 									 const gchar *right_margin_position_key);

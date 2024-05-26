@@ -440,10 +440,19 @@ tepl_prefs_create_files_component (GSettings   *settings,
 	return tepl_utils_get_titled_component (_("Files"), vgrid);
 }
 
-static GtkWidget *
-create_theme_variant_combo_box_common (GSettings   *settings,
-				       const gchar *theme_variant_key,
-				       gboolean     simple_theme_variant)
+/**
+ * tepl_prefs_create_theme_variant_combo_box:
+ * @settings: a #GSettings.
+ * @theme_variant_key: a key part of @settings. Its type must be an enum for
+ *   #TeplSettingsThemeVariant.
+ *
+ * Returns: (transfer floating): A widget containing a #GtkComboBoxText intended
+ *   to choose a #TeplSettingsThemeVariant.
+ * Since: 6.10
+ */
+GtkWidget *
+tepl_prefs_create_theme_variant_combo_box (GSettings   *settings,
+					   const gchar *theme_variant_key)
 {
 	GtkComboBoxText *combo_box_text;
 
@@ -454,11 +463,7 @@ create_theme_variant_combo_box_common (GSettings   *settings,
 	gtk_widget_show (GTK_WIDGET (combo_box_text));
 	gtk_widget_set_halign (GTK_WIDGET (combo_box_text), GTK_ALIGN_START);
 
-	if (!simple_theme_variant)
-	{
-		gtk_combo_box_text_append (combo_box_text, "system", _("Default"));
-	}
-
+	gtk_combo_box_text_append (combo_box_text, "system", _("Default"));
 	gtk_combo_box_text_append (combo_box_text, "light", _("Light"));
 	gtk_combo_box_text_append (combo_box_text, "dark", _("Dark"));
 
@@ -468,45 +473,6 @@ create_theme_variant_combo_box_common (GSettings   *settings,
 
 	return tepl_utils_get_titled_component (_("Theme Variant"),
 						GTK_WIDGET (combo_box_text));
-}
-
-/**
- * tepl_prefs_create_theme_variant_combo_box:
- * @settings: a #GSettings.
- * @theme_variant_key: a key part of @settings. Its type must be an enum for
- *   #TeplSettingsThemeVariant.
- *
- * See also tepl_prefs_create_simple_theme_variant_combo_box().
- *
- * Returns: (transfer floating): A widget containing a #GtkComboBoxText intended
- *   to choose a #TeplSettingsThemeVariant.
- * Since: 6.10
- */
-GtkWidget *
-tepl_prefs_create_theme_variant_combo_box (GSettings   *settings,
-					   const gchar *theme_variant_key)
-{
-	return create_theme_variant_combo_box_common (settings, theme_variant_key, FALSE);
-}
-
-/**
- * tepl_prefs_create_simple_theme_variant_combo_box:
- * @settings: a #GSettings.
- * @theme_variant_key: a key part of @settings. Its type must be an enum for
- *   #TeplSettingsSimpleThemeVariant.
- *
- * Like tepl_prefs_create_theme_variant_combo_box() but for
- * #TeplSettingsSimpleThemeVariant instead.
- *
- * Returns: (transfer floating): A widget containing a #GtkComboBoxText intended
- *   to choose a #TeplSettingsSimpleThemeVariant.
- * Since: 6.10
- */
-GtkWidget *
-tepl_prefs_create_simple_theme_variant_combo_box (GSettings   *settings,
-						  const gchar *theme_variant_key)
-{
-	return create_theme_variant_combo_box_common (settings, theme_variant_key, TRUE);
 }
 
 /**
