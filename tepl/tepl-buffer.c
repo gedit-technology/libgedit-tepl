@@ -33,9 +33,6 @@ struct _TeplBufferPrivate
 
 	GtkTextTag *invalid_char_tag;
 
-	GSettings *style_scheme_id_gsettings;
-	gchar *style_scheme_id_gsetting_key;
-
 	guint n_nested_user_actions;
 	guint idle_cursor_moved_id;
 };
@@ -45,7 +42,6 @@ enum
 	PROP_0,
 	PROP_TEPL_SHORT_TITLE,
 	PROP_TEPL_FULL_TITLE,
-	PROP_TEPL_STYLE_SCHEME_ID,
 	N_PROPERTIES
 };
 
@@ -102,30 +98,6 @@ tepl_buffer_get_property (GObject    *object,
 			g_value_take_string (value, tepl_buffer_get_full_title (buffer));
 			break;
 
-		case PROP_TEPL_STYLE_SCHEME_ID:
-			g_value_take_string (value, tepl_buffer_get_style_scheme_id (buffer));
-			break;
-
-		default:
-			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-			break;
-	}
-}
-
-static void
-tepl_buffer_set_property (GObject      *object,
-			  guint         prop_id,
-			  const GValue *value,
-			  GParamSpec   *pspec)
-{
-	TeplBuffer *buffer = TEPL_BUFFER (object);
-
-	switch (prop_id)
-	{
-		case PROP_TEPL_STYLE_SCHEME_ID:
-			tepl_buffer_set_style_scheme_id (buffer, g_value_get_string (value));
-			break;
-
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 			break;
@@ -139,7 +111,6 @@ tepl_buffer_dispose (GObject *object)
 
 	g_clear_object (&priv->file);
 	g_clear_object (&priv->metadata);
-	g_clear_object (&priv->style_scheme_id_gsettings);
 
 	if (priv->idle_cursor_moved_id != 0)
 	{
@@ -148,16 +119,6 @@ tepl_buffer_dispose (GObject *object)
 	}
 
 	G_OBJECT_CLASS (tepl_buffer_parent_class)->dispose (object);
-}
-
-static void
-tepl_buffer_finalize (GObject *object)
-{
-	TeplBufferPrivate *priv = tepl_buffer_get_instance_private (TEPL_BUFFER (object));
-
-	g_free (priv->style_scheme_id_gsetting_key);
-
-	G_OBJECT_CLASS (tepl_buffer_parent_class)->finalize (object);
 }
 
 static gboolean
@@ -278,9 +239,7 @@ tepl_buffer_class_init (TeplBufferClass *klass)
 	GtkTextBufferClass *text_buffer_class = GTK_TEXT_BUFFER_CLASS (klass);
 
 	object_class->get_property = tepl_buffer_get_property;
-	object_class->set_property = tepl_buffer_set_property;
 	object_class->dispose = tepl_buffer_dispose;
-	object_class->finalize = tepl_buffer_finalize;
 
 	text_buffer_class->begin_user_action = tepl_buffer_begin_user_action;
 	text_buffer_class->end_user_action = tepl_buffer_end_user_action;
@@ -316,25 +275,6 @@ tepl_buffer_class_init (TeplBufferClass *klass)
 				     "",
 				     NULL,
 				     G_PARAM_READABLE |
-				     G_PARAM_STATIC_STRINGS);
-
-	/**
-	 * TeplBuffer:tepl-style-scheme-id:
-	 *
-	 * The #GtkSourceBuffer:style-scheme ID, as a string. This property is
-	 * useful for binding it to a #GSettings key.
-	 *
-	 * When the #GtkSourceBuffer:style-scheme is %NULL,
-	 * #TeplBuffer:tepl-style-scheme-id contains the empty string.
-	 *
-	 * Since: 2.0
-	 */
-	properties[PROP_TEPL_STYLE_SCHEME_ID] =
-		g_param_spec_string ("tepl-style-scheme-id",
-				     "Tepl Style Scheme ID",
-				     "",
-				     "",
-				     G_PARAM_READWRITE |
 				     G_PARAM_STATIC_STRINGS);
 
 	g_object_class_install_properties (object_class, N_PROPERTIES, properties);
@@ -375,8 +315,6 @@ style_scheme_notify_cb (GtkSourceBuffer *buffer,
 			gpointer         user_data)
 {
 	update_invalid_char_tag_style (TEPL_BUFFER (buffer));
-
-	g_object_notify_by_pspec (G_OBJECT (buffer), properties[PROP_TEPL_STYLE_SCHEME_ID]);
 }
 
 static void
@@ -644,82 +582,10 @@ tepl_buffer_get_full_title (TeplBuffer *buffer)
 	return full_title;
 }
 
-/**
- * tepl_buffer_provide_style_scheme_id_gsetting:
- * @buffer: a #TeplBuffer.
- * @settings: a #GSettings object.
- * @setting_key: a #GSettings key of type string.
- * @bind_to_property: whether to bind the #GSettings key to the property.
- *
- * A convenience function to provide a #GSettings key corresponding to the
- * #TeplBuffer:tepl-style-scheme-id property.
- *
- * Once this function is called, calling tepl_buffer_set_style_scheme_id() or
- * setting the property will benefit from a fallback mechanism that takes the
- * default value of the #GSettings key (see g_settings_get_default_value()).
- *
- * If @bind_to_property is %TRUE, then this function additionally binds the
- * #GSettings key to the property with the %G_SETTINGS_BIND_GET flag.
- *
- * Since: 6.4
- */
-void
-tepl_buffer_provide_style_scheme_id_gsetting (TeplBuffer  *buffer,
-					      GSettings   *settings,
-					      const gchar *setting_key,
-					      gboolean     bind_to_property)
-{
-	TeplBufferPrivate *priv;
-
-	g_return_if_fail (TEPL_IS_BUFFER (buffer));
-	g_return_if_fail (G_IS_SETTINGS (settings));
-	g_return_if_fail (setting_key != NULL);
-
-	priv = tepl_buffer_get_instance_private (buffer);
-
-	g_set_object (&priv->style_scheme_id_gsettings, settings);
-
-	g_free (priv->style_scheme_id_gsetting_key);
-	priv->style_scheme_id_gsetting_key = g_strdup (setting_key);
-
-	if (bind_to_property)
-	{
-		g_settings_bind (settings, setting_key,
-				 buffer, "tepl-style-scheme-id",
-				 G_SETTINGS_BIND_GET | G_SETTINGS_BIND_NO_SENSITIVITY);
-	}
-}
-
-/**
- * tepl_buffer_get_style_scheme_id:
- * @buffer: a #TeplBuffer.
- *
- * Returns: the #TeplBuffer:tepl-style-scheme-id. Free with g_free().
- * Since: 2.0
- */
-gchar *
-tepl_buffer_get_style_scheme_id (TeplBuffer *buffer)
-{
-	GtkSourceStyleScheme *style_scheme;
-	const gchar *id;
-
-	g_return_val_if_fail (TEPL_IS_BUFFER (buffer), g_strdup (""));
-
-	style_scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer));
-
-	if (style_scheme == NULL)
-	{
-		return g_strdup ("");
-	}
-
-	id = gtk_source_style_scheme_get_id (style_scheme);
-
-	return id != NULL ? g_strdup (id) : g_strdup ("");
-}
-
 static gchar *
-get_default_style_scheme_id (TeplBuffer *buffer)
+get_default_style_scheme_id (void)
 {
+#if 0
 	TeplBufferPrivate *priv = tepl_buffer_get_instance_private (buffer);
 
 	if (priv->style_scheme_id_gsettings != NULL)
@@ -740,6 +606,7 @@ get_default_style_scheme_id (TeplBuffer *buffer)
 			return default_style_scheme_id;
 		}
 	}
+#endif
 
 	return g_strdup ("tango");
 }
@@ -747,24 +614,15 @@ get_default_style_scheme_id (TeplBuffer *buffer)
 /**
  * tepl_buffer_set_style_scheme_id:
  * @buffer: a #TeplBuffer.
- * @style_scheme_id: the new value.
+ * @style_scheme_id: a #GtkSourceStyleScheme ID.
  *
- * Sets the #TeplBuffer:tepl-style-scheme-id property.
+ * Sets the #GtkSourceBuffer:style-scheme property.
  *
  * The #GtkSourceStyleScheme is taken from the default
  * #GtkSourceStyleSchemeManager as returned by
  * gtk_source_style_scheme_manager_get_default().
  *
- * Since 6.4, if there are no #GtkSourceStyleScheme for @style_scheme_id, there
- * is a fallback mechanism that takes the default value of the provided
- * #GSettings key (see tepl_buffer_provide_style_scheme_id_gsetting()); if the
- * #GSettings key was not provided, it takes a recommended #GtkSourceStyleScheme
- * provided by GtkSourceView (see the documentation of
- * gtk_source_buffer_set_style_scheme()).
- *
- * If more flexibility is desired, don't use the
- * #TeplBuffer:tepl-style-scheme-id property, use the #GtkSourceBuffer API
- * instead.
+ * If more flexibility is desired, use the #GtkSourceBuffer API instead.
  *
  * Since: 2.0
  */
@@ -785,7 +643,7 @@ tepl_buffer_set_style_scheme_id (TeplBuffer  *buffer,
 	{
 		gchar *default_style_scheme_id;
 
-		default_style_scheme_id = get_default_style_scheme_id (buffer);
+		default_style_scheme_id = get_default_style_scheme_id ();
 
 		g_warning_once ("Style scheme '%s' cannot be found, falling back to '%s' default style scheme.",
 				style_scheme_id,

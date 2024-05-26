@@ -323,6 +323,17 @@
           enum and the functions using it.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <code>tepl_buffer_provide_style_scheme_id_gsetting()</code> has been
+          removed. Use <link linkend="TeplSettings">TeplSettings</link> instead
+          to provide two GSettings keys instead of one.
+        </para>
+        <para>
+          The <code>TeplBuffer:tepl-style-scheme-id</code> property and
+          <code>tepl_buffer_get_style_scheme_id()</code> have been removed.
+        </para>
+      </listitem>
     </itemizedlist>
   </chapter>
 </part>
