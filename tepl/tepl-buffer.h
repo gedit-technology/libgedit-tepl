@@ -78,6 +78,10 @@ void			tepl_buffer_set_style_scheme_id		(TeplBuffer  *buffer,
 								 const gchar *style_scheme_id);
 
 G_MODULE_EXPORT
+void			tepl_buffer_connect_style_scheme_settings
+								(TeplBuffer *buffer);
+
+G_MODULE_EXPORT
 TeplSelectionType	tepl_buffer_get_selection_type		(TeplBuffer *buffer);
 
 G_GNUC_INTERNAL

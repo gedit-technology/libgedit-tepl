@@ -635,6 +635,56 @@ tepl_buffer_set_style_scheme_id (TeplBuffer  *buffer,
 	gtk_source_buffer_set_style_scheme (GTK_SOURCE_BUFFER (buffer), style_scheme);
 }
 
+static void
+update_style_scheme (TeplBuffer *buffer)
+{
+	TeplSettings *settings;
+	gchar *style_scheme_id;
+
+	settings = tepl_settings_get_singleton ();
+	style_scheme_id = tepl_settings_get_style_scheme_id (settings);
+
+	if (style_scheme_id != NULL)
+	{
+		tepl_buffer_set_style_scheme_id (buffer, style_scheme_id);
+		g_free (style_scheme_id);
+	}
+}
+
+static void
+style_scheme_id_notify_cb (TeplSettings *settings,
+			   GParamSpec   *pspec,
+			   TeplBuffer   *buffer)
+{
+	update_style_scheme (buffer);
+}
+
+/**
+ * tepl_buffer_connect_style_scheme_settings:
+ * @buffer: a #TeplBuffer.
+ *
+ * Connects #TeplSettings:style-scheme-id to #GtkSourceBuffer:style-scheme.
+ *
+ * Since: 6.12
+ */
+void
+tepl_buffer_connect_style_scheme_settings (TeplBuffer *buffer)
+{
+	TeplSettings *settings = tepl_settings_get_singleton ();
+
+	g_return_if_fail (TEPL_IS_BUFFER (buffer));
+
+	g_signal_handlers_disconnect_by_func (settings, style_scheme_id_notify_cb, buffer);
+
+	g_signal_connect_object (settings,
+				 "notify::style-scheme-id",
+				 G_CALLBACK (style_scheme_id_notify_cb),
+				 buffer,
+				 G_CONNECT_DEFAULT);
+
+	update_style_scheme (buffer);
+}
+
 /**
  * tepl_buffer_get_selection_type:
  * @buffer: a #TeplBuffer.
