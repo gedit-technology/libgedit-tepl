@@ -616,6 +616,45 @@ tepl_settings_get_style_scheme_id (TeplSettings *self)
 				      self->priv->key_style_scheme_id_for_light_theme);
 }
 
+gchar *
+_tepl_settings_get_default_style_scheme_id (TeplSettings *self)
+{
+	g_return_val_if_fail (TEPL_IS_SETTINGS (self), NULL);
+
+	if (self->priv->settings_style_scheme != NULL)
+	{
+		HdyStyleManager *style_manager = hdy_style_manager_get_default ();
+		const gchar *key_style_scheme_id;
+		GVariant *default_value;
+		gchar *default_style_scheme_id = NULL;
+
+		if (hdy_style_manager_get_dark (style_manager))
+		{
+			key_style_scheme_id = self->priv->key_style_scheme_id_for_dark_theme;
+		}
+		else
+		{
+			key_style_scheme_id = self->priv->key_style_scheme_id_for_light_theme;
+		}
+
+		default_value = g_settings_get_default_value (self->priv->settings_style_scheme,
+							      key_style_scheme_id);
+
+		if (default_value != NULL)
+		{
+			default_style_scheme_id = g_variant_dup_string (default_value, NULL);
+			g_variant_unref (default_value);
+		}
+
+		if (default_style_scheme_id != NULL)
+		{
+			return default_style_scheme_id;
+		}
+	}
+
+	return g_strdup ("tango");
+}
+
 /**
  * tepl_settings_get_range_uint:
  * @settings: a #GSettings.

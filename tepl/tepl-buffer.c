@@ -5,6 +5,7 @@
 #include "tepl-buffer.h"
 #include "tepl-abstract-factory.h"
 #include "tepl-metadata-manager.h"
+#include "tepl-settings.h"
 #include "tepl-utils.h"
 
 /**
@@ -582,35 +583,6 @@ tepl_buffer_get_full_title (TeplBuffer *buffer)
 	return full_title;
 }
 
-static gchar *
-get_default_style_scheme_id (void)
-{
-#if 0
-	TeplBufferPrivate *priv = tepl_buffer_get_instance_private (buffer);
-
-	if (priv->style_scheme_id_gsettings != NULL)
-	{
-		GVariant *default_value;
-		gchar *default_style_scheme_id = NULL;
-
-		default_value = g_settings_get_default_value (priv->style_scheme_id_gsettings,
-							      priv->style_scheme_id_gsetting_key);
-		if (default_value != NULL)
-		{
-			default_style_scheme_id = g_variant_dup_string (default_value, NULL);
-			g_variant_unref (default_value);
-		}
-
-		if (default_style_scheme_id != NULL)
-		{
-			return default_style_scheme_id;
-		}
-	}
-#endif
-
-	return g_strdup ("tango");
-}
-
 /**
  * tepl_buffer_set_style_scheme_id:
  * @buffer: a #TeplBuffer.
@@ -641,9 +613,10 @@ tepl_buffer_set_style_scheme_id (TeplBuffer  *buffer,
 
 	if (style_scheme == NULL)
 	{
+		TeplSettings *settings = tepl_settings_get_singleton ();
 		gchar *default_style_scheme_id;
 
-		default_style_scheme_id = get_default_style_scheme_id ();
+		default_style_scheme_id = _tepl_settings_get_default_style_scheme_id (settings);
 
 		g_warning_once ("Style scheme '%s' cannot be found, falling back to '%s' default style scheme.",
 				style_scheme_id,

@@ -90,6 +90,9 @@ void		tepl_settings_provide_style_scheme_settings	(TeplSettings *self,
 G_MODULE_EXPORT
 gchar *		tepl_settings_get_style_scheme_id		(TeplSettings *self);
 
+G_GNUC_INTERNAL
+gchar *		_tepl_settings_get_default_style_scheme_id	(TeplSettings *self);
+
 G_MODULE_EXPORT
 gboolean	tepl_settings_get_range_uint			(GSettings   *settings,
 								 const gchar *key,
