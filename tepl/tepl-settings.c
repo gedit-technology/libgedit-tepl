@@ -589,8 +589,8 @@ tepl_settings_provide_style_scheme_settings (TeplSettings *self,
  * tepl_settings_get_style_scheme_id:
  * @self: the #TeplSettings instance.
  *
- * Returns: (transfer full): the value of the #TeplSettings:style-scheme-id
- *   property.
+ * Returns: (transfer full) (nullable): the value of the
+ *   #TeplSettings:style-scheme-id property.
  * Since: 6.12
  */
 gchar *
