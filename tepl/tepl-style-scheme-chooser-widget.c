@@ -190,7 +190,7 @@ tepl_style_scheme_chooser_widget_class_init (TeplStyleSchemeChooserWidgetClass *
 	g_object_class_install_property (object_class,
 					 PROP_TEPL_STYLE_SCHEME_ID,
 					 g_param_spec_string ("tepl-style-scheme-id",
-							      "Tepl Style Scheme ID",
+							      "tepl-style-scheme-id",
 							      "",
 							      "",
 							      G_PARAM_READWRITE |
@@ -367,7 +367,7 @@ listen_to_scheme_manager_changes (TeplStyleSchemeChooserWidget *chooser)
 				 "changed",
 				 G_CALLBACK (style_scheme_manager_changed_cb),
 				 chooser,
-				 0);
+				 G_CONNECT_DEFAULT);
 }
 
 static void
