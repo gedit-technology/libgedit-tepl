@@ -330,8 +330,12 @@
           to provide two GSettings keys instead of one.
         </para>
         <para>
-          The <code>TeplBuffer:tepl-style-scheme-id</code> property and
-          <code>tepl_buffer_get_style_scheme_id()</code> have been removed.
+          The <code>TeplBuffer:tepl-style-scheme-id</code> property,
+          <code>tepl_buffer_get_style_scheme_id()</code> and
+          <code>tepl_buffer_set_style_scheme_id()</code> have all been removed.
+          You can use
+          <link linkend="tepl-buffer-connect-style-scheme-settings">tepl_buffer_connect_style_scheme_settings()</link>
+          instead.
         </para>
       </listitem>
     </itemizedlist>

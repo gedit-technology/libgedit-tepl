@@ -74,10 +74,6 @@ G_MODULE_EXPORT
 gchar *			tepl_buffer_get_full_title		(TeplBuffer *buffer);
 
 G_MODULE_EXPORT
-void			tepl_buffer_set_style_scheme_id		(TeplBuffer  *buffer,
-								 const gchar *style_scheme_id);
-
-G_MODULE_EXPORT
 void			tepl_buffer_connect_style_scheme_settings
 								(TeplBuffer *buffer);
 

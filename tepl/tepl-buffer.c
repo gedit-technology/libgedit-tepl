@@ -583,30 +583,14 @@ tepl_buffer_get_full_title (TeplBuffer *buffer)
 	return full_title;
 }
 
-/**
- * tepl_buffer_set_style_scheme_id:
- * @buffer: a #TeplBuffer.
- * @style_scheme_id: a #GtkSourceStyleScheme ID.
- *
- * Sets the #GtkSourceBuffer:style-scheme property.
- *
- * The #GtkSourceStyleScheme is taken from the default
- * #GtkSourceStyleSchemeManager as returned by
- * gtk_source_style_scheme_manager_get_default().
- *
- * If more flexibility is desired, use the #GtkSourceBuffer API instead.
- *
- * Since: 2.0
- */
-void
-tepl_buffer_set_style_scheme_id (TeplBuffer  *buffer,
-				 const gchar *style_scheme_id)
+static void
+set_style_scheme_id (TeplBuffer  *buffer,
+		     const gchar *style_scheme_id)
 {
 	GtkSourceStyleSchemeManager *manager;
 	GtkSourceStyleScheme *style_scheme;
 
-	g_return_if_fail (TEPL_IS_BUFFER (buffer));
-	g_return_if_fail (style_scheme_id != NULL);
+	g_assert (style_scheme_id != NULL);
 
 	manager = gtk_source_style_scheme_manager_get_default ();
 	style_scheme = gtk_source_style_scheme_manager_get_scheme (manager, style_scheme_id);
@@ -646,7 +630,7 @@ update_style_scheme (TeplBuffer *buffer)
 
 	if (style_scheme_id != NULL)
 	{
-		tepl_buffer_set_style_scheme_id (buffer, style_scheme_id);
+		set_style_scheme_id (buffer, style_scheme_id);
 		g_free (style_scheme_id);
 	}
 }
