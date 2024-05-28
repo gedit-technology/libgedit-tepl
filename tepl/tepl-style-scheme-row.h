@@ -36,7 +36,8 @@ G_GNUC_INTERNAL
 GType			_tepl_style_scheme_row_get_type		(void);
 
 G_GNUC_INTERNAL
-TeplStyleSchemeRow *	_tepl_style_scheme_row_new		(GtkSourceStyleScheme *style_scheme);
+TeplStyleSchemeRow *	_tepl_style_scheme_row_new		(GtkSourceStyleScheme *style_scheme,
+								 gboolean              for_dark_theme_variant);
 
 G_GNUC_INTERNAL
 GtkSourceStyleScheme *	_tepl_style_scheme_row_get_style_scheme	(TeplStyleSchemeRow *row);

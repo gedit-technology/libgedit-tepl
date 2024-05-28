@@ -2,7 +2,9 @@
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
+#include "config.h"
 #include "tepl-style-scheme-row.h"
+#include <glib/gi18n-lib.h>
 
 struct _TeplStyleSchemeRowPrivate
 {
@@ -10,6 +12,50 @@ struct _TeplStyleSchemeRowPrivate
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (TeplStyleSchemeRow, _tepl_style_scheme_row, GTK_TYPE_LIST_BOX_ROW)
+
+static gboolean
+is_supported (TeplStyleSchemeRow *row,
+	      gboolean            for_dark_theme_variant)
+{
+	GtkSourceStyleSchemeKind kind;
+
+	kind = gtk_source_style_scheme_get_kind (row->priv->style_scheme);
+
+	switch (kind)
+	{
+		case GTK_SOURCE_STYLE_SCHEME_KIND_LIGHT:
+		case GTK_SOURCE_STYLE_SCHEME_KIND_DARK:
+			return TRUE;
+
+		case GTK_SOURCE_STYLE_SCHEME_KIND_LIGHT_ONLY:
+			return !for_dark_theme_variant;
+
+		case GTK_SOURCE_STYLE_SCHEME_KIND_DARK_ONLY:
+			return for_dark_theme_variant;
+
+		default:
+			break;
+	}
+
+	g_return_val_if_reached (FALSE);
+}
+
+static const gchar *
+get_description (TeplStyleSchemeRow *row,
+		 gboolean            for_dark_theme_variant)
+{
+	if (is_supported (row, for_dark_theme_variant))
+	{
+		return gtk_source_style_scheme_get_description (row->priv->style_scheme);
+	}
+
+	if (for_dark_theme_variant)
+	{
+		return _("Unsupported for the dark theme variant");
+	}
+
+	return _("Unsupported for the light theme variant");
+}
 
 static void
 _tepl_style_scheme_row_dispose (GObject *object)
@@ -36,7 +82,8 @@ _tepl_style_scheme_row_init (TeplStyleSchemeRow *row)
 }
 
 static void
-add_label (TeplStyleSchemeRow *row)
+add_label (TeplStyleSchemeRow *row,
+	   gboolean            for_dark_theme_variant)
 {
 	const gchar *name;
 	const gchar *description;
@@ -44,7 +91,7 @@ add_label (TeplStyleSchemeRow *row)
 	GtkWidget *label;
 
 	name = gtk_source_style_scheme_get_name (row->priv->style_scheme);
-	description = gtk_source_style_scheme_get_description (row->priv->style_scheme);
+	description = get_description (row, for_dark_theme_variant);
 
 	if (description != NULL)
 	{
@@ -66,7 +113,8 @@ add_label (TeplStyleSchemeRow *row)
 }
 
 TeplStyleSchemeRow *
-_tepl_style_scheme_row_new (GtkSourceStyleScheme *style_scheme)
+_tepl_style_scheme_row_new (GtkSourceStyleScheme *style_scheme,
+			    gboolean              for_dark_theme_variant)
 {
 	TeplStyleSchemeRow *row;
 
@@ -75,7 +123,7 @@ _tepl_style_scheme_row_new (GtkSourceStyleScheme *style_scheme)
 	row = g_object_new (TEPL_TYPE_STYLE_SCHEME_ROW, NULL);
 	row->priv->style_scheme = g_object_ref (style_scheme);
 
-	add_label (row);
+	add_label (row, for_dark_theme_variant);
 
 	return row;
 }
