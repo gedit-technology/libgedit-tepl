@@ -5,7 +5,7 @@
 #ifndef TEPL_STYLE_SCHEME_ROW_H
 #define TEPL_STYLE_SCHEME_ROW_H
 
-#include <gtk/gtk.h>
+#include <gtksourceview/gtksource.h>
 
 G_BEGIN_DECLS
 
@@ -33,10 +33,13 @@ struct _TeplStyleSchemeRowClass
 };
 
 G_GNUC_INTERNAL
-GType			_tepl_style_scheme_row_get_type	(void);
+GType			_tepl_style_scheme_row_get_type		(void);
 
 G_GNUC_INTERNAL
-TeplStyleSchemeRow *	_tepl_style_scheme_row_new	(void);
+TeplStyleSchemeRow *	_tepl_style_scheme_row_new		(GtkSourceStyleScheme *style_scheme);
+
+G_GNUC_INTERNAL
+GtkSourceStyleScheme *	_tepl_style_scheme_row_get_style_scheme	(TeplStyleSchemeRow *row);
 
 G_END_DECLS
 
