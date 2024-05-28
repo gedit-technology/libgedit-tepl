@@ -3,7 +3,7 @@
  */
 
 #include "tepl-style-scheme-chooser-widget.h"
-#include <gtksourceview/gtksource.h>
+#include "tepl-style-scheme-row.h"
 #include "tepl-utils.h"
 
 /**
@@ -33,26 +33,7 @@ enum
 	PROP_TEPL_STYLE_SCHEME_ID
 };
 
-#define LIST_BOX_ROW_STYLE_SCHEME_KEY "style-scheme-key"
-
 G_DEFINE_TYPE_WITH_PRIVATE (TeplStyleSchemeChooserWidget, tepl_style_scheme_chooser_widget, GTK_TYPE_BIN)
-
-static void
-list_box_row_set_style_scheme (GtkListBoxRow        *list_box_row,
-			       GtkSourceStyleScheme *style_scheme)
-{
-	g_object_set_data_full (G_OBJECT (list_box_row),
-				LIST_BOX_ROW_STYLE_SCHEME_KEY,
-				g_object_ref (style_scheme),
-				g_object_unref);
-}
-
-/* Returns: (transfer none). */
-static GtkSourceStyleScheme *
-list_box_row_get_style_scheme (GtkListBoxRow *list_box_row)
-{
-	return g_object_get_data (G_OBJECT (list_box_row), LIST_BOX_ROW_STYLE_SCHEME_KEY);
-}
 
 static gboolean
 style_scheme_equal (GtkSourceStyleScheme *style_scheme1,
@@ -180,7 +161,7 @@ get_style_scheme (TeplStyleSchemeChooserWidget *chooser)
 	selected_row = gtk_list_box_get_selected_row (chooser->priv->list_box);
 	if (selected_row != NULL)
 	{
-		return list_box_row_get_style_scheme (selected_row);
+		return _tepl_style_scheme_row_get_style_scheme (TEPL_STYLE_SCHEME_ROW (selected_row));
 	}
 
 	return NULL;
@@ -190,7 +171,7 @@ static void
 set_style_scheme (TeplStyleSchemeChooserWidget *chooser,
 		  GtkSourceStyleScheme         *style_scheme)
 {
-	GList *all_list_box_rows;
+	GList *all_rows;
 	GList *l;
 
 	if (style_scheme == NULL)
@@ -198,23 +179,25 @@ set_style_scheme (TeplStyleSchemeChooserWidget *chooser,
 		return;
 	}
 
-	all_list_box_rows = gtk_container_get_children (GTK_CONTAINER (chooser->priv->list_box));
+	all_rows = gtk_container_get_children (GTK_CONTAINER (chooser->priv->list_box));
 
-	for (l = all_list_box_rows; l != NULL; l = l->next)
+	for (l = all_rows; l != NULL; l = l->next)
 	{
-		GtkListBoxRow *cur_list_box_row = GTK_LIST_BOX_ROW (l->data);
+		TeplStyleSchemeRow *cur_row = TEPL_STYLE_SCHEME_ROW (l->data);
 		GtkSourceStyleScheme *cur_style_scheme;
 
-		cur_style_scheme = list_box_row_get_style_scheme (cur_list_box_row);
+		cur_style_scheme = _tepl_style_scheme_row_get_style_scheme (cur_row);
 		if (style_scheme_equal (cur_style_scheme, style_scheme))
 		{
-			gtk_list_box_select_row (chooser->priv->list_box, cur_list_box_row);
-			tepl_utils_list_box_scroll_to_row (chooser->priv->list_box, cur_list_box_row);
+			gtk_list_box_select_row (chooser->priv->list_box,
+						 GTK_LIST_BOX_ROW (cur_row));
+			tepl_utils_list_box_scroll_to_row (chooser->priv->list_box,
+							   GTK_LIST_BOX_ROW (cur_row));
 			break;
 		}
 	}
 
-	g_list_free (all_list_box_rows);
+	g_list_free (all_rows);
 }
 
 static void
@@ -225,7 +208,7 @@ append_style_scheme_to_list_box (TeplStyleSchemeChooserWidget *chooser,
 	const gchar *description;
 	gchar *markup;
 	GtkWidget *label;
-	GtkWidget *list_box_row;
+	TeplStyleSchemeRow *row;
 
 	name = gtk_source_style_scheme_get_name (style_scheme);
 	g_return_if_fail (name != NULL);
@@ -244,12 +227,11 @@ append_style_scheme_to_list_box (TeplStyleSchemeChooserWidget *chooser,
 	gtk_label_set_markup (GTK_LABEL (label), markup);
 	gtk_widget_set_halign (label, GTK_ALIGN_START);
 
-	list_box_row = gtk_list_box_row_new ();
-	gtk_container_add (GTK_CONTAINER (list_box_row), label);
-	list_box_row_set_style_scheme (GTK_LIST_BOX_ROW (list_box_row), style_scheme);
-	gtk_widget_show_all (list_box_row);
+	row = _tepl_style_scheme_row_new (style_scheme);
+	gtk_container_add (GTK_CONTAINER (row), label);
+	gtk_widget_show_all (GTK_WIDGET (row));
 
-	gtk_list_box_insert (chooser->priv->list_box, list_box_row, -1);
+	gtk_list_box_insert (chooser->priv->list_box, GTK_WIDGET (row), -1);
 
 	g_free (markup);
 }
