@@ -117,6 +117,7 @@ _tepl_style_scheme_row_new (GtkSourceStyleScheme *style_scheme,
 			    gboolean              for_dark_theme_variant)
 {
 	TeplStyleSchemeRow *row;
+	gboolean selectable;
 
 	g_return_val_if_fail (GTK_SOURCE_IS_STYLE_SCHEME (style_scheme), NULL);
 
@@ -124,6 +125,10 @@ _tepl_style_scheme_row_new (GtkSourceStyleScheme *style_scheme,
 	row->priv->style_scheme = g_object_ref (style_scheme);
 
 	add_label (row, for_dark_theme_variant);
+
+	selectable = is_supported (row, for_dark_theme_variant);
+	gtk_list_box_row_set_selectable (GTK_LIST_BOX_ROW (row), selectable);
+	gtk_widget_set_sensitive (GTK_WIDGET (row), selectable);
 
 	return row;
 }
