@@ -204,36 +204,12 @@ static void
 append_style_scheme_to_list_box (TeplStyleSchemeChooserWidget *chooser,
 				 GtkSourceStyleScheme         *style_scheme)
 {
-	const gchar *name;
-	const gchar *description;
-	gchar *markup;
-	GtkWidget *label;
 	TeplStyleSchemeRow *row;
 
-	name = gtk_source_style_scheme_get_name (style_scheme);
-	g_return_if_fail (name != NULL);
-	description = gtk_source_style_scheme_get_description (style_scheme);
-
-	if (description != NULL)
-	{
-		markup = g_markup_printf_escaped ("<b>%s</b> - %s", name, description);
-	}
-	else
-	{
-		markup = g_markup_printf_escaped ("<b>%s</b>", name);
-	}
-
-	label = gtk_label_new (NULL);
-	gtk_label_set_markup (GTK_LABEL (label), markup);
-	gtk_widget_set_halign (label, GTK_ALIGN_START);
-
 	row = _tepl_style_scheme_row_new (style_scheme);
-	gtk_container_add (GTK_CONTAINER (row), label);
-	gtk_widget_show_all (GTK_WIDGET (row));
+	gtk_widget_show (GTK_WIDGET (row));
 
 	gtk_list_box_insert (chooser->priv->list_box, GTK_WIDGET (row), -1);
-
-	g_free (markup);
 }
 
 static void
