@@ -110,6 +110,7 @@ TEPL_PRIVATE_HEADERS = [
   'tepl-metadata-attic.h',
   'tepl-metadata-parser.h',
   'tepl-panel-item-simple.h',
+  'tepl-style-scheme-row.h',
   'tepl-window-actions-edit.h',
   'tepl-window-actions-file.h',
   'tepl-window-actions-search.h'
@@ -121,6 +122,7 @@ tepl_private_c_files = [
   'tepl-metadata-attic.c',
   'tepl-metadata-parser.c',
   'tepl-panel-item-simple.c',
+  'tepl-style-scheme-row.c',
   'tepl-window-actions-edit.c',
   'tepl-window-actions-file.c',
   'tepl-window-actions-search.c'
