@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2020 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2020-2024 - Sébastien Wilmet <swilmet@gnome.org>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
@@ -9,10 +9,9 @@
 /**
  * SECTION:style-scheme-chooser-widget
  * @Title: TeplStyleSchemeChooserWidget
- * @Short_description: A simple #GtkSourceStyleSchemeChooser
+ * @Short_description: A #GtkSourceStyleScheme chooser
  *
- * #TeplStyleSchemeChooserWidget is a simple implementation of the
- * #GtkSourceStyleSchemeChooser interface.
+ * #TeplStyleSchemeChooserWidget permits to choose a #GtkSourceStyleScheme.
  *
  * It shows a list with the name and description of each #GtkSourceStyleScheme,
  * taken from the default #GtkSourceStyleSchemeManager (as returned by
@@ -21,9 +20,6 @@
  * #TeplStyleSchemeChooserWidget contains a #GtkScrolledWindow internally. When
  * the #GtkWidget::map signal is emitted, it scrolls to the selected row (useful
  * when the list is long).
- *
- * There is also an additional convenience property:
- * #TeplStyleSchemeChooserWidget:tepl-style-scheme-id.
  */
 
 struct _TeplStyleSchemeChooserWidgetPrivate
@@ -34,21 +30,12 @@ struct _TeplStyleSchemeChooserWidgetPrivate
 enum
 {
 	PROP_0,
-	PROP_STYLE_SCHEME,
 	PROP_TEPL_STYLE_SCHEME_ID
 };
 
 #define LIST_BOX_ROW_STYLE_SCHEME_KEY "style-scheme-key"
 
-static void gtk_source_style_scheme_chooser_interface_init (gpointer g_iface,
-							    gpointer iface_data);
-
-G_DEFINE_TYPE_WITH_CODE (TeplStyleSchemeChooserWidget,
-			 tepl_style_scheme_chooser_widget,
-			 GTK_TYPE_BIN,
-			 G_ADD_PRIVATE (TeplStyleSchemeChooserWidget)
-			 G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_STYLE_SCHEME_CHOOSER,
-						gtk_source_style_scheme_chooser_interface_init))
+G_DEFINE_TYPE_WITH_PRIVATE (TeplStyleSchemeChooserWidget, tepl_style_scheme_chooser_widget, GTK_TYPE_BIN)
 
 static void
 list_box_row_set_style_scheme (GtkListBoxRow        *list_box_row,
@@ -95,15 +82,10 @@ tepl_style_scheme_chooser_widget_get_property (GObject    *object,
                                                GValue     *value,
                                                GParamSpec *pspec)
 {
-	GtkSourceStyleSchemeChooser *gsv_chooser = GTK_SOURCE_STYLE_SCHEME_CHOOSER (object);
 	TeplStyleSchemeChooserWidget *tepl_chooser = TEPL_STYLE_SCHEME_CHOOSER_WIDGET (object);
 
 	switch (prop_id)
 	{
-		case PROP_STYLE_SCHEME:
-			g_value_set_object (value, gtk_source_style_scheme_chooser_get_style_scheme (gsv_chooser));
-			break;
-
 		case PROP_TEPL_STYLE_SCHEME_ID:
 			g_value_take_string (value, tepl_style_scheme_chooser_widget_get_style_scheme_id (tepl_chooser));
 			break;
@@ -120,15 +102,10 @@ tepl_style_scheme_chooser_widget_set_property (GObject      *object,
                                                const GValue *value,
                                                GParamSpec   *pspec)
 {
-	GtkSourceStyleSchemeChooser *gsv_chooser = GTK_SOURCE_STYLE_SCHEME_CHOOSER (object);
 	TeplStyleSchemeChooserWidget *tepl_chooser = TEPL_STYLE_SCHEME_CHOOSER_WIDGET (object);
 
 	switch (prop_id)
 	{
-		case PROP_STYLE_SCHEME:
-			gtk_source_style_scheme_chooser_set_style_scheme (gsv_chooser, g_value_get_object (value));
-			break;
-
 		case PROP_TEPL_STYLE_SCHEME_ID:
 			tepl_style_scheme_chooser_widget_set_style_scheme_id (tepl_chooser, g_value_get_string (value));
 			break;
@@ -174,16 +151,14 @@ tepl_style_scheme_chooser_widget_class_init (TeplStyleSchemeChooserWidgetClass *
 
 	widget_class->map = tepl_style_scheme_chooser_widget_map;
 
-	g_object_class_override_property (object_class, PROP_STYLE_SCHEME, "style-scheme");
-
 	/**
 	 * TeplStyleSchemeChooserWidget:tepl-style-scheme-id:
 	 *
-	 * The #GtkSourceStyleSchemeChooser:style-scheme ID, as a string. This
-	 * property is useful for binding it to a #GSettings key.
+	 * The selected #GtkSourceStyleScheme ID, as a string. This property is
+	 * useful for binding it to a #GSettings key.
 	 *
-	 * When the #GtkSourceStyleSchemeChooser:style-scheme is %NULL, this
-	 * property contains the empty string.
+	 * When no style scheme is selected, this property contains the empty
+	 * string.
 	 *
 	 * Since: 5.0
 	 */
@@ -198,9 +173,8 @@ tepl_style_scheme_chooser_widget_class_init (TeplStyleSchemeChooserWidgetClass *
 }
 
 static GtkSourceStyleScheme *
-tepl_style_scheme_chooser_widget_get_style_scheme (GtkSourceStyleSchemeChooser *gsv_chooser)
+get_style_scheme (TeplStyleSchemeChooserWidget *chooser)
 {
-	TeplStyleSchemeChooserWidget *chooser = TEPL_STYLE_SCHEME_CHOOSER_WIDGET (gsv_chooser);
 	GtkListBoxRow *selected_row;
 
 	selected_row = gtk_list_box_get_selected_row (chooser->priv->list_box);
@@ -213,10 +187,9 @@ tepl_style_scheme_chooser_widget_get_style_scheme (GtkSourceStyleSchemeChooser *
 }
 
 static void
-tepl_style_scheme_chooser_widget_set_style_scheme (GtkSourceStyleSchemeChooser *gsv_chooser,
-						   GtkSourceStyleScheme        *style_scheme)
+set_style_scheme (TeplStyleSchemeChooserWidget *chooser,
+		  GtkSourceStyleScheme         *style_scheme)
 {
-	TeplStyleSchemeChooserWidget *chooser = TEPL_STYLE_SCHEME_CHOOSER_WIDGET (gsv_chooser);
 	GList *all_list_box_rows;
 	GList *l;
 
@@ -242,16 +215,6 @@ tepl_style_scheme_chooser_widget_set_style_scheme (GtkSourceStyleSchemeChooser *
 	}
 
 	g_list_free (all_list_box_rows);
-}
-
-static void
-gtk_source_style_scheme_chooser_interface_init (gpointer g_iface,
-						gpointer iface_data)
-{
-	GtkSourceStyleSchemeChooserInterface *interface = g_iface;
-
-	interface->get_style_scheme = tepl_style_scheme_chooser_widget_get_style_scheme;
-	interface->set_style_scheme = tepl_style_scheme_chooser_widget_set_style_scheme;
 }
 
 static void
@@ -311,9 +274,8 @@ populate_list_box (TeplStyleSchemeChooserWidget *chooser)
 }
 
 static void
-notify_properties (TeplStyleSchemeChooserWidget *chooser)
+notify_property (TeplStyleSchemeChooserWidget *chooser)
 {
-	g_object_notify (G_OBJECT (chooser), "style-scheme");
 	g_object_notify (G_OBJECT (chooser), "tepl-style-scheme-id");
 }
 
@@ -321,7 +283,7 @@ static void
 list_box_selected_rows_changed_cb (GtkListBox                   *list_box,
 				   TeplStyleSchemeChooserWidget *chooser)
 {
-	notify_properties (chooser);
+	notify_property (chooser);
 }
 
 static void
@@ -350,8 +312,8 @@ style_scheme_manager_changed_cb (GtkSourceStyleSchemeManager  *manager,
 					   list_box_selected_rows_changed_cb,
 					   chooser);
 
-	/* Notify properies in all cases, even if no rows are selected. */
-	notify_properties (chooser);
+	/* Notify the property in all cases, even if no rows are selected. */
+	notify_property (chooser);
 
 	g_free (style_scheme_id);
 }
@@ -427,21 +389,19 @@ tepl_style_scheme_chooser_widget_new (void)
  * tepl_style_scheme_chooser_widget_get_style_scheme_id:
  * @chooser: a #TeplStyleSchemeChooserWidget.
  *
- * Returns: the value of the #TeplStyleSchemeChooserWidget:tepl-style-scheme-id
- * property. Free with g_free() when no longer needed.
+ * Returns: (transfer full): the value of the
+ *   #TeplStyleSchemeChooserWidget:tepl-style-scheme-id property.
  * Since: 5.0
  */
 gchar *
 tepl_style_scheme_chooser_widget_get_style_scheme_id (TeplStyleSchemeChooserWidget *chooser)
 {
-	GtkSourceStyleSchemeChooser *gsv_chooser;
 	GtkSourceStyleScheme *style_scheme;
 	const gchar *id;
 
 	g_return_val_if_fail (TEPL_IS_STYLE_SCHEME_CHOOSER_WIDGET (chooser), g_strdup (""));
 
-	gsv_chooser = GTK_SOURCE_STYLE_SCHEME_CHOOSER (chooser);
-	style_scheme = gtk_source_style_scheme_chooser_get_style_scheme (gsv_chooser);
+	style_scheme = get_style_scheme (chooser);
 
 	if (style_scheme == NULL)
 	{
@@ -481,7 +441,6 @@ tepl_style_scheme_chooser_widget_set_style_scheme_id (TeplStyleSchemeChooserWidg
 
 	if (style_scheme != NULL)
 	{
-		gtk_source_style_scheme_chooser_set_style_scheme (GTK_SOURCE_STYLE_SCHEME_CHOOSER (chooser),
-								  style_scheme);
+		set_style_scheme (chooser, style_scheme);
 	}
 }
