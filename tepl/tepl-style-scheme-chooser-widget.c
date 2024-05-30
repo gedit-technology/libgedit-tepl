@@ -71,12 +71,16 @@ get_style_scheme_id (TeplStyleSchemeChooserWidget *chooser)
 }
 
 static void
-set_style_scheme (TeplStyleSchemeChooserWidget *chooser,
-		  GtkSourceStyleScheme         *style_scheme)
+set_style_scheme_id (TeplStyleSchemeChooserWidget *chooser,
+		     const gchar                  *style_scheme_id)
 {
+	GtkSourceStyleSchemeManager *manager;
+	GtkSourceStyleScheme *style_scheme;
 	GList *all_rows;
 	GList *l;
 
+	manager = gtk_source_style_scheme_manager_get_default ();
+	style_scheme = gtk_source_style_scheme_manager_get_scheme (manager, style_scheme_id);
 	if (style_scheme == NULL)
 	{
 		return;
@@ -101,25 +105,6 @@ set_style_scheme (TeplStyleSchemeChooserWidget *chooser,
 	}
 
 	g_list_free (all_rows);
-}
-
-static void
-set_style_scheme_id (TeplStyleSchemeChooserWidget *chooser,
-		     const gchar                  *style_scheme_id)
-{
-	GtkSourceStyleSchemeManager *manager;
-	GtkSourceStyleScheme *style_scheme;
-
-	g_return_if_fail (TEPL_IS_STYLE_SCHEME_CHOOSER_WIDGET (chooser));
-	g_return_if_fail (style_scheme_id != NULL);
-
-	manager = gtk_source_style_scheme_manager_get_default ();
-	style_scheme = gtk_source_style_scheme_manager_get_scheme (manager, style_scheme_id);
-
-	if (style_scheme != NULL)
-	{
-		set_style_scheme (chooser, style_scheme);
-	}
 }
 
 static void
