@@ -27,12 +27,6 @@ struct _TeplStyleSchemeChooserWidgetPrivate
 	GtkListBox *list_box;
 };
 
-enum
-{
-	PROP_0,
-	PROP_TEPL_STYLE_SCHEME_ID
-};
-
 G_DEFINE_TYPE_WITH_PRIVATE (TeplStyleSchemeChooserWidget, tepl_style_scheme_chooser_widget, GTK_TYPE_BIN)
 
 static gboolean
@@ -55,46 +49,6 @@ style_scheme_equal (GtkSourceStyleScheme *style_scheme1,
 	id1 = gtk_source_style_scheme_get_id (style_scheme1);
 	id2 = gtk_source_style_scheme_get_id (style_scheme2);
 	return g_strcmp0 (id1, id2) == 0;
-}
-
-static void
-tepl_style_scheme_chooser_widget_get_property (GObject    *object,
-                                               guint       prop_id,
-                                               GValue     *value,
-                                               GParamSpec *pspec)
-{
-	TeplStyleSchemeChooserWidget *tepl_chooser = TEPL_STYLE_SCHEME_CHOOSER_WIDGET (object);
-
-	switch (prop_id)
-	{
-		case PROP_TEPL_STYLE_SCHEME_ID:
-			g_value_take_string (value, tepl_style_scheme_chooser_widget_get_style_scheme_id (tepl_chooser));
-			break;
-
-		default:
-			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-			break;
-	}
-}
-
-static void
-tepl_style_scheme_chooser_widget_set_property (GObject      *object,
-                                               guint         prop_id,
-                                               const GValue *value,
-                                               GParamSpec   *pspec)
-{
-	TeplStyleSchemeChooserWidget *tepl_chooser = TEPL_STYLE_SCHEME_CHOOSER_WIDGET (object);
-
-	switch (prop_id)
-	{
-		case PROP_TEPL_STYLE_SCHEME_ID:
-			tepl_style_scheme_chooser_widget_set_style_scheme_id (tepl_chooser, g_value_get_string (value));
-			break;
-
-		default:
-			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-			break;
-	}
 }
 
 static void
@@ -126,31 +80,9 @@ tepl_style_scheme_chooser_widget_class_init (TeplStyleSchemeChooserWidgetClass *
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-	object_class->get_property = tepl_style_scheme_chooser_widget_get_property;
-	object_class->set_property = tepl_style_scheme_chooser_widget_set_property;
 	object_class->dispose = tepl_style_scheme_chooser_widget_dispose;
 
 	widget_class->map = tepl_style_scheme_chooser_widget_map;
-
-	/**
-	 * TeplStyleSchemeChooserWidget:tepl-style-scheme-id:
-	 *
-	 * The selected #GtkSourceStyleScheme ID, as a string. This property is
-	 * useful for binding it to a #GSettings key.
-	 *
-	 * When no style scheme is selected, this property contains the empty
-	 * string.
-	 *
-	 * Since: 5.0
-	 */
-	g_object_class_install_property (object_class,
-					 PROP_TEPL_STYLE_SCHEME_ID,
-					 g_param_spec_string ("tepl-style-scheme-id",
-							      "tepl-style-scheme-id",
-							      "",
-							      "",
-							      G_PARAM_READWRITE |
-							      G_PARAM_STATIC_STRINGS));
 }
 
 static GtkSourceStyleScheme *
@@ -232,16 +164,10 @@ populate_list_box (TeplStyleSchemeChooserWidget *chooser)
 }
 
 static void
-notify_property (TeplStyleSchemeChooserWidget *chooser)
-{
-	g_object_notify (G_OBJECT (chooser), "tepl-style-scheme-id");
-}
-
-static void
 list_box_selected_rows_changed_cb (GtkListBox                   *list_box,
 				   TeplStyleSchemeChooserWidget *chooser)
 {
-	notify_property (chooser);
+	/* TODO */
 }
 
 static void
@@ -269,9 +195,6 @@ style_scheme_manager_changed_cb (GtkSourceStyleSchemeManager  *manager,
 	g_signal_handlers_unblock_by_func (chooser->priv->list_box,
 					   list_box_selected_rows_changed_cb,
 					   chooser);
-
-	/* Notify the property in all cases, even if no rows are selected. */
-	notify_property (chooser);
 
 	g_free (style_scheme_id);
 }
