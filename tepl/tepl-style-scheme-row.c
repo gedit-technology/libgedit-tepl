@@ -112,7 +112,6 @@ add_label (TeplStyleSchemeRow *row,
 	label = gtk_label_new (NULL);
 	gtk_label_set_markup (GTK_LABEL (label), markup);
 	gtk_widget_set_halign (label, GTK_ALIGN_START);
-	gtk_widget_show (label);
 
 	gtk_container_add (GTK_CONTAINER (row), label);
 
@@ -136,6 +135,8 @@ _tepl_style_scheme_row_new (GtkSourceStyleScheme *style_scheme,
 	selectable = is_supported (row, for_dark_theme_variant);
 	gtk_list_box_row_set_selectable (GTK_LIST_BOX_ROW (row), selectable);
 	gtk_widget_set_sensitive (GTK_WIDGET (row), selectable);
+
+	gtk_widget_show_all (GTK_WIDGET (row));
 
 	return row;
 }

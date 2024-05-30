@@ -161,8 +161,6 @@ append_style_scheme_to_list_box (TeplStyleSchemeChooserWidget *chooser,
 	TeplStyleSchemeRow *row;
 
 	row = _tepl_style_scheme_row_new (style_scheme, for_dark_theme_variant);
-	gtk_widget_show (GTK_WIDGET (row));
-
 	gtk_list_box_insert (chooser->priv->list_box, GTK_WIDGET (row), -1);
 }
 
