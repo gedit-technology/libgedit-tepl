@@ -154,17 +154,6 @@ get_for_dark_theme_variant (TeplStyleSchemeChooserWidget *chooser)
 }
 
 static void
-append_style_scheme_to_list_box (TeplStyleSchemeChooserWidget *chooser,
-				 GtkSourceStyleScheme         *style_scheme,
-				 gboolean                      for_dark_theme_variant)
-{
-	TeplStyleSchemeRow *row;
-
-	row = _tepl_style_scheme_row_new (style_scheme, for_dark_theme_variant);
-	gtk_list_box_insert (chooser->priv->list_box, GTK_WIDGET (row), -1);
-}
-
-static void
 populate_list_box (TeplStyleSchemeChooserWidget *chooser)
 {
 	gboolean for_dark_theme_variant;
@@ -180,7 +169,10 @@ populate_list_box (TeplStyleSchemeChooserWidget *chooser)
 	for (l = schemes; l != NULL; l = l->next)
 	{
 		GtkSourceStyleScheme *style_scheme = GTK_SOURCE_STYLE_SCHEME (l->data);
-		append_style_scheme_to_list_box (chooser, style_scheme, for_dark_theme_variant);
+		TeplStyleSchemeRow *row;
+
+		row = _tepl_style_scheme_row_new (style_scheme, for_dark_theme_variant);
+		gtk_list_box_insert (chooser->priv->list_box, GTK_WIDGET (row), -1);
 	}
 
 	g_list_free (schemes);
