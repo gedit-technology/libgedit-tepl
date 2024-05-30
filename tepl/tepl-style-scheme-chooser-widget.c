@@ -4,6 +4,7 @@
 
 #include "tepl-style-scheme-chooser-widget.h"
 #include <handy.h>
+#include "tepl-settings.h"
 #include "tepl-style-scheme-row.h"
 #include "tepl-utils.h"
 
@@ -153,6 +154,30 @@ get_for_dark_theme_variant (TeplStyleSchemeChooserWidget *chooser)
 	return FALSE;
 }
 
+static GSettings *
+get_settings (TeplStyleSchemeChooserWidget  *chooser,
+	      const gchar                  **key)
+{
+	GSettings *settings;
+	const gchar *key_for_light_theme_variant = NULL;
+	const gchar *key_for_dark_theme_variant = NULL;
+
+	settings = _tepl_settings_get_style_scheme_settings (tepl_settings_get_singleton (),
+							     &key_for_light_theme_variant,
+							     &key_for_dark_theme_variant);
+
+	if (get_for_dark_theme_variant (chooser))
+	{
+		*key = key_for_dark_theme_variant;
+	}
+	else
+	{
+		*key = key_for_light_theme_variant;
+	}
+
+	return settings;
+}
+
 static void
 populate_list_box (TeplStyleSchemeChooserWidget *chooser)
 {
@@ -182,7 +207,21 @@ static void
 list_box_selected_rows_changed_cb (GtkListBox                   *list_box,
 				   TeplStyleSchemeChooserWidget *chooser)
 {
-	/* TODO */
+	GSettings *settings;
+	const gchar *key = NULL;
+
+	settings = get_settings (chooser, &key);
+
+	if (settings != NULL && key != NULL)
+	{
+		gchar *style_scheme_id = get_style_scheme_id (chooser);
+
+		if (style_scheme_id != NULL)
+		{
+			g_settings_set_string (settings, key, style_scheme_id);
+			g_free (style_scheme_id);
+		}
+	}
 }
 
 static void
