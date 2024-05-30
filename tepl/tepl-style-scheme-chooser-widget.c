@@ -319,8 +319,8 @@ tepl_style_scheme_chooser_widget_init (TeplStyleSchemeChooserWidget *chooser)
 
 	gtk_container_add (GTK_CONTAINER (scrolled_window),
 			   GTK_WIDGET (chooser->priv->list_box));
-	gtk_widget_show_all (scrolled_window);
 	gtk_container_add (GTK_CONTAINER (chooser), scrolled_window);
+	gtk_widget_show_all (GTK_WIDGET (chooser));
 
 	tepl_utils_list_box_setup_scrolling (chooser->priv->list_box,
 					     GTK_SCROLLED_WINDOW (scrolled_window));
