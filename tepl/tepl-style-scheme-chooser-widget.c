@@ -24,6 +24,8 @@
 struct _TeplStyleSchemeChooserWidgetPrivate
 {
 	GtkListBox *list_box;
+
+	guint theme_variants : 1;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (TeplStyleSchemeChooserWidget, tepl_style_scheme_chooser_widget, GTK_TYPE_BIN)
@@ -302,5 +304,10 @@ tepl_style_scheme_chooser_widget_init (TeplStyleSchemeChooserWidget *chooser)
 TeplStyleSchemeChooserWidget *
 tepl_style_scheme_chooser_widget_new (gboolean theme_variants)
 {
-	return g_object_new (TEPL_TYPE_STYLE_SCHEME_CHOOSER_WIDGET, NULL);
+	TeplStyleSchemeChooserWidget *chooser;
+
+	chooser = g_object_new (TEPL_TYPE_STYLE_SCHEME_CHOOSER_WIDGET, NULL);
+	chooser->priv->theme_variants = theme_variants != FALSE;
+
+	return chooser;
 }
