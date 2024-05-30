@@ -51,40 +51,6 @@ style_scheme_equal (GtkSourceStyleScheme *style_scheme1,
 	return g_strcmp0 (id1, id2) == 0;
 }
 
-static void
-tepl_style_scheme_chooser_widget_dispose (GObject *object)
-{
-	TeplStyleSchemeChooserWidget *chooser = TEPL_STYLE_SCHEME_CHOOSER_WIDGET (object);
-
-	chooser->priv->list_box = NULL;
-
-	G_OBJECT_CLASS (tepl_style_scheme_chooser_widget_parent_class)->dispose (object);
-}
-
-static void
-tepl_style_scheme_chooser_widget_map (GtkWidget *widget)
-{
-	TeplStyleSchemeChooserWidget *chooser = TEPL_STYLE_SCHEME_CHOOSER_WIDGET (widget);
-
-	if (GTK_WIDGET_CLASS (tepl_style_scheme_chooser_widget_parent_class)->map != NULL)
-	{
-		GTK_WIDGET_CLASS (tepl_style_scheme_chooser_widget_parent_class)->map (widget);
-	}
-
-	tepl_utils_list_box_scroll_to_selected_row (chooser->priv->list_box);
-}
-
-static void
-tepl_style_scheme_chooser_widget_class_init (TeplStyleSchemeChooserWidgetClass *klass)
-{
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-	object_class->dispose = tepl_style_scheme_chooser_widget_dispose;
-
-	widget_class->map = tepl_style_scheme_chooser_widget_map;
-}
-
 static GtkSourceStyleScheme *
 get_style_scheme (TeplStyleSchemeChooserWidget *chooser)
 {
@@ -130,6 +96,79 @@ set_style_scheme (TeplStyleSchemeChooserWidget *chooser,
 	}
 
 	g_list_free (all_rows);
+}
+
+static gchar *
+get_style_scheme_id (TeplStyleSchemeChooserWidget *chooser)
+{
+	GtkSourceStyleScheme *style_scheme;
+	const gchar *id;
+
+	g_return_val_if_fail (TEPL_IS_STYLE_SCHEME_CHOOSER_WIDGET (chooser), g_strdup (""));
+
+	style_scheme = get_style_scheme (chooser);
+
+	if (style_scheme == NULL)
+	{
+		return g_strdup ("");
+	}
+
+	id = gtk_source_style_scheme_get_id (style_scheme);
+
+	return id != NULL ? g_strdup (id) : g_strdup ("");
+}
+
+static void
+set_style_scheme_id (TeplStyleSchemeChooserWidget *chooser,
+		     const gchar                  *style_scheme_id)
+{
+	GtkSourceStyleSchemeManager *manager;
+	GtkSourceStyleScheme *style_scheme;
+
+	g_return_if_fail (TEPL_IS_STYLE_SCHEME_CHOOSER_WIDGET (chooser));
+	g_return_if_fail (style_scheme_id != NULL);
+
+	manager = gtk_source_style_scheme_manager_get_default ();
+	style_scheme = gtk_source_style_scheme_manager_get_scheme (manager, style_scheme_id);
+
+	if (style_scheme != NULL)
+	{
+		set_style_scheme (chooser, style_scheme);
+	}
+}
+
+static void
+tepl_style_scheme_chooser_widget_dispose (GObject *object)
+{
+	TeplStyleSchemeChooserWidget *chooser = TEPL_STYLE_SCHEME_CHOOSER_WIDGET (object);
+
+	chooser->priv->list_box = NULL;
+
+	G_OBJECT_CLASS (tepl_style_scheme_chooser_widget_parent_class)->dispose (object);
+}
+
+static void
+tepl_style_scheme_chooser_widget_map (GtkWidget *widget)
+{
+	TeplStyleSchemeChooserWidget *chooser = TEPL_STYLE_SCHEME_CHOOSER_WIDGET (widget);
+
+	if (GTK_WIDGET_CLASS (tepl_style_scheme_chooser_widget_parent_class)->map != NULL)
+	{
+		GTK_WIDGET_CLASS (tepl_style_scheme_chooser_widget_parent_class)->map (widget);
+	}
+
+	tepl_utils_list_box_scroll_to_selected_row (chooser->priv->list_box);
+}
+
+static void
+tepl_style_scheme_chooser_widget_class_init (TeplStyleSchemeChooserWidgetClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+	object_class->dispose = tepl_style_scheme_chooser_widget_dispose;
+
+	widget_class->map = tepl_style_scheme_chooser_widget_map;
 }
 
 static void
@@ -180,7 +219,7 @@ style_scheme_manager_changed_cb (GtkSourceStyleSchemeManager  *manager,
 					 list_box_selected_rows_changed_cb,
 					 chooser);
 
-	style_scheme_id = tepl_style_scheme_chooser_widget_get_style_scheme_id (chooser);
+	style_scheme_id = get_style_scheme_id (chooser);
 
 	tepl_utils_list_box_clear (chooser->priv->list_box);
 	populate_list_box (chooser);
@@ -188,7 +227,7 @@ style_scheme_manager_changed_cb (GtkSourceStyleSchemeManager  *manager,
 	/* Note that the style_scheme_id may no longer exist, in which case no
 	 * rows will be selected.
 	 */
-	tepl_style_scheme_chooser_widget_set_style_scheme_id (chooser, style_scheme_id);
+	set_style_scheme_id (chooser, style_scheme_id);
 
 	tepl_utils_list_box_scroll_to_selected_row (chooser->priv->list_box);
 
@@ -265,64 +304,4 @@ TeplStyleSchemeChooserWidget *
 tepl_style_scheme_chooser_widget_new (gboolean theme_variants)
 {
 	return g_object_new (TEPL_TYPE_STYLE_SCHEME_CHOOSER_WIDGET, NULL);
-}
-
-/**
- * tepl_style_scheme_chooser_widget_get_style_scheme_id:
- * @chooser: a #TeplStyleSchemeChooserWidget.
- *
- * Returns: (transfer full): the value of the
- *   #TeplStyleSchemeChooserWidget:tepl-style-scheme-id property.
- * Since: 5.0
- */
-gchar *
-tepl_style_scheme_chooser_widget_get_style_scheme_id (TeplStyleSchemeChooserWidget *chooser)
-{
-	GtkSourceStyleScheme *style_scheme;
-	const gchar *id;
-
-	g_return_val_if_fail (TEPL_IS_STYLE_SCHEME_CHOOSER_WIDGET (chooser), g_strdup (""));
-
-	style_scheme = get_style_scheme (chooser);
-
-	if (style_scheme == NULL)
-	{
-		return g_strdup ("");
-	}
-
-	id = gtk_source_style_scheme_get_id (style_scheme);
-
-	return id != NULL ? g_strdup (id) : g_strdup ("");
-}
-
-/**
- * tepl_style_scheme_chooser_widget_set_style_scheme_id:
- * @chooser: a #TeplStyleSchemeChooserWidget.
- * @style_scheme_id: the new value.
- *
- * Sets the #TeplStyleSchemeChooserWidget:tepl-style-scheme-id property.
- *
- * The #GtkSourceStyleScheme is taken from the default
- * #GtkSourceStyleSchemeManager as returned by
- * gtk_source_style_scheme_manager_get_default().
- *
- * Since: 5.0
- */
-void
-tepl_style_scheme_chooser_widget_set_style_scheme_id (TeplStyleSchemeChooserWidget *chooser,
-						      const gchar                  *style_scheme_id)
-{
-	GtkSourceStyleSchemeManager *manager;
-	GtkSourceStyleScheme *style_scheme;
-
-	g_return_if_fail (TEPL_IS_STYLE_SCHEME_CHOOSER_WIDGET (chooser));
-	g_return_if_fail (style_scheme_id != NULL);
-
-	manager = gtk_source_style_scheme_manager_get_default ();
-	style_scheme = gtk_source_style_scheme_manager_get_scheme (manager, style_scheme_id);
-
-	if (style_scheme != NULL)
-	{
-		set_style_scheme (chooser, style_scheme);
-	}
 }
