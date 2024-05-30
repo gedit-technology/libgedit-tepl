@@ -3,6 +3,7 @@
  */
 
 #include "tepl-style-scheme-chooser-widget.h"
+#include <handy.h>
 #include "tepl-style-scheme-row.h"
 #include "tepl-utils.h"
 
@@ -141,13 +142,25 @@ tepl_style_scheme_chooser_widget_class_init (TeplStyleSchemeChooserWidgetClass *
 	widget_class->map = tepl_style_scheme_chooser_widget_map;
 }
 
+static gboolean
+get_for_dark_theme_variant (TeplStyleSchemeChooserWidget *chooser)
+{
+	if (chooser->priv->theme_variants)
+	{
+		return hdy_style_manager_get_dark (hdy_style_manager_get_default ());
+	}
+
+	return FALSE;
+}
+
 static void
 append_style_scheme_to_list_box (TeplStyleSchemeChooserWidget *chooser,
-				 GtkSourceStyleScheme         *style_scheme)
+				 GtkSourceStyleScheme         *style_scheme,
+				 gboolean                      for_dark_theme_variant)
 {
 	TeplStyleSchemeRow *row;
 
-	row = _tepl_style_scheme_row_new (style_scheme, FALSE);
+	row = _tepl_style_scheme_row_new (style_scheme, for_dark_theme_variant);
 	gtk_widget_show (GTK_WIDGET (row));
 
 	gtk_list_box_insert (chooser->priv->list_box, GTK_WIDGET (row), -1);
@@ -156,9 +169,12 @@ append_style_scheme_to_list_box (TeplStyleSchemeChooserWidget *chooser,
 static void
 populate_list_box (TeplStyleSchemeChooserWidget *chooser)
 {
+	gboolean for_dark_theme_variant;
 	GtkSourceStyleSchemeManager *manager;
 	GList *schemes;
 	GList *l;
+
+	for_dark_theme_variant = get_for_dark_theme_variant (chooser);
 
 	manager = gtk_source_style_scheme_manager_get_default ();
 	schemes = gtk_source_style_scheme_manager_get_schemes (manager);
@@ -166,7 +182,7 @@ populate_list_box (TeplStyleSchemeChooserWidget *chooser)
 	for (l = schemes; l != NULL; l = l->next)
 	{
 		GtkSourceStyleScheme *style_scheme = GTK_SOURCE_STYLE_SCHEME (l->data);
-		append_style_scheme_to_list_box (chooser, style_scheme);
+		append_style_scheme_to_list_box (chooser, style_scheme, for_dark_theme_variant);
 	}
 
 	g_list_free (schemes);
