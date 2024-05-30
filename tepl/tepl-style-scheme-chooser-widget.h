@@ -43,7 +43,7 @@ GType		tepl_style_scheme_chooser_widget_get_type		(void);
 
 G_MODULE_EXPORT
 TeplStyleSchemeChooserWidget *
-		tepl_style_scheme_chooser_widget_new			(void);
+		tepl_style_scheme_chooser_widget_new			(gboolean theme_variants);
 
 G_MODULE_EXPORT
 gchar *		tepl_style_scheme_chooser_widget_get_style_scheme_id	(TeplStyleSchemeChooserWidget *chooser);

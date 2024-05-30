@@ -333,12 +333,13 @@ tepl_style_scheme_chooser_widget_init (TeplStyleSchemeChooserWidget *chooser)
 
 /**
  * tepl_style_scheme_chooser_widget_new:
+ * @theme_variants: whether to enable theme variants support.
  *
  * Returns: (transfer floating): a new #TeplStyleSchemeChooserWidget.
  * Since: 5.0
  */
 TeplStyleSchemeChooserWidget *
-tepl_style_scheme_chooser_widget_new (void)
+tepl_style_scheme_chooser_widget_new (gboolean theme_variants)
 {
 	return g_object_new (TEPL_TYPE_STYLE_SCHEME_CHOOSER_WIDGET, NULL);
 }
