@@ -227,6 +227,24 @@ style_scheme_manager_changed_cb (GtkSourceStyleSchemeManager  *manager,
 }
 
 static void
+theme_variant_notify_cb (HdyStyleManager              *style_manager,
+			 GParamSpec                   *pspec,
+			 TeplStyleSchemeChooserWidget *chooser)
+{
+	g_signal_handlers_block_by_func (chooser->priv->list_box,
+					 list_box_selected_rows_changed_cb,
+					 chooser);
+
+	tepl_utils_list_box_clear (chooser->priv->list_box);
+	populate_list_box (chooser);
+	tepl_utils_list_box_scroll_to_selected_row (chooser->priv->list_box);
+
+	g_signal_handlers_unblock_by_func (chooser->priv->list_box,
+					   list_box_selected_rows_changed_cb,
+					   chooser);
+}
+
+static void
 tepl_style_scheme_chooser_widget_init (TeplStyleSchemeChooserWidget *chooser)
 {
 	GtkWidget *scrolled_window;
@@ -279,6 +297,12 @@ tepl_style_scheme_chooser_widget_new (gboolean theme_variants)
 	g_signal_connect_object (gtk_source_style_scheme_manager_get_default (),
 				 "changed",
 				 G_CALLBACK (style_scheme_manager_changed_cb),
+				 chooser,
+				 G_CONNECT_DEFAULT);
+
+	g_signal_connect_object (hdy_style_manager_get_default (),
+				 "notify::dark",
+				 G_CALLBACK (theme_variant_notify_cb),
 				 chooser,
 				 G_CONNECT_DEFAULT);
 
