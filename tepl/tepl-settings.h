@@ -93,6 +93,11 @@ gchar *		tepl_settings_get_style_scheme_id		(TeplSettings *self);
 G_GNUC_INTERNAL
 gchar *		_tepl_settings_get_default_style_scheme_id	(TeplSettings *self);
 
+G_GNUC_INTERNAL
+GSettings *	_tepl_settings_get_style_scheme_settings	(TeplSettings  *self,
+								 const gchar  **key_for_light_theme_variant,
+								 const gchar  **key_for_dark_theme_variant);
+
 G_MODULE_EXPORT
 gboolean	tepl_settings_get_range_uint			(GSettings   *settings,
 								 const gchar *key,

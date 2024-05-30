@@ -655,6 +655,25 @@ _tepl_settings_get_default_style_scheme_id (TeplSettings *self)
 	return g_strdup ("tango");
 }
 
+GSettings *
+_tepl_settings_get_style_scheme_settings (TeplSettings  *self,
+					  const gchar  **key_for_light_theme_variant,
+					  const gchar  **key_for_dark_theme_variant)
+{
+	g_return_val_if_fail (TEPL_IS_SETTINGS (self), NULL);
+
+	if (key_for_light_theme_variant != NULL)
+	{
+		*key_for_light_theme_variant = self->priv->key_style_scheme_id_for_light_theme;
+	}
+	if (key_for_dark_theme_variant != NULL)
+	{
+		*key_for_dark_theme_variant = self->priv->key_style_scheme_id_for_dark_theme;
+	}
+
+	return self->priv->settings_style_scheme;
+}
+
 /**
  * tepl_settings_get_range_uint:
  * @settings: a #GSettings.
