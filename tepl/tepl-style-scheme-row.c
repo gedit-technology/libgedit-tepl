@@ -49,6 +49,13 @@ get_description (TeplStyleSchemeRow *row,
 		return gtk_source_style_scheme_get_description (row->priv->style_scheme);
 	}
 
+	/* Instead of hiding the style schemes that are unsupported, show them
+	 * with a message. That way the user understands, to know that there
+	 * isn't a bug (no issues to report).
+	 * Normally (at least with the default style schemes) the number of
+	 * unsupported style schemes is small, so it's not a problem to add them
+	 * to the list.
+	 */
 	if (for_dark_theme_variant)
 	{
 		return _("Unsupported for the dark theme variant");
