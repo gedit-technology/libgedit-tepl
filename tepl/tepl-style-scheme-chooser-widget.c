@@ -52,18 +52,22 @@ style_scheme_equal (GtkSourceStyleScheme *style_scheme1,
 	return g_strcmp0 (id1, id2) == 0;
 }
 
-static GtkSourceStyleScheme *
-get_style_scheme (TeplStyleSchemeChooserWidget *chooser)
+static gchar *
+get_style_scheme_id (TeplStyleSchemeChooserWidget *chooser)
 {
 	GtkListBoxRow *selected_row;
+	GtkSourceStyleScheme *style_scheme;
+	const gchar *id;
 
 	selected_row = gtk_list_box_get_selected_row (chooser->priv->list_box);
-	if (selected_row != NULL)
+	if (selected_row == NULL)
 	{
-		return _tepl_style_scheme_row_get_style_scheme (TEPL_STYLE_SCHEME_ROW (selected_row));
+		return NULL;
 	}
 
-	return NULL;
+	style_scheme = _tepl_style_scheme_row_get_style_scheme (TEPL_STYLE_SCHEME_ROW (selected_row));
+	id = gtk_source_style_scheme_get_id (style_scheme);
+	return g_strdup (id);
 }
 
 static void
@@ -97,26 +101,6 @@ set_style_scheme (TeplStyleSchemeChooserWidget *chooser,
 	}
 
 	g_list_free (all_rows);
-}
-
-static gchar *
-get_style_scheme_id (TeplStyleSchemeChooserWidget *chooser)
-{
-	GtkSourceStyleScheme *style_scheme;
-	const gchar *id;
-
-	g_return_val_if_fail (TEPL_IS_STYLE_SCHEME_CHOOSER_WIDGET (chooser), g_strdup (""));
-
-	style_scheme = get_style_scheme (chooser);
-
-	if (style_scheme == NULL)
-	{
-		return g_strdup ("");
-	}
-
-	id = gtk_source_style_scheme_get_id (style_scheme);
-
-	return id != NULL ? g_strdup (id) : g_strdup ("");
 }
 
 static void
@@ -225,18 +209,20 @@ style_scheme_manager_changed_cb (GtkSourceStyleSchemeManager  *manager,
 	tepl_utils_list_box_clear (chooser->priv->list_box);
 	populate_list_box (chooser);
 
-	/* Note that the style_scheme_id may no longer exist, in which case no
-	 * rows will be selected.
-	 */
-	set_style_scheme_id (chooser, style_scheme_id);
+	if (style_scheme_id != NULL)
+	{
+		/* Note that the style_scheme_id may no longer exist, in which
+		 * case no rows will be selected.
+		 */
+		set_style_scheme_id (chooser, style_scheme_id);
+		g_free (style_scheme_id);
+	}
 
 	tepl_utils_list_box_scroll_to_selected_row (chooser->priv->list_box);
 
 	g_signal_handlers_unblock_by_func (chooser->priv->list_box,
 					   list_box_selected_rows_changed_cb,
 					   chooser);
-
-	g_free (style_scheme_id);
 }
 
 static void
