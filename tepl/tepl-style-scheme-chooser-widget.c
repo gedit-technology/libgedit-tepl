@@ -14,8 +14,7 @@
  * #TeplStyleSchemeChooserWidget permits to choose a #GtkSourceStyleScheme.
  *
  * It shows a list with the name and description of each #GtkSourceStyleScheme,
- * taken from the default #GtkSourceStyleSchemeManager (as returned by
- * gtk_source_style_scheme_manager_get_default()).
+ * taken from the default #GtkSourceStyleSchemeManager.
  *
  * #TeplStyleSchemeChooserWidget contains a #GtkScrolledWindow internally. When
  * the #GtkWidget::map signal is emitted, it scrolls to the selected row (useful
