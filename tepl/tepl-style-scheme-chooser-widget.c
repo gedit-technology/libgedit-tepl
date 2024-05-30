@@ -263,9 +263,6 @@ tepl_style_scheme_chooser_widget_init (TeplStyleSchemeChooserWidget *chooser)
 	chooser->priv->list_box = GTK_LIST_BOX (gtk_list_box_new ());
 	gtk_list_box_set_selection_mode (chooser->priv->list_box, GTK_SELECTION_BROWSE);
 
-	populate_list_box (chooser);
-	listen_to_scheme_manager_changes (chooser);
-
 	scrolled_window = gtk_scrolled_window_new (NULL, NULL);
 	gtk_widget_set_hexpand (scrolled_window, TRUE);
 	gtk_widget_set_vexpand (scrolled_window, TRUE);
@@ -287,11 +284,6 @@ tepl_style_scheme_chooser_widget_init (TeplStyleSchemeChooserWidget *chooser)
 
 	tepl_utils_list_box_setup_scrolling (chooser->priv->list_box,
 					     GTK_SCROLLED_WINDOW (scrolled_window));
-
-	g_signal_connect (chooser->priv->list_box,
-			  "selected-rows-changed",
-			  G_CALLBACK (list_box_selected_rows_changed_cb),
-			  chooser);
 }
 
 /**
@@ -308,6 +300,14 @@ tepl_style_scheme_chooser_widget_new (gboolean theme_variants)
 
 	chooser = g_object_new (TEPL_TYPE_STYLE_SCHEME_CHOOSER_WIDGET, NULL);
 	chooser->priv->theme_variants = theme_variants != FALSE;
+
+	populate_list_box (chooser);
+	listen_to_scheme_manager_changes (chooser);
+
+	g_signal_connect (chooser->priv->list_box,
+			  "selected-rows-changed",
+			  G_CALLBACK (list_box_selected_rows_changed_cb),
+			  chooser);
 
 	return chooser;
 }
