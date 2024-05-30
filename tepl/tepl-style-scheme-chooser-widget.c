@@ -227,20 +227,6 @@ style_scheme_manager_changed_cb (GtkSourceStyleSchemeManager  *manager,
 }
 
 static void
-listen_to_scheme_manager_changes (TeplStyleSchemeChooserWidget *chooser)
-{
-	GtkSourceStyleSchemeManager *manager;
-
-	manager = gtk_source_style_scheme_manager_get_default ();
-
-	g_signal_connect_object (manager,
-				 "changed",
-				 G_CALLBACK (style_scheme_manager_changed_cb),
-				 chooser,
-				 G_CONNECT_DEFAULT);
-}
-
-static void
 tepl_style_scheme_chooser_widget_init (TeplStyleSchemeChooserWidget *chooser)
 {
 	GtkWidget *scrolled_window;
@@ -289,7 +275,12 @@ tepl_style_scheme_chooser_widget_new (gboolean theme_variants)
 	chooser->priv->theme_variants = theme_variants != FALSE;
 
 	populate_list_box (chooser);
-	listen_to_scheme_manager_changes (chooser);
+
+	g_signal_connect_object (gtk_source_style_scheme_manager_get_default (),
+				 "changed",
+				 G_CALLBACK (style_scheme_manager_changed_cb),
+				 chooser,
+				 G_CONNECT_DEFAULT);
 
 	g_signal_connect (chooser->priv->list_box,
 			  "selected-rows-changed",
