@@ -552,7 +552,6 @@ tepl_pango_font_description_to_css
 <SECTION>
 <FILE>prefs</FILE>
 tepl_prefs_create_font_component
-tepl_prefs_create_color_scheme_component
 tepl_prefs_create_display_line_numbers_checkbutton
 tepl_prefs_create_tab_width_spinbutton
 tepl_prefs_create_insert_spaces_component

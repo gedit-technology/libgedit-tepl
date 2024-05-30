@@ -161,37 +161,6 @@ tepl_prefs_create_font_component (GSettings   *settings,
 }
 
 /**
- * tepl_prefs_create_color_scheme_component:
- * @settings: a #GSettings.
- * @style_scheme_key: a key part of @settings to store the style scheme ID. The
- *   type of the key must be a string.
- *
- * This function creates a component containing a #TeplStyleSchemeChooserWidget.
- *
- * Returns: (transfer floating): A component for choosing the
- *   #GtkSourceStyleScheme to use.
- * Since: 6.2
- */
-GtkWidget *
-tepl_prefs_create_color_scheme_component (GSettings   *settings,
-					  const gchar *style_scheme_key)
-{
-	TeplStyleSchemeChooserWidget *style_scheme_chooser;
-
-	g_return_val_if_fail (G_IS_SETTINGS (settings), NULL);
-	g_return_val_if_fail (style_scheme_key != NULL, NULL);
-
-	style_scheme_chooser = tepl_style_scheme_chooser_widget_new ();
-
-	g_settings_bind (settings, style_scheme_key,
-			 style_scheme_chooser, "tepl-style-scheme-id",
-			 G_SETTINGS_BIND_DEFAULT);
-
-	return tepl_utils_get_titled_component (_("Color Scheme"),
-						GTK_WIDGET (style_scheme_chooser));
-}
-
-/**
  * tepl_prefs_create_display_line_numbers_checkbutton:
  * @settings: a #GSettings.
  * @display_line_numbers_key: a key part of @settings. The type of the key must

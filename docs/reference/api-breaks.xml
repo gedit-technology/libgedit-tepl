@@ -338,6 +338,13 @@
           instead.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <code>tepl_prefs_create_color_scheme_component()</code> has been
+          removed. It is replaced by
+          <link linkend="TeplStyleSchemeChooserWidget">TeplStyleSchemeChooserWidget</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </chapter>
 </part>

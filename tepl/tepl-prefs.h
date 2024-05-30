@@ -19,10 +19,6 @@ GtkWidget *	tepl_prefs_create_font_component			(GSettings   *settings,
 									 const gchar *editor_font_key);
 
 G_MODULE_EXPORT
-GtkWidget *	tepl_prefs_create_color_scheme_component		(GSettings   *settings,
-									 const gchar *style_scheme_key);
-
-G_MODULE_EXPORT
 GtkWidget *	tepl_prefs_create_display_line_numbers_checkbutton	(GSettings   *settings,
 									 const gchar *display_line_numbers_key);
 
