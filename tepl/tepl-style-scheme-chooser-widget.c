@@ -2,8 +2,10 @@
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
+#include "config.h"
 #include "tepl-style-scheme-chooser-widget.h"
 #include <handy.h>
+#include <glib/gi18n-lib.h>
 #include "tepl-settings.h"
 #include "tepl-style-scheme-row.h"
 #include "tepl-utils.h"
@@ -25,8 +27,8 @@
 
 struct _TeplStyleSchemeChooserWidgetPrivate
 {
+	GtkLabel *label;
 	GtkListBox *list_box;
-
 	guint theme_variants : 1;
 };
 
@@ -154,6 +156,33 @@ get_for_dark_theme_variant (TeplStyleSchemeChooserWidget *chooser)
 	return FALSE;
 }
 
+static void
+update_label (TeplStyleSchemeChooserWidget *chooser)
+{
+	const gchar *text;
+	gchar *markup;
+
+	if (chooser->priv->theme_variants)
+	{
+		if (get_for_dark_theme_variant (chooser))
+		{
+			text = _("Color Scheme for the Dark Theme Variant");
+		}
+		else
+		{
+			text = _("Color Scheme for the Light Theme Variant");
+		}
+	}
+	else
+	{
+		text = _("Color Scheme");
+	}
+
+	markup = g_strdup_printf ("<b>%s</b>", text);
+	gtk_label_set_markup (chooser->priv->label, markup);
+	g_free (markup);
+}
+
 static GSettings *
 get_settings (TeplStyleSchemeChooserWidget  *chooser,
 	      const gchar                  **key)
@@ -271,7 +300,19 @@ theme_variant_notify_cb (HdyStyleManager              *style_manager,
 			 GParamSpec                   *pspec,
 			 TeplStyleSchemeChooserWidget *chooser)
 {
+	update_label (chooser);
 	full_repopulate (chooser);
+}
+
+static GtkLabel *
+create_label (void)
+{
+	GtkLabel *label;
+
+	label = GTK_LABEL (gtk_label_new (NULL));
+	gtk_widget_set_halign (GTK_WIDGET (label), GTK_ALIGN_START);
+
+	return label;
 }
 
 static GtkListBox *
@@ -294,6 +335,7 @@ create_scrolled_window (void)
 	gtk_widget_set_hexpand (GTK_WIDGET (scrolled_window), TRUE);
 	gtk_widget_set_vexpand (GTK_WIDGET (scrolled_window), TRUE);
 	gtk_scrolled_window_set_shadow_type (scrolled_window, GTK_SHADOW_IN);
+	gtk_widget_set_margin_start (GTK_WIDGET (scrolled_window), 12);
 
 	/* Improve the minimum height, to avoid the vertical scrollbar by
 	 * default (with the default list of style schemes provided by
@@ -307,23 +349,42 @@ create_scrolled_window (void)
 	return scrolled_window;
 }
 
+static GtkContainer *
+create_vgrid (void)
+{
+	GtkContainer *vgrid;
+
+	vgrid = GTK_CONTAINER (gtk_grid_new ());
+	gtk_orientable_set_orientation (GTK_ORIENTABLE (vgrid), GTK_ORIENTATION_VERTICAL);
+	gtk_grid_set_row_spacing (GTK_GRID (vgrid), 6);
+
+	return vgrid;
+}
+
 static void
 tepl_style_scheme_chooser_widget_init (TeplStyleSchemeChooserWidget *chooser)
 {
 	GtkScrolledWindow *scrolled_window;
+	GtkContainer *vgrid;
 
 	chooser->priv = tepl_style_scheme_chooser_widget_get_instance_private (chooser);
 
+	/* Create individual widgets */
+	chooser->priv->label = create_label ();
 	chooser->priv->list_box = create_list_box ();
 	scrolled_window = create_scrolled_window ();
+	vgrid = create_vgrid ();
 
+	/* Packing */
 	gtk_container_add (GTK_CONTAINER (scrolled_window),
 			   GTK_WIDGET (chooser->priv->list_box));
-	gtk_container_add (GTK_CONTAINER (chooser),
-			   GTK_WIDGET (scrolled_window));
-	gtk_widget_show_all (GTK_WIDGET (chooser));
-
 	tepl_utils_list_box_setup_scrolling (chooser->priv->list_box, scrolled_window);
+
+	gtk_container_add (vgrid, GTK_WIDGET (chooser->priv->label));
+	gtk_container_add (vgrid, GTK_WIDGET (scrolled_window));
+
+	gtk_container_add (GTK_CONTAINER (chooser), GTK_WIDGET (vgrid));
+	gtk_widget_show_all (GTK_WIDGET (chooser));
 }
 
 /**
@@ -358,6 +419,7 @@ tepl_style_scheme_chooser_widget_new (gboolean theme_variants)
 			  G_CALLBACK (list_box_selected_rows_changed_cb),
 			  chooser);
 
+	update_label (chooser);
 	full_repopulate (chooser);
 
 	return chooser;
