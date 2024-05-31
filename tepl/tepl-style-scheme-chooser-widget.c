@@ -204,6 +204,24 @@ populate_list_box (TeplStyleSchemeChooserWidget *chooser)
 }
 
 static void
+set_style_scheme_according_to_settings (TeplStyleSchemeChooserWidget *chooser)
+{
+	GSettings *settings;
+	const gchar *key = NULL;
+
+	settings = get_settings (chooser, &key);
+
+	if (settings != NULL && key != NULL)
+	{
+		gchar *style_scheme_id;
+
+		style_scheme_id = g_settings_get_string (settings, key);
+		set_style_scheme_id (chooser, style_scheme_id);
+		g_free (style_scheme_id);
+	}
+}
+
+static void
 list_box_selected_rows_changed_cb (GtkListBox                   *list_box,
 				   TeplStyleSchemeChooserWidget *chooser)
 {
@@ -225,29 +243,15 @@ list_box_selected_rows_changed_cb (GtkListBox                   *list_box,
 }
 
 static void
-style_scheme_manager_changed_cb (GtkSourceStyleSchemeManager  *manager,
-				 TeplStyleSchemeChooserWidget *chooser)
+full_repopulate (TeplStyleSchemeChooserWidget *chooser)
 {
-	gchar *style_scheme_id;
-
 	g_signal_handlers_block_by_func (chooser->priv->list_box,
 					 list_box_selected_rows_changed_cb,
 					 chooser);
 
-	style_scheme_id = get_style_scheme_id (chooser);
-
 	tepl_utils_list_box_clear (chooser->priv->list_box);
 	populate_list_box (chooser);
-
-	if (style_scheme_id != NULL)
-	{
-		/* Note that the style_scheme_id may no longer exist, in which
-		 * case no rows will be selected.
-		 */
-		set_style_scheme_id (chooser, style_scheme_id);
-		g_free (style_scheme_id);
-	}
-
+	set_style_scheme_according_to_settings (chooser);
 	tepl_utils_list_box_scroll_to_selected_row (chooser->priv->list_box);
 
 	g_signal_handlers_unblock_by_func (chooser->priv->list_box,
@@ -256,21 +260,18 @@ style_scheme_manager_changed_cb (GtkSourceStyleSchemeManager  *manager,
 }
 
 static void
+style_scheme_manager_changed_cb (GtkSourceStyleSchemeManager  *manager,
+				 TeplStyleSchemeChooserWidget *chooser)
+{
+	full_repopulate (chooser);
+}
+
+static void
 theme_variant_notify_cb (HdyStyleManager              *style_manager,
 			 GParamSpec                   *pspec,
 			 TeplStyleSchemeChooserWidget *chooser)
 {
-	g_signal_handlers_block_by_func (chooser->priv->list_box,
-					 list_box_selected_rows_changed_cb,
-					 chooser);
-
-	tepl_utils_list_box_clear (chooser->priv->list_box);
-	populate_list_box (chooser);
-	tepl_utils_list_box_scroll_to_selected_row (chooser->priv->list_box);
-
-	g_signal_handlers_unblock_by_func (chooser->priv->list_box,
-					   list_box_selected_rows_changed_cb,
-					   chooser);
+	full_repopulate (chooser);
 }
 
 static void
@@ -321,8 +322,6 @@ tepl_style_scheme_chooser_widget_new (gboolean theme_variants)
 	chooser = g_object_new (TEPL_TYPE_STYLE_SCHEME_CHOOSER_WIDGET, NULL);
 	chooser->priv->theme_variants = theme_variants != FALSE;
 
-	populate_list_box (chooser);
-
 	g_signal_connect_object (gtk_source_style_scheme_manager_get_default (),
 				 "changed",
 				 G_CALLBACK (style_scheme_manager_changed_cb),
@@ -339,6 +338,8 @@ tepl_style_scheme_chooser_widget_new (gboolean theme_variants)
 			  "selected-rows-changed",
 			  G_CALLBACK (list_box_selected_rows_changed_cb),
 			  chooser);
+
+	full_repopulate (chooser);
 
 	return chooser;
 }
