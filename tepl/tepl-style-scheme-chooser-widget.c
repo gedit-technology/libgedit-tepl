@@ -274,37 +274,56 @@ theme_variant_notify_cb (HdyStyleManager              *style_manager,
 	full_repopulate (chooser);
 }
 
-static void
-tepl_style_scheme_chooser_widget_init (TeplStyleSchemeChooserWidget *chooser)
+static GtkListBox *
+create_list_box (void)
 {
-	GtkWidget *scrolled_window;
+	GtkListBox *list_box;
 
-	chooser->priv = tepl_style_scheme_chooser_widget_get_instance_private (chooser);
+	list_box = GTK_LIST_BOX (gtk_list_box_new ());
+	gtk_list_box_set_selection_mode (list_box, GTK_SELECTION_BROWSE);
 
-	chooser->priv->list_box = GTK_LIST_BOX (gtk_list_box_new ());
-	gtk_list_box_set_selection_mode (chooser->priv->list_box, GTK_SELECTION_BROWSE);
+	return list_box;
+}
 
-	scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-	gtk_widget_set_hexpand (scrolled_window, TRUE);
-	gtk_widget_set_vexpand (scrolled_window, TRUE);
-	gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_window), GTK_SHADOW_IN);
+static GtkScrolledWindow *
+create_scrolled_window (void)
+{
+	GtkScrolledWindow *scrolled_window;
+
+	scrolled_window = GTK_SCROLLED_WINDOW (gtk_scrolled_window_new (NULL, NULL));
+	gtk_widget_set_hexpand (GTK_WIDGET (scrolled_window), TRUE);
+	gtk_widget_set_vexpand (GTK_WIDGET (scrolled_window), TRUE);
+	gtk_scrolled_window_set_shadow_type (scrolled_window, GTK_SHADOW_IN);
 
 	/* Improve the minimum height, to avoid the vertical scrollbar by
 	 * default (with the default list of style schemes provided by
 	 * GtkSourceView).
 	 */
-	gtk_widget_set_size_request (scrolled_window, -1, 200);
+	gtk_widget_set_size_request (GTK_WIDGET (scrolled_window), -1, 200);
 
 	/* Overlay scrolling gets in the way when trying to select the last row. */
-	gtk_scrolled_window_set_overlay_scrolling (GTK_SCROLLED_WINDOW (scrolled_window), FALSE);
+	gtk_scrolled_window_set_overlay_scrolling (scrolled_window, FALSE);
+
+	return scrolled_window;
+}
+
+static void
+tepl_style_scheme_chooser_widget_init (TeplStyleSchemeChooserWidget *chooser)
+{
+	GtkScrolledWindow *scrolled_window;
+
+	chooser->priv = tepl_style_scheme_chooser_widget_get_instance_private (chooser);
+
+	chooser->priv->list_box = create_list_box ();
+	scrolled_window = create_scrolled_window ();
 
 	gtk_container_add (GTK_CONTAINER (scrolled_window),
 			   GTK_WIDGET (chooser->priv->list_box));
-	gtk_container_add (GTK_CONTAINER (chooser), scrolled_window);
+	gtk_container_add (GTK_CONTAINER (chooser),
+			   GTK_WIDGET (scrolled_window));
 	gtk_widget_show_all (GTK_WIDGET (chooser));
 
-	tepl_utils_list_box_setup_scrolling (chooser->priv->list_box,
-					     GTK_SCROLLED_WINDOW (scrolled_window));
+	tepl_utils_list_box_setup_scrolling (chooser->priv->list_box, scrolled_window);
 }
 
 /**
