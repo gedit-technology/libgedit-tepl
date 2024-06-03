@@ -7,7 +7,6 @@
 #include <glib/gi18n-lib.h>
 #include <handy.h>
 #include "tepl-settings.h"
-#include "tepl-style-scheme-chooser-widget.h"
 #include "tepl-utils.h"
 
 /**

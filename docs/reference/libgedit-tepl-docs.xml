@@ -73,7 +73,8 @@
       <xi:include href="xml/prefs-dialog.xml"/>
       <xi:include href="xml/settings.xml"/>
       <xi:include href="xml/space-drawer-prefs.xml"/>
-      <xi:include href="xml/style-scheme-chooser-widget.xml"/>
+      <xi:include href="xml/style-scheme-chooser-full.xml"/>
+      <xi:include href="xml/style-scheme-chooser-simple.xml"/>
     </chapter>
   </part>
 

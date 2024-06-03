@@ -52,7 +52,8 @@
 #include <tepl/tepl-signal-group.h>
 #include <tepl/tepl-space-drawer-prefs.h>
 #include <tepl/tepl-status-menu-button.h>
-#include <tepl/tepl-style-scheme-chooser-widget.h>
+#include <tepl/tepl-style-scheme-chooser-full.h>
+#include <tepl/tepl-style-scheme-chooser-simple.h>
 #include <tepl/tepl-tab.h>
 #include <tepl/tepl-tab-group.h>
 #include <tepl/tepl-tab-label.h>

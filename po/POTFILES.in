@@ -42,7 +42,8 @@ tepl/tepl-settings.c
 tepl/tepl-signal-group.c
 tepl/tepl-space-drawer-prefs.c
 tepl/tepl-status-menu-button.c
-tepl/tepl-style-scheme-chooser-widget.c
+tepl/tepl-style-scheme-chooser-full.c
+tepl/tepl-style-scheme-chooser-simple.c
 tepl/tepl-style-scheme-row.c
 tepl/tepl-tab.c
 tepl/tepl-tab-group.c
