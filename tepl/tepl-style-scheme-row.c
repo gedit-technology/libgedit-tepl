@@ -6,9 +6,15 @@
 #include "tepl-style-scheme-row.h"
 #include <glib/gi18n-lib.h>
 
+/* A GtkListBoxRow to be used in the GtkListBox of TeplStyleSchemeChooserWidget.
+ * The row is something static. It does *not* change automatically when the
+ * theme variant changes; when that happens, a new row needs to be created with
+ * the new configuration.
+ */
+
 struct _TeplStyleSchemeRowPrivate
 {
-	GtkSourceStyleScheme *style_scheme;
+	GtkSourceStyleScheme *style_scheme; /* owned */
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (TeplStyleSchemeRow, _tepl_style_scheme_row, GTK_TYPE_LIST_BOX_ROW)
