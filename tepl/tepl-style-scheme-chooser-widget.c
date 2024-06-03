@@ -343,11 +343,13 @@ create_scrolled_window (void)
 	gtk_widget_set_hexpand (GTK_WIDGET (scrolled_window), TRUE);
 	gtk_widget_set_vexpand (GTK_WIDGET (scrolled_window), TRUE);
 	gtk_scrolled_window_set_shadow_type (scrolled_window, GTK_SHADOW_IN);
+
+	/* To do like tepl_utils_get_titled_component(). */
 	gtk_widget_set_margin_start (GTK_WIDGET (scrolled_window), 12);
 
 	/* Improve the minimum height, to avoid the vertical scrollbar by
 	 * default (with the default list of style schemes provided by
-	 * GtkSourceView).
+	 * libgedit-gtksourceview).
 	 */
 	gtk_widget_set_size_request (GTK_WIDGET (scrolled_window), -1, 200);
 
