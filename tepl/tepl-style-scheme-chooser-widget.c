@@ -27,8 +27,15 @@
 
 struct _TeplStyleSchemeChooserWidgetPrivate
 {
+	/* The title of the component. */
 	GtkLabel *label;
+
+	/* Contains TeplStyleSchemeRow's. */
 	GtkListBox *list_box;
+
+	/* Whether GTK theme variants (light/dark) are taken into account.
+	 * If FALSE, the light theme variant is assumed.
+	 */
 	guint theme_variants : 1;
 };
 
