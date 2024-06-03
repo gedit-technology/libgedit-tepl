@@ -123,6 +123,7 @@ tepl_style_scheme_chooser_widget_dispose (GObject *object)
 {
 	TeplStyleSchemeChooserWidget *chooser = TEPL_STYLE_SCHEME_CHOOSER_WIDGET (object);
 
+	chooser->priv->label = NULL;
 	chooser->priv->list_box = NULL;
 
 	G_OBJECT_CLASS (tepl_style_scheme_chooser_widget_parent_class)->dispose (object);
