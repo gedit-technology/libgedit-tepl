@@ -391,6 +391,15 @@ tepl_style_scheme_chooser_widget_init (TeplStyleSchemeChooserWidget *chooser)
  * tepl_style_scheme_chooser_widget_new:
  * @theme_variants: whether to enable theme variants support.
  *
+ * If @theme_variants is %FALSE, it is assumed that a light GTK theme is always
+ * used. Only the #GSettings key for the light theme variant is used.
+ *
+ * If @theme_variants is %TRUE, the widget content changes depending on the GTK
+ * theme (light or dark), and the corresponding #GSettings key is used.
+ *
+ * The #GSettings keys are taken from #TeplSettings. See
+ * tepl_settings_provide_style_scheme_settings().
+ *
  * Returns: (transfer floating): a new #TeplStyleSchemeChooserWidget.
  * Since: 5.0
  */
