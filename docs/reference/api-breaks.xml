@@ -344,6 +344,11 @@
           removed. It is replaced by
           <link linkend="TeplStyleSchemeChooserWidget">TeplStyleSchemeChooserWidget</link>.
         </para>
+        <para>
+          The API of
+          <link linkend="TeplStyleSchemeChooserWidget">TeplStyleSchemeChooserWidget</link>
+          has changed.
+        </para>
       </listitem>
     </itemizedlist>
   </chapter>
