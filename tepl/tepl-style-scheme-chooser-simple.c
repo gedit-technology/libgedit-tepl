@@ -395,7 +395,14 @@ tepl_style_scheme_chooser_simple_set_style_scheme_id (TeplStyleSchemeChooserSimp
 
 	if (g_set_str (&chooser->priv->style_scheme_id, style_scheme_id))
 	{
+		g_signal_handlers_block_by_func (chooser->priv->list_box,
+						 list_box_selected_rows_changed_cb,
+						 chooser);
 		update_selected_row (chooser);
+		g_signal_handlers_unblock_by_func (chooser->priv->list_box,
+						   list_box_selected_rows_changed_cb,
+						   chooser);
+
 		g_object_notify_by_pspec (G_OBJECT (chooser), properties[PROP_STYLE_SCHEME_ID]);
 	}
 }
