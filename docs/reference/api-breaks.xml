@@ -318,9 +318,9 @@
           The <code>TeplSettingsSimpleThemeVariant</code> enum,
           <code>tepl_settings_handle_simple_theme_variant()</code> and
           <code>tepl_prefs_create_simple_theme_variant_combo_box()</code> have
-          all been removed. You can use instead the more complete
+          been removed. You can use instead the more complete
           <link linkend="TeplSettingsThemeVariant">TeplSettingsThemeVariant</link>
-          enum and the functions using it.
+          enum and the functions that use it.
         </para>
       </listitem>
       <listitem>
@@ -332,7 +332,7 @@
         <para>
           The <code>TeplBuffer:tepl-style-scheme-id</code> property,
           <code>tepl_buffer_get_style_scheme_id()</code> and
-          <code>tepl_buffer_set_style_scheme_id()</code> have all been removed.
+          <code>tepl_buffer_set_style_scheme_id()</code> have been removed.
           You can use
           <link linkend="tepl-buffer-connect-style-scheme-settings">tepl_buffer_connect_style_scheme_settings()</link>
           instead.
@@ -340,14 +340,11 @@
       </listitem>
       <listitem>
         <para>
-          <code>tepl_prefs_create_color_scheme_component()</code> has been
-          removed. It is replaced by
-          <link linkend="TeplStyleSchemeChooserWidget">TeplStyleSchemeChooserWidget</link>.
-        </para>
-        <para>
-          The API of
-          <link linkend="TeplStyleSchemeChooserWidget">TeplStyleSchemeChooserWidget</link>
-          has changed.
+          <code>tepl_prefs_create_color_scheme_component()</code> and the
+          <code>TeplStyleSchemeChooserWidget</code> class have been removed.
+          They are replaced by
+          <link linkend="TeplStyleSchemeChooserSimple">TeplStyleSchemeChooserSimple</link> and
+          <link linkend="TeplStyleSchemeChooserFull">TeplStyleSchemeChooserFull</link>.
         </para>
       </listitem>
     </itemizedlist>
