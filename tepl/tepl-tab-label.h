@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2017 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2017-2024 - Sébastien Wilmet <swilmet@gnome.org>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
@@ -27,7 +27,7 @@ typedef struct _TeplTabLabelPrivate  TeplTabLabelPrivate;
 
 struct _TeplTabLabel
 {
-	GtkGrid parent;
+	GtkBox parent;
 
 	TeplTabLabelPrivate *priv;
 };
@@ -44,7 +44,7 @@ struct _TeplTabLabel
  */
 struct _TeplTabLabelClass
 {
-	GtkGridClass parent_class;
+	GtkBoxClass parent_class;
 
 	gchar *	(* get_tooltip_markup)	(TeplTabLabel *tab_label);
 

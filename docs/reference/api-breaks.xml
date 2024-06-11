@@ -347,6 +347,12 @@
           <link linkend="TeplStyleSchemeChooserFull">TeplStyleSchemeChooserFull</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link linkend="TeplTabLabel">TeplTabLabel</link> now inherits from
+          <code>GtkBox</code> instead of <code>GtkGrid</code>.
+        </para>
+      </listitem>
     </itemizedlist>
   </chapter>
 </part>

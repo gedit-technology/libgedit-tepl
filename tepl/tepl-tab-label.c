@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2017 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2017-2024 - Sébastien Wilmet <swilmet@gnome.org>
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
@@ -46,7 +46,7 @@ static GParamSpec *properties[N_PROPERTIES];
 
 #define MAX_LABEL_CHARS_LENGTH (42)
 
-G_DEFINE_TYPE_WITH_PRIVATE (TeplTabLabel, tepl_tab_label, GTK_TYPE_GRID)
+G_DEFINE_TYPE_WITH_PRIVATE (TeplTabLabel, tepl_tab_label, GTK_TYPE_BOX)
 
 static void
 update_label (TeplTabLabel *tab_label)
@@ -309,8 +309,8 @@ tepl_tab_label_init (TeplTabLabel *tab_label)
 	gtk_widget_set_vexpand (GTK_WIDGET (tab_label->priv->label), TRUE);
 
 	gtk_widget_show (GTK_WIDGET (tab_label->priv->label));
-	gtk_container_add (GTK_CONTAINER (tab_label),
-			   GTK_WIDGET (tab_label->priv->label));
+	gtk_box_set_center_widget (GTK_BOX (tab_label),
+				   GTK_WIDGET (tab_label->priv->label));
 
 	/* Close button */
 
@@ -323,7 +323,7 @@ tepl_tab_label_init (TeplTabLabel *tab_label)
 			  tab_label);
 
 	gtk_widget_show (close_button);
-	gtk_container_add (GTK_CONTAINER (tab_label), close_button);
+	gtk_box_pack_end (GTK_BOX (tab_label), close_button, FALSE, FALSE, 0);
 }
 
 /**
