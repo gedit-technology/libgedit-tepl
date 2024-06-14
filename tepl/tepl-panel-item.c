@@ -114,9 +114,9 @@ tepl_panel_item_init (TeplPanelItem *item)
 /**
  * tepl_panel_item_new:
  * @widget: a #GtkWidget.
- * @name: the name.
- * @title: the title.
- * @icon_name: the icon-name.
+ * @name: (nullable): the name.
+ * @title: (nullable): the title.
+ * @icon_name: (nullable): the icon-name.
  *
  * Creates a new #TeplPanelItem object.
  *
