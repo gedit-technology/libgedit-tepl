@@ -7,12 +7,12 @@
 /**
  * SECTION:object-counters
  * @Title: TeplObjectCounters
- * @Short_description: Memory checking utility for object instances
+ * @Short_description: Utility to detect memory leaks
  *
- * TeplObjectCounters is a memory checking utility, to ensure that the objects
- * are freed. It counts the number of objects created and destructed, per type.
+ * TeplObjectCounters is a utility to detect memory leaks, by counting the
+ * number of objects constructed and destructed, per type.
  *
- * This utility must be used manually by calling its functions explicitly.
+ * It must be used manually by calling its functions explicitly.
  *
  * It is not intended to be used in performance-sensitive code areas.
  */
