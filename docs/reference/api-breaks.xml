@@ -353,6 +353,12 @@
           <code>GtkBox</code> instead of <code>GtkGrid</code>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link linkend="TeplPanelItem">TeplPanelItem</link> is now a GObject
+          class instead of an interface.
+        </para>
+      </listitem>
     </itemizedlist>
   </chapter>
 </part>
