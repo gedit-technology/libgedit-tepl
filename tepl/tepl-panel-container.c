@@ -226,6 +226,10 @@ tepl_panel_container_get_active_item (TeplPanelContainer *container)
 	g_return_val_if_fail (TEPL_IS_PANEL_CONTAINER (container), NULL);
 
 	active_widget = gtk_stack_get_visible_child (container->priv->stack);
+	if (active_widget == NULL)
+	{
+		return NULL;
+	}
 
 	for (l = container->priv->items; l != NULL; l = l->next)
 	{
