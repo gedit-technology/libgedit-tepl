@@ -24,8 +24,8 @@ test_basics (void)
 
 	/* Add an item */
 	label1 = gtk_label_new (NULL);
-	gtk_widget_show (label1);
-	item1 = tepl_panel_add (TEPL_PANEL (container), label1, "name1", "Title 1", NULL);
+	item1 = tepl_panel_item_new (label1, "name1", "Title 1", NULL);
+	tepl_panel_add (TEPL_PANEL (container), item1);
 
 	items = tepl_panel_container_get_items (container);
 	g_assert_cmpint (g_list_length (items), ==, 1);
@@ -37,8 +37,8 @@ test_basics (void)
 
 	/* Add one more item */
 	label2 = gtk_label_new (NULL);
-	gtk_widget_show (label2);
-	item2 = tepl_panel_add (TEPL_PANEL (container), label2, "name2", "Title 2", "icon-name");
+	item2 = tepl_panel_item_new (label2, "name2", "Title 2", "icon-name");
+	tepl_panel_add (TEPL_PANEL (container), item2);
 
 	items = tepl_panel_container_get_items (container);
 	g_assert_cmpint (g_list_length (items), ==, 2);

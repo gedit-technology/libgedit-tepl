@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2023 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2023-2024 - Sébastien Wilmet
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
@@ -97,35 +97,24 @@ tepl_panel_container_init (TeplPanelContainer *container)
 			   GTK_WIDGET (container->priv->stack));
 }
 
-static TeplPanelItem *
-tepl_panel_container_add (TeplPanel   *panel,
-			  GtkWidget   *widget,
-			  const gchar *name,
-			  const gchar *title,
-			  const gchar *icon_name)
+static void
+tepl_panel_container_add (TeplPanel     *panel,
+			  TeplPanelItem *item)
 {
 	TeplPanelContainer *container = TEPL_PANEL_CONTAINER (panel);
-	TeplPanelItem *item;
+	GtkWidget *widget;
 
-	if (gtk_widget_get_parent (widget) != NULL)
-	{
-		g_warn_if_reached ();
-		return NULL;
-	}
+	widget = tepl_panel_item_get_widget (item);
+	g_return_if_fail (widget != NULL);
+	g_return_if_fail (gtk_widget_get_parent (widget) == NULL);
 
-	item = tepl_panel_item_new (widget,
-				    name,
-				    title,
-				    icon_name);
-
+	gtk_widget_show (widget);
 	gtk_container_add (GTK_CONTAINER (container->priv->stack), widget);
 
 	container->priv->items = g_list_prepend (container->priv->items,
 						 g_object_ref (item));
 
 	emit_changed_signal (container);
-
-	return item;
 }
 
 static void
