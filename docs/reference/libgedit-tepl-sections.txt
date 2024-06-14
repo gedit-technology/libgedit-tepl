@@ -498,7 +498,7 @@ tepl_panel_container_get_type
 <SECTION>
 <FILE>panel-item</FILE>
 TeplPanelItem
-TeplPanelItemInterface
+tepl_panel_item_new
 tepl_panel_item_get_widget
 tepl_panel_item_get_name
 tepl_panel_item_get_title
@@ -506,9 +506,13 @@ tepl_panel_item_get_icon_name
 tepl_panel_item_compare_by_title
 <SUBSECTION Standard>
 TEPL_IS_PANEL_ITEM
+TEPL_IS_PANEL_ITEM_CLASS
 TEPL_PANEL_ITEM
-TEPL_PANEL_ITEM_GET_INTERFACE
+TEPL_PANEL_ITEM_CLASS
+TEPL_PANEL_ITEM_GET_CLASS
 TEPL_TYPE_PANEL_ITEM
+TeplPanelItemClass
+TeplPanelItemPrivate
 tepl_panel_item_get_type
 </SECTION>
 

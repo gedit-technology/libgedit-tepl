@@ -1,18 +1,17 @@
-/* SPDX-FileCopyrightText: 2023 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2023-2024 - Sébastien Wilmet
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
 #include <tepl/tepl.h>
-#include "tepl/tepl-panel-item-simple.h"
 
 static void
-test_simple (void)
+test_basics (void)
 {
 	GtkWidget *label;
 	TeplPanelItem *item;
 
 	label = gtk_label_new (NULL);
-	item = _tepl_panel_item_simple_new (label, "name", "Title", NULL);
+	item = tepl_panel_item_new (label, "name", "Title", NULL);
 
 	g_assert_true (tepl_panel_item_get_widget (item) == label);
 	g_assert_cmpstr (tepl_panel_item_get_name (item), ==, "name");
@@ -31,7 +30,7 @@ main (int    argc,
 {
 	gtk_test_init (&argc, &argv);
 
-	g_test_add_func ("/PanelItem/simple", test_simple);
+	g_test_add_func ("/PanelItem/basics", test_basics);
 
 	return g_test_run ();
 }

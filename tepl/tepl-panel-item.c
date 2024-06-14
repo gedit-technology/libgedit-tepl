@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2023 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2023-2024 - Sébastien Wilmet
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
@@ -7,44 +7,145 @@
 /**
  * SECTION:panel-item
  * @Title: TeplPanelItem
- * @Short_description: Access to the information of a panel item
+ * @Short_description: Panel item data
  *
- * #TeplPanelItem is an interface to get the information of a panel item.
+ * A #TeplPanelItem object contains a #GtkWidget plus associated information.
  */
 
-G_DEFINE_INTERFACE (TeplPanelItem, tepl_panel_item, G_TYPE_OBJECT)
-
-static GtkWidget *
-tepl_panel_item_get_widget_default (TeplPanelItem *item)
+struct _TeplPanelItemPrivate
 {
-	return NULL;
-}
+	/* Owned. The ref is released on ::destroy. */
+	GtkWidget *widget;
+	gulong widget_destroy_handler_id;
 
-static const gchar *
-tepl_panel_item_get_name_default (TeplPanelItem *item)
-{
-	return NULL;
-}
+	gchar *name;
+	gchar *title;
+	gchar *icon_name;
+};
 
-static const gchar *
-tepl_panel_item_get_title_default (TeplPanelItem *item)
-{
-	return NULL;
-}
+/* Forward declarations */
+static void set_widget (TeplPanelItem *item,
+			GtkWidget     *widget);
 
-static const gchar *
-tepl_panel_item_get_icon_name_default (TeplPanelItem *item)
+G_DEFINE_TYPE_WITH_PRIVATE (TeplPanelItem, tepl_panel_item, G_TYPE_OBJECT)
+
+static gboolean
+is_null_or_valid_utf8 (const gchar *str)
 {
-	return NULL;
+	return (str == NULL || g_utf8_validate (str, -1, NULL));
 }
 
 static void
-tepl_panel_item_default_init (TeplPanelItemInterface *interface)
+widget_destroy_cb (GtkWidget     *widget,
+		   TeplPanelItem *item)
 {
-	interface->get_widget = tepl_panel_item_get_widget_default;
-	interface->get_name = tepl_panel_item_get_name_default;
-	interface->get_title = tepl_panel_item_get_title_default;
-	interface->get_icon_name = tepl_panel_item_get_icon_name_default;
+	set_widget (item, NULL);
+}
+
+static void
+set_widget (TeplPanelItem *item,
+	    GtkWidget     *widget)
+{
+	if (item->priv->widget == widget)
+	{
+		return;
+	}
+
+	if (item->priv->widget != NULL)
+	{
+		if (item->priv->widget_destroy_handler_id != 0)
+		{
+			g_signal_handler_disconnect (item->priv->widget, item->priv->widget_destroy_handler_id);
+			item->priv->widget_destroy_handler_id = 0;
+		}
+
+		g_clear_object (&item->priv->widget);
+	}
+
+	if (widget != NULL)
+	{
+		item->priv->widget = g_object_ref_sink (widget);
+
+		item->priv->widget_destroy_handler_id =
+			g_signal_connect (item->priv->widget,
+					  "destroy",
+					  G_CALLBACK (widget_destroy_cb),
+					  item);
+	}
+}
+
+static void
+tepl_panel_item_dispose (GObject *object)
+{
+	TeplPanelItem *item = TEPL_PANEL_ITEM (object);
+
+	set_widget (item, NULL);
+
+	G_OBJECT_CLASS (tepl_panel_item_parent_class)->dispose (object);
+}
+
+static void
+tepl_panel_item_finalize (GObject *object)
+{
+	TeplPanelItem *item = TEPL_PANEL_ITEM (object);
+
+	g_free (item->priv->name);
+	g_free (item->priv->title);
+	g_free (item->priv->icon_name);
+
+	G_OBJECT_CLASS (tepl_panel_item_parent_class)->finalize (object);
+}
+
+static void
+tepl_panel_item_class_init (TeplPanelItemClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	object_class->dispose = tepl_panel_item_dispose;
+	object_class->finalize = tepl_panel_item_finalize;
+}
+
+static void
+tepl_panel_item_init (TeplPanelItem *item)
+{
+	item->priv = tepl_panel_item_get_instance_private (item);
+}
+
+/**
+ * tepl_panel_item_new:
+ * @widget: a #GtkWidget.
+ * @name: the name.
+ * @title: the title.
+ * @icon_name: the icon-name.
+ *
+ * Creates a new #TeplPanelItem object.
+ *
+ * See the other #TeplPanelItem functions for the meaning of the parameters.
+ *
+ * Returns: (transfer full): a new #TeplPanelItem object.
+ * Since: 6.12
+ */
+TeplPanelItem *
+tepl_panel_item_new (GtkWidget   *widget,
+		     const gchar *name,
+		     const gchar *title,
+		     const gchar *icon_name)
+{
+	TeplPanelItem *item;
+
+	g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+	g_return_val_if_fail (is_null_or_valid_utf8 (name), NULL);
+	g_return_val_if_fail (is_null_or_valid_utf8 (title), NULL);
+
+	item = g_object_new (TEPL_TYPE_PANEL_ITEM, NULL);
+
+	set_widget (item, widget);
+
+	item->priv->name = g_strdup (name);
+	item->priv->title = g_strdup (title);
+	item->priv->icon_name = g_strdup (icon_name);
+
+	return item;
 }
 
 /**
@@ -61,8 +162,7 @@ GtkWidget *
 tepl_panel_item_get_widget (TeplPanelItem *item)
 {
 	g_return_val_if_fail (TEPL_IS_PANEL_ITEM (item), NULL);
-
-	return TEPL_PANEL_ITEM_GET_INTERFACE (item)->get_widget (item);
+	return item->priv->widget;
 }
 
 /**
@@ -79,8 +179,7 @@ const gchar *
 tepl_panel_item_get_name (TeplPanelItem *item)
 {
 	g_return_val_if_fail (TEPL_IS_PANEL_ITEM (item), NULL);
-
-	return TEPL_PANEL_ITEM_GET_INTERFACE (item)->get_name (item);
+	return item->priv->name;
 }
 
 /**
@@ -97,8 +196,7 @@ const gchar *
 tepl_panel_item_get_title (TeplPanelItem *item)
 {
 	g_return_val_if_fail (TEPL_IS_PANEL_ITEM (item), NULL);
-
-	return TEPL_PANEL_ITEM_GET_INTERFACE (item)->get_title (item);
+	return item->priv->title;
 }
 
 /**
@@ -115,8 +213,7 @@ const gchar *
 tepl_panel_item_get_icon_name (TeplPanelItem *item)
 {
 	g_return_val_if_fail (TEPL_IS_PANEL_ITEM (item), NULL);
-
-	return TEPL_PANEL_ITEM_GET_INTERFACE (item)->get_icon_name (item);
+	return item->priv->icon_name;
 }
 
 /**

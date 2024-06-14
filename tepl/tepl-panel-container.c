@@ -4,7 +4,6 @@
 
 #include "tepl-panel-container.h"
 #include "tepl-panel.h"
-#include "tepl-panel-item-simple.h"
 
 /**
  * SECTION:panel-container
@@ -114,10 +113,10 @@ tepl_panel_container_add (TeplPanel   *panel,
 		return NULL;
 	}
 
-	item = _tepl_panel_item_simple_new (widget,
-					    name,
-					    title,
-					    icon_name);
+	item = tepl_panel_item_new (widget,
+				    name,
+				    title,
+				    icon_name);
 
 	gtk_container_add (GTK_CONTAINER (container->priv->stack), widget);
 

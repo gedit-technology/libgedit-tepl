@@ -32,7 +32,6 @@ tepl/tepl-panel1.c
 tepl/tepl-panel.c
 tepl/tepl-panel-container.c
 tepl/tepl-panel-item.c
-tepl/tepl-panel-item-simple.c
 tepl/tepl-panel-switcher-menu.c
 tepl/tepl-panel-switcher-notebook.c
 tepl/tepl-pango.c

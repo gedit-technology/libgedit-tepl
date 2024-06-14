@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2023 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2023-2024 - Sébastien Wilmet
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
@@ -13,45 +13,39 @@
 
 G_BEGIN_DECLS
 
-#define TEPL_TYPE_PANEL_ITEM               (tepl_panel_item_get_type ())
-#define TEPL_PANEL_ITEM(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), TEPL_TYPE_PANEL_ITEM, TeplPanelItem))
-#define TEPL_IS_PANEL_ITEM(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TEPL_TYPE_PANEL_ITEM))
-#define TEPL_PANEL_ITEM_GET_INTERFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), TEPL_TYPE_PANEL_ITEM, TeplPanelItemInterface))
+#define TEPL_TYPE_PANEL_ITEM             (tepl_panel_item_get_type ())
+#define TEPL_PANEL_ITEM(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), TEPL_TYPE_PANEL_ITEM, TeplPanelItem))
+#define TEPL_PANEL_ITEM_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), TEPL_TYPE_PANEL_ITEM, TeplPanelItemClass))
+#define TEPL_IS_PANEL_ITEM(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TEPL_TYPE_PANEL_ITEM))
+#define TEPL_IS_PANEL_ITEM_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), TEPL_TYPE_PANEL_ITEM))
+#define TEPL_PANEL_ITEM_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), TEPL_TYPE_PANEL_ITEM, TeplPanelItemClass))
 
-typedef struct _TeplPanelItem          TeplPanelItem;
-typedef struct _TeplPanelItemInterface TeplPanelItemInterface;
+typedef struct _TeplPanelItem         TeplPanelItem;
+typedef struct _TeplPanelItemClass    TeplPanelItemClass;
+typedef struct _TeplPanelItemPrivate  TeplPanelItemPrivate;
 
-/**
- * TeplPanelItemInterface:
- * @parent_interface: The parent interface.
- * @get_widget: The virtual function pointer for tepl_panel_item_get_widget().
- *   By default, returns %NULL.
- * @get_name: The virtual function pointer for tepl_panel_item_get_name().
- *   By default, returns %NULL.
- * @get_title: The virtual function pointer for tepl_panel_item_get_title().
- *   By default, returns %NULL.
- * @get_icon_name: The virtual function pointer for tepl_panel_item_get_icon_name().
- *   By default, returns %NULL.
- *
- * The virtual function table for #TeplPanelItem.
- *
- * Since: 6.8
- */
-struct _TeplPanelItemInterface
+struct _TeplPanelItem
 {
-	GTypeInterface parent_interface;
+	GObject parent;
 
-	GtkWidget *	(*get_widget)		(TeplPanelItem *item);
+	TeplPanelItemPrivate *priv;
+};
 
-	const gchar *	(*get_name)		(TeplPanelItem *item);
+struct _TeplPanelItemClass
+{
+	GObjectClass parent_class;
 
-	const gchar *	(*get_title)		(TeplPanelItem *item);
-
-	const gchar *	(*get_icon_name)	(TeplPanelItem *item);
+	gpointer padding[12];
 };
 
 G_MODULE_EXPORT
 GType		tepl_panel_item_get_type		(void);
+
+G_MODULE_EXPORT
+TeplPanelItem *	tepl_panel_item_new			(GtkWidget   *widget,
+							 const gchar *name,
+							 const gchar *title,
+							 const gchar *icon_name);
 
 G_MODULE_EXPORT
 GtkWidget *	tepl_panel_item_get_widget		(TeplPanelItem *item);
