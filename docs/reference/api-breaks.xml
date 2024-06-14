@@ -359,6 +359,12 @@
           class instead of an interface.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The API of <link linkend="tepl-panel-add">tepl_panel_add()</link> and
+          its vfunc have changed.
+        </para>
+      </listitem>
     </itemizedlist>
   </chapter>
 </part>
