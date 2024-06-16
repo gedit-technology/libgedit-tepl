@@ -365,6 +365,13 @@
           its vfunc have changed.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The API of
+          <link linkend="TeplPanelSwitcherMenu">TeplPanelSwitcherMenu</link>
+          has changed.
+        </para>
+      </listitem>
     </itemizedlist>
   </chapter>
 </part>
