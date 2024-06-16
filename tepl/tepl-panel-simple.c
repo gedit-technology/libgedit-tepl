@@ -369,7 +369,7 @@ tepl_panel_simple_get_active_item_name (TeplPanelSimple *panel)
 /**
  * tepl_panel_simple_set_active_item_name:
  * @panel: a #TeplPanelSimple.
- * @name: a name.
+ * @name: (nullable): a name.
  *
  * A convenience function that calls tepl_panel_set_active() with the
  * #TeplPanelItem named @name (if found).
@@ -384,7 +384,12 @@ tepl_panel_simple_set_active_item_name (TeplPanelSimple *panel,
 	GList *l;
 
 	g_return_if_fail (TEPL_IS_PANEL_SIMPLE (panel));
-	g_return_if_fail (name != NULL);
+
+	if (name == NULL)
+	{
+		tepl_panel_set_active (TEPL_PANEL (panel), NULL);
+		return;
+	}
 
 	items = tepl_panel_simple_get_items (panel);
 
