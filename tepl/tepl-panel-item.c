@@ -21,6 +21,7 @@ struct _TeplPanelItemPrivate
 	gchar *name;
 	gchar *title;
 	gchar *icon_name;
+	gint position;
 };
 
 enum
@@ -30,6 +31,7 @@ enum
 	PROP_NAME,
 	PROP_TITLE,
 	PROP_ICON_NAME,
+	PROP_POSITION,
 	N_PROPERTIES
 };
 
@@ -128,6 +130,10 @@ tepl_panel_item_get_property (GObject    *object,
 			g_value_set_string (value, tepl_panel_item_get_icon_name (item));
 			break;
 
+		case PROP_POSITION:
+			g_value_set_int (value, tepl_panel_item_get_position (item));
+			break;
+
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 			break;
@@ -158,6 +164,10 @@ tepl_panel_item_set_property (GObject      *object,
 
 		case PROP_ICON_NAME:
 			g_set_str (&item->priv->icon_name, g_value_get_string (value));
+			break;
+
+		case PROP_POSITION:
+			item->priv->position = g_value_get_int (value);
 			break;
 
 		default:
@@ -271,6 +281,24 @@ tepl_panel_item_class_init (TeplPanelItemClass *klass)
 				     G_PARAM_CONSTRUCT_ONLY |
 				     G_PARAM_STATIC_STRINGS);
 
+	/**
+	 * TeplPanelItem:position:
+	 *
+	 * The position.
+	 *
+	 * Used to sort items in the desired order.
+	 *
+	 * Since: 6.12
+	 */
+	properties[PROP_POSITION] =
+		g_param_spec_int ("position",
+				  "position",
+				  "",
+				  G_MININT, G_MAXINT, 0,
+				  G_PARAM_READWRITE |
+				  G_PARAM_CONSTRUCT_ONLY |
+				  G_PARAM_STATIC_STRINGS);
+
 	g_object_class_install_properties (object_class, N_PROPERTIES, properties);
 }
 
@@ -365,6 +393,20 @@ tepl_panel_item_get_icon_name (TeplPanelItem *item)
 {
 	g_return_val_if_fail (TEPL_IS_PANEL_ITEM (item), NULL);
 	return item->priv->icon_name;
+}
+
+/**
+ * tepl_panel_item_get_position:
+ * @item: a #TeplPanelItem.
+ *
+ * Returns: the value of the #TeplPanelItem:position property.
+ * Since: 6.12
+ */
+gint
+tepl_panel_item_get_position (TeplPanelItem *item)
+{
+	g_return_val_if_fail (TEPL_IS_PANEL_ITEM (item), 0);
+	return item->priv->position;
 }
 
 /**

@@ -60,6 +60,9 @@ G_MODULE_EXPORT
 const gchar *	tepl_panel_item_get_icon_name		(TeplPanelItem *item);
 
 G_MODULE_EXPORT
+gint		tepl_panel_item_get_position		(TeplPanelItem *item);
+
+G_MODULE_EXPORT
 gint		tepl_panel_item_compare_by_title	(TeplPanelItem *a,
 							 TeplPanelItem *b);
 

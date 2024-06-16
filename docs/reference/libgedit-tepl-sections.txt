@@ -503,6 +503,7 @@ tepl_panel_item_get_widget
 tepl_panel_item_get_name
 tepl_panel_item_get_title
 tepl_panel_item_get_icon_name
+tepl_panel_item_get_position
 tepl_panel_item_compare_by_title
 <SUBSECTION Standard>
 TEPL_IS_PANEL_ITEM
