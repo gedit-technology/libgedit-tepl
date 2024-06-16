@@ -61,10 +61,6 @@ panel_simple_add_item_cb (TeplPanelSimple *panel_simple,
 	widget = tepl_panel_item_get_widget (item);
 	gtk_widget_show (widget);
 
-	g_signal_handlers_block_by_func (panel_stack->priv->stack,
-					 stack_visible_child_notify_cb,
-					 panel_stack);
-
 	gtk_container_add_with_properties (GTK_CONTAINER (panel_stack->priv->stack),
 					   widget,
 					   "name", tepl_panel_item_get_name (item),
@@ -72,10 +68,6 @@ panel_simple_add_item_cb (TeplPanelSimple *panel_simple,
 					   "icon-name", tepl_panel_item_get_icon_name (item),
 					   "position", get_real_position (panel_simple, item),
 					   NULL);
-
-	g_signal_handlers_unblock_by_func (panel_stack->priv->stack,
-					   stack_visible_child_notify_cb,
-					   panel_stack);
 }
 
 static void
@@ -83,16 +75,8 @@ panel_simple_remove_item_cb (TeplPanelSimple *panel_simple,
 			     TeplPanelItem   *item,
 			     TeplPanelStack  *panel_stack)
 {
-	g_signal_handlers_block_by_func (panel_stack->priv->stack,
-					 stack_visible_child_notify_cb,
-					 panel_stack);
-
 	gtk_container_remove (GTK_CONTAINER (panel_stack->priv->stack),
 			      tepl_panel_item_get_widget (item));
-
-	g_signal_handlers_unblock_by_func (panel_stack->priv->stack,
-					   stack_visible_child_notify_cb,
-					   panel_stack);
 }
 
 static void
