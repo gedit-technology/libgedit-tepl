@@ -56,8 +56,13 @@ panel_simple_add_item_cb (TeplPanelSimple *panel_simple,
 			  TeplPanelItem   *item,
 			  TeplPanelStack  *panel_stack)
 {
+	GtkWidget *widget;
+
+	widget = tepl_panel_item_get_widget (item);
+	gtk_widget_show (widget);
+
 	gtk_container_add_with_properties (GTK_CONTAINER (panel_stack->priv->stack),
-					   tepl_panel_item_get_widget (item),
+					   widget,
 					   "name", tepl_panel_item_get_name (item),
 					   "title", tepl_panel_item_get_title (item),
 					   "icon-name", tepl_panel_item_get_icon_name (item),
