@@ -89,6 +89,25 @@ item_button_clicked_cb (GtkToggleButton       *button,
 {
 	TeplPanelItem *item;
 
+	if (!gtk_toggle_button_get_active (button))
+	{
+		g_signal_handlers_block_by_func (button,
+						 item_button_clicked_cb,
+						 switcher);
+
+		/* The user has clicked on the button that was already pressed
+		 * in. Keep it pressed in.
+		 * In this case the call to tepl_panel_set_active() doesn't
+		 * trigger the notify signal, so repopulate() won't be called.
+		 * But we still want to hide the popover.
+		 */
+		gtk_toggle_button_set_active (button, TRUE);
+
+		g_signal_handlers_unblock_by_func (button,
+						   item_button_clicked_cb,
+						   switcher);
+	}
+
 	item = g_object_get_data (G_OBJECT (button), TEPL_PANEL_ITEM_KEY);
 	g_return_if_fail (TEPL_IS_PANEL_ITEM (item));
 
