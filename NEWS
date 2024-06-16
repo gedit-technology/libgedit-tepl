@@ -1,3 +1,23 @@
+News in 6.11.beta, yyyy-mm-dd (Pre-release)
+-------------------------------------------
+
+New versioning scheme:
+- Adopt the x.y.alpha, x.y.beta and x.y.rc versions for pre-releases.
+  For example: 6.11.beta (pre-release), 6.11.0 (stable version).
+
+New features:
+- Full support for light/dark GTK theme variants.
+- Side and bottom panels support: rework the API.
+
+Bug fixes:
+- TeplTabLabel: correct position for the close button.
+
+For packagers:
+- Build: add 'tests' option.
+
+Misc:
+- Documentation improvements.
+
 News in 6.10.0, 2024-04-27 (stable version)
 -------------------------------------------
 * Rename the project from Tepl to libgedit-tepl.
