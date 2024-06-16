@@ -103,6 +103,10 @@ panel_simple_active_item_notify_cb (TeplPanelSimple *panel_simple,
 	TeplPanelItem *active_item;
 
 	active_item = tepl_panel_simple_get_active_item (panel_simple);
+	if (active_item == NULL)
+	{
+		return;
+	}
 
 	g_signal_handlers_block_by_func (panel_stack->priv->stack,
 					 stack_visible_child_notify_cb,
