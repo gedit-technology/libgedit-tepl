@@ -540,6 +540,24 @@ tepl_panel_simple_get_type
 </SECTION>
 
 <SECTION>
+<FILE>panel-stack</FILE>
+TeplPanelStack
+tepl_panel_stack_new
+tepl_panel_stack_get_panel_simple
+tepl_panel_stack_get_stack
+<SUBSECTION Standard>
+TEPL_IS_PANEL_STACK
+TEPL_IS_PANEL_STACK_CLASS
+TEPL_PANEL_STACK
+TEPL_PANEL_STACK_CLASS
+TEPL_PANEL_STACK_GET_CLASS
+TEPL_TYPE_PANEL_STACK
+TeplPanelStackClass
+TeplPanelStackPrivate
+tepl_panel_stack_get_type
+</SECTION>
+
+<SECTION>
 <FILE>panel-switcher-menu</FILE>
 TeplPanelSwitcherMenu
 tepl_panel_switcher_menu_new
