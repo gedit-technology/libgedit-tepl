@@ -414,7 +414,8 @@ tepl_panel_item_get_position (TeplPanelItem *item)
  * @a: a #TeplPanelItem.
  * @b: a #TeplPanelItem.
  *
- * A #GCompareFunc for the #TeplPanelItem's "title" attribute.
+ * A #GCompareFunc that takes into account only the #TeplPanelItem:title
+ * property.
  *
  * Returns: the usual return value for a #GCompareFunc.
  * Since: 6.8
@@ -464,4 +465,31 @@ out:
 	g_free (normalized_title_a);
 	g_free (normalized_title_b);
 	return result;
+}
+
+/**
+ * tepl_panel_item_compare:
+ * @a: a #TeplPanelItem.
+ * @b: a #TeplPanelItem.
+ *
+ * A #GCompareFunc that takes into account the #TeplPanelItem:position property
+ * in priority, and falls back to the #TeplPanelItem:title property if two items
+ * have the same position.
+ *
+ * Returns: the usual return value for a #GCompareFunc.
+ * Since: 6.12
+ */
+gint
+tepl_panel_item_compare (TeplPanelItem *a,
+			 TeplPanelItem *b)
+{
+	g_return_val_if_fail (TEPL_IS_PANEL_ITEM (a), 0);
+	g_return_val_if_fail (TEPL_IS_PANEL_ITEM (b), 0);
+
+	if (a->priv->position == b->priv->position)
+	{
+		return tepl_panel_item_compare_by_title (a, b);
+	}
+
+	return a->priv->position - b->priv->position;
 }

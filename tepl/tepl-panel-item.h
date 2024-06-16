@@ -63,6 +63,10 @@ G_MODULE_EXPORT
 gint		tepl_panel_item_get_position		(TeplPanelItem *item);
 
 G_MODULE_EXPORT
+gint		tepl_panel_item_compare			(TeplPanelItem *a,
+							 TeplPanelItem *b);
+
+G_MODULE_EXPORT
 gint		tepl_panel_item_compare_by_title	(TeplPanelItem *a,
 							 TeplPanelItem *b);
 
