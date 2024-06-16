@@ -82,7 +82,7 @@ tepl_panel_remove (TeplPanel     *panel,
 /**
  * tepl_panel_set_active:
  * @panel: a #TeplPanel.
- * @item: a #TeplPanelItem.
+ * @item: (nullable): a #TeplPanelItem.
  *
  * Sets @item to be the one that is currently shown in @panel.
  *
@@ -95,7 +95,6 @@ tepl_panel_set_active (TeplPanel     *panel,
 		       TeplPanelItem *item)
 {
 	g_return_if_fail (TEPL_IS_PANEL (panel));
-	g_return_if_fail (TEPL_IS_PANEL_ITEM (item));
 
 	TEPL_PANEL_GET_INTERFACE (panel)->set_active (panel, item);
 }
