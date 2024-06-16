@@ -334,8 +334,8 @@ tepl_panel_simple_get_items (TeplPanelSimple *panel)
  * tepl_panel_simple_get_active_item:
  * @panel: a #TeplPanelSimple.
  *
- * Returns: (transfer none): the value of the #TeplPanelSimple:active-item
- *   property.
+ * Returns: (transfer none) (nullable): the value of the
+ *   #TeplPanelSimple:active-item property.
  * Since: 6.12
  */
 TeplPanelItem *
