@@ -13,7 +13,7 @@ create_panel_stack (void)
 	GtkWidget *label;
 	TeplPanelItem *item;
 
-	panel_stack = tepl_panel_stack_new ();
+	panel_stack = tepl_panel_stack_new (NULL);
 	panel_simple = tepl_panel_stack_get_panel_simple (panel_stack);
 
 	label = gtk_label_new ("Widget 1");

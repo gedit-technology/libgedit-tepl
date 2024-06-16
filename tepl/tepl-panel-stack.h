@@ -42,7 +42,7 @@ G_MODULE_EXPORT
 GType			tepl_panel_stack_get_type		(void);
 
 G_MODULE_EXPORT
-TeplPanelStack *	tepl_panel_stack_new			(void);
+TeplPanelStack *	tepl_panel_stack_new			(TeplPanelSimple *panel_simple);
 
 G_MODULE_EXPORT
 TeplPanelSimple *	tepl_panel_stack_get_panel_simple	(TeplPanelStack *panel_stack);
