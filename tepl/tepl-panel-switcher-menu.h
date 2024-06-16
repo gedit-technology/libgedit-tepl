@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2023 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2023-2024 - Sébastien Wilmet
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
@@ -9,7 +9,7 @@
 #error "Only <tepl/tepl.h> can be included directly."
 #endif
 
-#include <tepl/tepl-panel-container.h>
+#include <tepl/tepl-panel-simple.h>
 
 G_BEGIN_DECLS
 
@@ -42,7 +42,7 @@ G_MODULE_EXPORT
 GType			tepl_panel_switcher_menu_get_type	(void);
 
 G_MODULE_EXPORT
-TeplPanelSwitcherMenu *	tepl_panel_switcher_menu_new		(TeplPanelContainer *panel);
+TeplPanelSwitcherMenu *	tepl_panel_switcher_menu_new		(TeplPanelSimple *panel);
 
 G_END_DECLS
 

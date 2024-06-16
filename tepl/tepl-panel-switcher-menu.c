@@ -7,10 +7,10 @@
 
 /**
  * SECTION:panel-switcher-menu
- * @Short_description: A controller for #TeplPanelContainer
+ * @Short_description: A controller for #TeplPanelSimple
  * @Title: TeplPanelSwitcherMenu
  *
- * Similar to #GtkStackSwitcher, but for a #TeplPanelContainer.
+ * Similar to #GtkStackSwitcher, but for a #TeplPanelSimple.
  *
  * This switcher widget is suitable to be put in a #GtkHeaderBar, to choose the
  * component of a side panel (for example).
@@ -18,7 +18,7 @@
 
 struct _TeplPanelSwitcherMenuPrivate
 {
-	TeplPanelContainer *panel;
+	TeplPanelSimple *panel;
 
 	GtkPopover *popover;
 };
@@ -28,11 +28,11 @@ struct _TeplPanelSwitcherMenuPrivate
 G_DEFINE_TYPE_WITH_PRIVATE (TeplPanelSwitcherMenu, tepl_panel_switcher_menu, GTK_TYPE_BIN)
 
 static const gchar *
-get_title (TeplPanelContainer *panel)
+get_title (TeplPanelSimple *panel)
 {
 	TeplPanelItem *active_item;
 
-	active_item = tepl_panel_container_get_active_item (panel);
+	active_item = tepl_panel_simple_get_active_item (panel);
 	if (active_item != NULL)
 	{
 		return tepl_panel_item_get_title (active_item);
@@ -150,10 +150,10 @@ create_popover (TeplPanelSwitcherMenu *switcher)
 		      "margin", 10,
 		      NULL);
 
-	active_item = tepl_panel_container_get_active_item (switcher->priv->panel);
+	active_item = tepl_panel_simple_get_active_item (switcher->priv->panel);
 
-	items = tepl_panel_container_get_items (switcher->priv->panel);
-	items = g_list_sort (items, (GCompareFunc) tepl_panel_item_compare_by_title);
+	items = tepl_panel_simple_get_items (switcher->priv->panel);
+	items = g_list_sort (items, (GCompareFunc) tepl_panel_item_compare);
 	for (l = items; l != NULL; l = l->next)
 	{
 		TeplPanelItem *cur_item = TEPL_PANEL_ITEM (l->data);
@@ -213,7 +213,7 @@ repopulate (TeplPanelSwitcherMenu *switcher)
 
 	clear_all (switcher);
 
-	if (tepl_panel_container_has_several_items (switcher->priv->panel))
+	if (tepl_panel_simple_has_several_items (switcher->priv->panel))
 	{
 		child = GTK_WIDGET (create_menu_button (switcher));
 	}
@@ -252,7 +252,7 @@ tepl_panel_switcher_menu_init (TeplPanelSwitcherMenu *switcher)
 }
 
 static void
-panel_changed_cb (TeplPanelContainer    *panel,
+panel_changed_cb (TeplPanelSimple       *panel,
 		  TeplPanelSwitcherMenu *switcher)
 {
 	repopulate (switcher);
@@ -260,17 +260,17 @@ panel_changed_cb (TeplPanelContainer    *panel,
 
 /**
  * tepl_panel_switcher_menu_new:
- * @panel: a #TeplPanelContainer.
+ * @panel: a #TeplPanelSimple.
  *
  * Returns: (transfer floating): a new #TeplPanelSwitcherMenu widget.
- * Since: 6.8
+ * Since: 6.12
  */
 TeplPanelSwitcherMenu *
-tepl_panel_switcher_menu_new (TeplPanelContainer *panel)
+tepl_panel_switcher_menu_new (TeplPanelSimple *panel)
 {
 	TeplPanelSwitcherMenu *switcher;
 
-	g_return_val_if_fail (TEPL_IS_PANEL_CONTAINER (panel), NULL);
+	g_return_val_if_fail (TEPL_IS_PANEL_SIMPLE (panel), NULL);
 
 	switcher = g_object_new (TEPL_TYPE_PANEL_SWITCHER_MENU, NULL);
 
