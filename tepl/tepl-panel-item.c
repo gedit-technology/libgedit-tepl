@@ -92,7 +92,9 @@ static void
 set_name (TeplPanelItem *item,
 	  const gchar   *name)
 {
-	g_return_if_fail (is_null_or_valid_utf8 (name));
+	g_return_if_fail (name != NULL);
+	g_return_if_fail (g_utf8_validate (name, -1, NULL));
+
 	g_set_str (&item->priv->name, name);
 }
 
@@ -311,7 +313,7 @@ tepl_panel_item_init (TeplPanelItem *item)
 /**
  * tepl_panel_item_new:
  * @widget: a #GtkWidget.
- * @name: (nullable): the name.
+ * @name: the name.
  * @title: (nullable): the title.
  * @icon_name: (nullable): the icon-name.
  *
@@ -329,6 +331,7 @@ tepl_panel_item_new (GtkWidget   *widget,
 		     const gchar *icon_name)
 {
 	g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+	g_return_val_if_fail (name != NULL, NULL);
 
 	return g_object_new (TEPL_TYPE_PANEL_ITEM,
 			     "widget", widget,
@@ -357,7 +360,7 @@ tepl_panel_item_get_widget (TeplPanelItem *item)
  * tepl_panel_item_get_name:
  * @item: a #TeplPanelItem.
  *
- * Returns: (nullable): the value of the #TeplPanelItem:name property.
+ * Returns: the value of the #TeplPanelItem:name property.
  * Since: 6.8
  */
 const gchar *
