@@ -519,6 +519,27 @@ tepl_panel_item_get_type
 </SECTION>
 
 <SECTION>
+<FILE>panel-simple</FILE>
+TeplPanelSimple
+tepl_panel_simple_new
+tepl_panel_simple_get_items
+tepl_panel_simple_get_active_item
+tepl_panel_simple_get_active_item_name
+tepl_panel_simple_set_active_item_name
+tepl_panel_simple_has_several_items
+<SUBSECTION Standard>
+TEPL_IS_PANEL_SIMPLE
+TEPL_IS_PANEL_SIMPLE_CLASS
+TEPL_PANEL_SIMPLE
+TEPL_PANEL_SIMPLE_CLASS
+TEPL_PANEL_SIMPLE_GET_CLASS
+TEPL_TYPE_PANEL_SIMPLE
+TeplPanelSimpleClass
+TeplPanelSimplePrivate
+tepl_panel_simple_get_type
+</SECTION>
+
+<SECTION>
 <FILE>panel-switcher-menu</FILE>
 TeplPanelSwitcherMenu
 tepl_panel_switcher_menu_new

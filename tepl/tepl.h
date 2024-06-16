@@ -42,6 +42,7 @@
 #include <tepl/tepl-panel.h>
 #include <tepl/tepl-panel-container.h>
 #include <tepl/tepl-panel-item.h>
+#include <tepl/tepl-panel-simple.h>
 #include <tepl/tepl-panel-switcher-menu.h>
 #include <tepl/tepl-panel-switcher-notebook.h>
 #include <tepl/tepl-pango.h>
