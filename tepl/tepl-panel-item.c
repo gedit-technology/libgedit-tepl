@@ -23,6 +23,18 @@ struct _TeplPanelItemPrivate
 	gchar *icon_name;
 };
 
+enum
+{
+	PROP_0,
+	PROP_WIDGET,
+	PROP_NAME,
+	PROP_TITLE,
+	PROP_ICON_NAME,
+	N_PROPERTIES
+};
+
+static GParamSpec *properties[N_PROPERTIES];
+
 /* Forward declarations */
 static void set_widget (TeplPanelItem *item,
 			GtkWidget     *widget);
@@ -75,6 +87,86 @@ set_widget (TeplPanelItem *item,
 }
 
 static void
+set_name (TeplPanelItem *item,
+	  const gchar   *name)
+{
+	g_return_if_fail (is_null_or_valid_utf8 (name));
+	g_set_str (&item->priv->name, name);
+}
+
+static void
+set_title (TeplPanelItem *item,
+	   const gchar   *title)
+{
+	g_return_if_fail (is_null_or_valid_utf8 (title));
+	g_set_str (&item->priv->title, title);
+}
+
+static void
+tepl_panel_item_get_property (GObject    *object,
+			      guint       prop_id,
+			      GValue     *value,
+			      GParamSpec *pspec)
+{
+	TeplPanelItem *item = TEPL_PANEL_ITEM (object);
+
+	switch (prop_id)
+	{
+		case PROP_WIDGET:
+			g_value_set_object (value, tepl_panel_item_get_widget (item));
+			break;
+
+		case PROP_NAME:
+			g_value_set_string (value, tepl_panel_item_get_name (item));
+			break;
+
+		case PROP_TITLE:
+			g_value_set_string (value, tepl_panel_item_get_title (item));
+			break;
+
+		case PROP_ICON_NAME:
+			g_value_set_string (value, tepl_panel_item_get_icon_name (item));
+			break;
+
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+			break;
+	}
+}
+
+static void
+tepl_panel_item_set_property (GObject      *object,
+			      guint         prop_id,
+			      const GValue *value,
+			      GParamSpec   *pspec)
+{
+	TeplPanelItem *item = TEPL_PANEL_ITEM (object);
+
+	switch (prop_id)
+	{
+		case PROP_WIDGET:
+			set_widget (item, g_value_get_object (value));
+			break;
+
+		case PROP_NAME:
+			set_name (item, g_value_get_string (value));
+			break;
+
+		case PROP_TITLE:
+			set_title (item, g_value_get_string (value));
+			break;
+
+		case PROP_ICON_NAME:
+			g_set_str (&item->priv->icon_name, g_value_get_string (value));
+			break;
+
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+			break;
+	}
+}
+
+static void
 tepl_panel_item_dispose (GObject *object)
 {
 	TeplPanelItem *item = TEPL_PANEL_ITEM (object);
@@ -101,8 +193,85 @@ tepl_panel_item_class_init (TeplPanelItemClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+	object_class->get_property = tepl_panel_item_get_property;
+	object_class->set_property = tepl_panel_item_set_property;
 	object_class->dispose = tepl_panel_item_dispose;
 	object_class->finalize = tepl_panel_item_finalize;
+
+	/**
+	 * TeplPanelItem:widget:
+	 *
+	 * The #GtkWidget (the main content).
+	 *
+	 * Since: 6.12
+	 */
+	properties[PROP_WIDGET] =
+		g_param_spec_object ("widget",
+				     "widget",
+				     "",
+				     GTK_TYPE_WIDGET,
+				     G_PARAM_READWRITE |
+				     G_PARAM_CONSTRUCT_ONLY |
+				     G_PARAM_STATIC_STRINGS);
+
+	/**
+	 * TeplPanelItem:name:
+	 *
+	 * The name.
+	 *
+	 * It is an ID as a UTF-8 string. It is not displayed in the UI. It
+	 * uniquely identifies an item within a list.
+	 *
+	 * Since: 6.12
+	 */
+	properties[PROP_NAME] =
+		g_param_spec_string ("name",
+				     "name",
+				     "",
+				     NULL,
+				     G_PARAM_READWRITE |
+				     G_PARAM_CONSTRUCT_ONLY |
+				     G_PARAM_STATIC_STRINGS);
+
+	/**
+	 * TeplPanelItem:title:
+	 *
+	 * The title.
+	 *
+	 * It is a human-readable UTF-8 string that can be shown in the UI to
+	 * choose this item.
+	 *
+	 * Since: 6.12
+	 */
+	properties[PROP_TITLE] =
+		g_param_spec_string ("title",
+				     "title",
+				     "",
+				     NULL,
+				     G_PARAM_READWRITE |
+				     G_PARAM_CONSTRUCT_ONLY |
+				     G_PARAM_STATIC_STRINGS);
+
+	/**
+	 * TeplPanelItem:icon-name:
+	 *
+	 * The icon name.
+	 *
+	 * It can be shown in the UI to choose this item, for example with the
+	 * #GtkImage's #GtkImage:icon-name property.
+	 *
+	 * Since: 6.12
+	 */
+	properties[PROP_ICON_NAME] =
+		g_param_spec_string ("icon-name",
+				     "icon-name",
+				     "",
+				     NULL,
+				     G_PARAM_READWRITE |
+				     G_PARAM_CONSTRUCT_ONLY |
+				     G_PARAM_STATIC_STRINGS);
+
+	g_object_class_install_properties (object_class, N_PROPERTIES, properties);
 }
 
 static void
@@ -120,7 +289,7 @@ tepl_panel_item_init (TeplPanelItem *item)
  *
  * Creates a new #TeplPanelItem object.
  *
- * See the other #TeplPanelItem functions for the meaning of the parameters.
+ * See the properties for the meaning of the parameters.
  *
  * Returns: (transfer full): a new #TeplPanelItem object.
  * Since: 6.12
@@ -131,31 +300,22 @@ tepl_panel_item_new (GtkWidget   *widget,
 		     const gchar *title,
 		     const gchar *icon_name)
 {
-	TeplPanelItem *item;
-
 	g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-	g_return_val_if_fail (is_null_or_valid_utf8 (name), NULL);
-	g_return_val_if_fail (is_null_or_valid_utf8 (title), NULL);
 
-	item = g_object_new (TEPL_TYPE_PANEL_ITEM, NULL);
-
-	set_widget (item, widget);
-
-	item->priv->name = g_strdup (name);
-	item->priv->title = g_strdup (title);
-	item->priv->icon_name = g_strdup (icon_name);
-
-	return item;
+	return g_object_new (TEPL_TYPE_PANEL_ITEM,
+			     "widget", widget,
+			     "name", name,
+			     "title", title,
+			     "icon-name", icon_name,
+			     NULL);
 }
 
 /**
  * tepl_panel_item_get_widget:
  * @item: a #TeplPanelItem.
  *
- * Gets the #GtkWidget (the main content).
- *
- * Returns: (transfer none) (nullable): the "widget" attribute. Is %NULL when
- *   the widget has been destroyed.
+ * Returns: (transfer none) (nullable): the value of the #TeplPanelItem:widget
+ *   property.
  * Since: 6.8
  */
 GtkWidget *
@@ -169,10 +329,7 @@ tepl_panel_item_get_widget (TeplPanelItem *item)
  * tepl_panel_item_get_name:
  * @item: a #TeplPanelItem.
  *
- * Gets the name. It is an ID as a UTF-8 string. It is not displayed in the UI.
- * It uniquely identifies an item within a list.
- *
- * Returns: (nullable): the "name" attribute.
+ * Returns: (nullable): the value of the #TeplPanelItem:name property.
  * Since: 6.8
  */
 const gchar *
@@ -186,10 +343,7 @@ tepl_panel_item_get_name (TeplPanelItem *item)
  * tepl_panel_item_get_title:
  * @item: a #TeplPanelItem.
  *
- * Gets the title. It is a human-readable UTF-8 string that can be shown in the
- * UI to choose this item.
- *
- * Returns: (nullable): the "title" attribute.
+ * Returns: (nullable): the value of the #TeplPanelItem:title property.
  * Since: 6.8
  */
 const gchar *
@@ -203,10 +357,7 @@ tepl_panel_item_get_title (TeplPanelItem *item)
  * tepl_panel_item_get_icon_name:
  * @item: a #TeplPanelItem.
  *
- * Gets the icon name. It can be shown in the UI to choose this item, for
- * example with the #GtkImage's #GtkImage:icon-name property.
- *
- * Returns: (nullable): the "icon-name" attribute.
+ * Returns: (nullable): the value of the #TeplPanelItem:icon-name property.
  * Since: 6.8
  */
 const gchar *
