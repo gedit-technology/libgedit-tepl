@@ -3,6 +3,7 @@
  */
 
 #include "tepl-panel-item.h"
+#include "tepl-utils.h"
 
 /**
  * SECTION:panel-item
@@ -16,7 +17,6 @@ struct _TeplPanelItemPrivate
 {
 	/* Owned. The ref is released on ::destroy. */
 	GtkWidget *widget;
-	gulong widget_destroy_handler_id;
 
 	gchar *name;
 	gchar *title;
@@ -37,55 +37,12 @@ enum
 
 static GParamSpec *properties[N_PROPERTIES];
 
-/* Forward declarations */
-static void set_widget (TeplPanelItem *item,
-			GtkWidget     *widget);
-
 G_DEFINE_TYPE_WITH_PRIVATE (TeplPanelItem, tepl_panel_item, G_TYPE_OBJECT)
 
 static gboolean
 is_null_or_valid_utf8 (const gchar *str)
 {
 	return (str == NULL || g_utf8_validate (str, -1, NULL));
-}
-
-static void
-widget_destroy_cb (GtkWidget     *widget,
-		   TeplPanelItem *item)
-{
-	set_widget (item, NULL);
-}
-
-static void
-set_widget (TeplPanelItem *item,
-	    GtkWidget     *widget)
-{
-	if (item->priv->widget == widget)
-	{
-		return;
-	}
-
-	if (item->priv->widget != NULL)
-	{
-		if (item->priv->widget_destroy_handler_id != 0)
-		{
-			g_signal_handler_disconnect (item->priv->widget, item->priv->widget_destroy_handler_id);
-			item->priv->widget_destroy_handler_id = 0;
-		}
-
-		g_clear_object (&item->priv->widget);
-	}
-
-	if (widget != NULL)
-	{
-		item->priv->widget = g_object_ref_sink (widget);
-
-		item->priv->widget_destroy_handler_id =
-			g_signal_connect (item->priv->widget,
-					  "destroy",
-					  G_CALLBACK (widget_destroy_cb),
-					  item);
-	}
 }
 
 static void
@@ -153,7 +110,7 @@ tepl_panel_item_set_property (GObject      *object,
 	switch (prop_id)
 	{
 		case PROP_WIDGET:
-			set_widget (item, g_value_get_object (value));
+			tepl_utils_set_widget (&item->priv->widget, g_value_get_object (value));
 			break;
 
 		case PROP_NAME:
@@ -183,7 +140,7 @@ tepl_panel_item_dispose (GObject *object)
 {
 	TeplPanelItem *item = TEPL_PANEL_ITEM (object);
 
-	set_widget (item, NULL);
+	tepl_utils_set_widget (&item->priv->widget, NULL);
 
 	G_OBJECT_CLASS (tepl_panel_item_parent_class)->dispose (object);
 }
