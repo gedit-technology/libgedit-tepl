@@ -1,17 +1,6 @@
 libgedit-tepl - more information
 ================================
 
-Versioning scheme
------------------
-
-libgedit-tepl follows the even/odd minor version scheme.
-
-For example the `6.3.x` versions are development snapshots (pre-releases), and
-the `6.4.x` series is stable.
-
-There are sometimes API or ABI breaks, in which case the library soname is
-adapted.
-
 Renames
 -------
 

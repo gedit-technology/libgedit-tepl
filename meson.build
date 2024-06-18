@@ -6,7 +6,7 @@
 project(
   'libgedit-tepl', 'c',
   meson_version: '>= 0.64',
-  version: '6.10.1',
+  version: '6.11.alpha',
   default_options: ['warning_level=2']
 )
 
