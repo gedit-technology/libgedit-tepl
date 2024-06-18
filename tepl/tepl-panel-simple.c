@@ -167,7 +167,7 @@ tepl_panel_simple_class_init (TeplPanelSimpleClass *klass)
 	 * It is a %G_SIGNAL_RUN_LAST signal: the item is added by the
 	 * #TeplPanelSimple's object method handler for this signal.
 	 *
-	 * Since: 6.12
+	 * Since: 6.11
 	 */
 	signals[SIGNAL_ADD_ITEM] =
 		g_signal_new ("add-item",
@@ -188,7 +188,7 @@ tepl_panel_simple_class_init (TeplPanelSimpleClass *klass)
 	 * It is a %G_SIGNAL_RUN_LAST signal: the item is removed by the
 	 * #TeplPanelSimple's object method handler for this signal.
 	 *
-	 * Since: 6.12
+	 * Since: 6.11
 	 */
 	signals[SIGNAL_REMOVE_ITEM] =
 		g_signal_new ("remove-item",
@@ -212,7 +212,7 @@ tepl_panel_simple_class_init (TeplPanelSimpleClass *klass)
 	 * This signal is useful if you don't need the more detailed information
 	 * on what has changed.
 	 *
-	 * Since: 6.12
+	 * Since: 6.11
 	 */
 	signals[SIGNAL_CHANGED] =
 		g_signal_new ("changed",
@@ -227,7 +227,7 @@ tepl_panel_simple_class_init (TeplPanelSimpleClass *klass)
 	 *
 	 * The #TeplPanelItem currently shown.
 	 *
-	 * Since: 6.12
+	 * Since: 6.11
 	 */
 	properties[PROP_ACTIVE_ITEM] =
 		g_param_spec_object ("active-item",
@@ -296,7 +296,7 @@ tepl_panel_interface_init (gpointer g_iface,
  * tepl_panel_simple_new:
  *
  * Returns: (transfer full): a new #TeplPanelSimple object.
- * Since: 6.12
+ * Since: 6.11
  */
 TeplPanelSimple *
 tepl_panel_simple_new (void)
@@ -310,7 +310,7 @@ tepl_panel_simple_new (void)
  *
  * Returns: (transfer full) (element-type TeplPanelItem): all the items of
  *   @panel.
- * Since: 6.12
+ * Since: 6.11
  */
 GList *
 tepl_panel_simple_get_items (TeplPanelSimple *panel)
@@ -336,7 +336,7 @@ tepl_panel_simple_get_items (TeplPanelSimple *panel)
  *
  * Returns: (transfer none) (nullable): the value of the
  *   #TeplPanelSimple:active-item property.
- * Since: 6.12
+ * Since: 6.11
  */
 TeplPanelItem *
 tepl_panel_simple_get_active_item (TeplPanelSimple *panel)
@@ -352,7 +352,7 @@ tepl_panel_simple_get_active_item (TeplPanelSimple *panel)
  * A convenience function.
  *
  * Returns: (nullable): the name of the #TeplPanelSimple:active-item.
- * Since: 6.12
+ * Since: 6.11
  */
 const gchar *
 tepl_panel_simple_get_active_item_name (TeplPanelSimple *panel)
@@ -374,7 +374,7 @@ tepl_panel_simple_get_active_item_name (TeplPanelSimple *panel)
  * A convenience function that calls tepl_panel_set_active() with the
  * #TeplPanelItem named @name (if found).
  *
- * Since: 6.12
+ * Since: 6.11
  */
 void
 tepl_panel_simple_set_active_item_name (TeplPanelSimple *panel,
@@ -417,7 +417,7 @@ tepl_panel_simple_set_active_item_name (TeplPanelSimple *panel,
  * A convenience function. Useful to implement a switcher widget.
  *
  * Returns: whether @panel has more than one #TeplPanelItem.
- * Since: 6.12
+ * Since: 6.11
  */
 gboolean
 tepl_panel_simple_has_several_items (TeplPanelSimple *panel)

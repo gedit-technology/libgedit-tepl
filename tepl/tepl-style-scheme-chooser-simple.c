@@ -292,7 +292,7 @@ tepl_style_scheme_chooser_simple_class_init (TeplStyleSchemeChooserSimpleClass *
 	 *
 	 * When set, if the ID doesn't exist, no row is selected.
 	 *
-	 * Since: 6.12
+	 * Since: 6.11
 	 */
 	properties[PROP_STYLE_SCHEME_ID] =
 		g_param_spec_string ("style-scheme-id",
@@ -337,7 +337,7 @@ tepl_style_scheme_chooser_simple_init (TeplStyleSchemeChooserSimple *chooser)
  * variants, consider using #TeplStyleSchemeChooserFull instead.
  *
  * Returns: (transfer floating): a new #TeplStyleSchemeChooserSimple widget.
- * Since: 6.12
+ * Since: 6.11
  */
 TeplStyleSchemeChooserSimple *
 tepl_style_scheme_chooser_simple_new (gboolean for_dark_theme_variant)
@@ -369,7 +369,7 @@ tepl_style_scheme_chooser_simple_new (gboolean for_dark_theme_variant)
  *
  * Returns: (nullable): the value of the
  *   #TeplStyleSchemeChooserSimple:style-scheme-id property.
- * Since: 6.12
+ * Since: 6.11
  */
 const gchar *
 tepl_style_scheme_chooser_simple_get_style_scheme_id (TeplStyleSchemeChooserSimple *chooser)
@@ -385,7 +385,7 @@ tepl_style_scheme_chooser_simple_get_style_scheme_id (TeplStyleSchemeChooserSimp
  *
  * Sets the #TeplStyleSchemeChooserSimple:style-scheme-id property.
  *
- * Since: 6.12
+ * Since: 6.11
  */
 void
 tepl_style_scheme_chooser_simple_set_style_scheme_id (TeplStyleSchemeChooserSimple *chooser,

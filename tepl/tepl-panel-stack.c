@@ -164,7 +164,7 @@ tepl_panel_stack_init (TeplPanelStack *panel_stack)
  * @panel_simple: (nullable): a #TeplPanelSimple, or %NULL to create one.
  *
  * Returns: (transfer full): a new #TeplPanelStack object.
- * Since: 6.12
+ * Since: 6.11
  */
 TeplPanelStack *
 tepl_panel_stack_new (TeplPanelSimple *panel_simple)
@@ -215,7 +215,7 @@ tepl_panel_stack_new (TeplPanelSimple *panel_simple)
  * functions.
  *
  * Returns: (transfer none): the #TeplPanelSimple of @panel_stack.
- * Since: 6.12
+ * Since: 6.11
  */
 TeplPanelSimple *
 tepl_panel_stack_get_panel_simple (TeplPanelStack *panel_stack)
@@ -237,7 +237,7 @@ tepl_panel_stack_get_panel_simple (TeplPanelStack *panel_stack)
  * tepl_panel_stack_get_panel_simple() instead.
  *
  * Returns: (transfer none): the #GtkStack of @panel_stack.
- * Since: 6.12
+ * Since: 6.11
  */
 GtkStack *
 tepl_panel_stack_get_stack (TeplPanelStack *panel_stack)

@@ -215,7 +215,7 @@ tepl_panel_item_class_init (TeplPanelItemClass *klass)
 	 *
 	 * The #GtkWidget (the main content).
 	 *
-	 * Since: 6.12
+	 * Since: 6.11
 	 */
 	properties[PROP_WIDGET] =
 		g_param_spec_object ("widget",
@@ -234,7 +234,7 @@ tepl_panel_item_class_init (TeplPanelItemClass *klass)
 	 * It is an ID as a UTF-8 string. It is not displayed in the UI. It
 	 * uniquely identifies an item within a list.
 	 *
-	 * Since: 6.12
+	 * Since: 6.11
 	 */
 	properties[PROP_NAME] =
 		g_param_spec_string ("name",
@@ -253,7 +253,7 @@ tepl_panel_item_class_init (TeplPanelItemClass *klass)
 	 * It is a human-readable UTF-8 string that can be shown in the UI to
 	 * choose this item.
 	 *
-	 * Since: 6.12
+	 * Since: 6.11
 	 */
 	properties[PROP_TITLE] =
 		g_param_spec_string ("title",
@@ -272,7 +272,7 @@ tepl_panel_item_class_init (TeplPanelItemClass *klass)
 	 * It can be shown in the UI to choose this item, for example with the
 	 * #GtkImage's #GtkImage:icon-name property.
 	 *
-	 * Since: 6.12
+	 * Since: 6.11
 	 */
 	properties[PROP_ICON_NAME] =
 		g_param_spec_string ("icon-name",
@@ -290,7 +290,7 @@ tepl_panel_item_class_init (TeplPanelItemClass *klass)
 	 *
 	 * Used to sort items in the desired order.
 	 *
-	 * Since: 6.12
+	 * Since: 6.11
 	 */
 	properties[PROP_POSITION] =
 		g_param_spec_int ("position",
@@ -322,7 +322,7 @@ tepl_panel_item_init (TeplPanelItem *item)
  * See the properties for the meaning of the parameters.
  *
  * Returns: (transfer full): a new #TeplPanelItem object.
- * Since: 6.12
+ * Since: 6.11
  */
 TeplPanelItem *
 tepl_panel_item_new (GtkWidget   *widget,
@@ -403,7 +403,7 @@ tepl_panel_item_get_icon_name (TeplPanelItem *item)
  * @item: a #TeplPanelItem.
  *
  * Returns: the value of the #TeplPanelItem:position property.
- * Since: 6.12
+ * Since: 6.11
  */
 gint
 tepl_panel_item_get_position (TeplPanelItem *item)
@@ -480,7 +480,7 @@ out:
  * have the same position.
  *
  * Returns: the usual return value for a #GCompareFunc.
- * Since: 6.12
+ * Since: 6.11
  */
 gint
 tepl_panel_item_compare (TeplPanelItem *a,

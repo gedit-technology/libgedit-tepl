@@ -206,7 +206,7 @@ tepl_style_scheme_chooser_full_init (TeplStyleSchemeChooserFull *chooser)
  * tepl_style_scheme_chooser_full_new:
  *
  * Returns: (transfer floating): a new #TeplStyleSchemeChooserFull widget.
- * Since: 6.12
+ * Since: 6.11
  */
 TeplStyleSchemeChooserFull *
 tepl_style_scheme_chooser_full_new (void)

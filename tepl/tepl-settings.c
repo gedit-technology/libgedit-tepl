@@ -172,7 +172,7 @@ tepl_settings_class_init (TeplSettingsClass *klass)
 	 * The value of this property depends on whether the GTK theme is light
 	 * or dark, and uses the corresponding #GSettings key.
 	 *
-	 * Since: 6.12
+	 * Since: 6.11
 	 */
 	properties[PROP_STYLE_SCHEME_ID] =
 		g_param_spec_string ("style-scheme-id",
@@ -535,7 +535,7 @@ style_manager_dark_notify_cb (HdyStyleManager *style_manager,
  *
  * See tepl_settings_get_style_scheme_id().
  *
- * Since: 6.12
+ * Since: 6.11
  */
 void
 tepl_settings_provide_style_scheme_settings (TeplSettings *self,
@@ -591,7 +591,7 @@ tepl_settings_provide_style_scheme_settings (TeplSettings *self,
  *
  * Returns: (transfer full) (nullable): the value of the
  *   #TeplSettings:style-scheme-id property.
- * Since: 6.12
+ * Since: 6.11
  */
 gchar *
 tepl_settings_get_style_scheme_id (TeplSettings *self)

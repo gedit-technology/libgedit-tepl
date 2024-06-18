@@ -649,7 +649,7 @@ style_scheme_id_notify_cb (TeplSettings *settings,
  *
  * Connects #TeplSettings:style-scheme-id to #GtkSourceBuffer:style-scheme.
  *
- * Since: 6.12
+ * Since: 6.11
  */
 void
 tepl_buffer_connect_style_scheme_settings (TeplBuffer *buffer)

@@ -48,7 +48,7 @@ tepl_panel_default_init (TeplPanelInterface *interface)
  *
  * Adds an item to the panel.
  *
- * Since: 6.12
+ * Since: 6.11
  */
 void
 tepl_panel_add (TeplPanel     *panel,

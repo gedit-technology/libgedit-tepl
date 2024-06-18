@@ -282,7 +282,7 @@ panel_changed_cb (TeplPanelSimple       *panel,
  * @panel: a #TeplPanelSimple.
  *
  * Returns: (transfer floating): a new #TeplPanelSwitcherMenu widget.
- * Since: 6.12
+ * Since: 6.11
  */
 TeplPanelSwitcherMenu *
 tepl_panel_switcher_menu_new (TeplPanelSimple *panel)
