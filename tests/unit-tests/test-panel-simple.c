@@ -78,6 +78,69 @@ test_basics (void)
 	g_object_unref (panel);
 }
 
+static void
+test_active_item_name (void)
+{
+	GtkWidget *label1;
+	GtkWidget *label2;
+	TeplPanelItem *item1;
+	TeplPanelItem *item2;
+	TeplPanelSimple *panel;
+
+	label1 = gtk_label_new (NULL);
+	label2 = gtk_label_new (NULL);
+
+	item1 = tepl_panel_item_new (label1, "name1", "Title 1", NULL, 0);
+	item2 = tepl_panel_item_new (label2, "name2", "Title 2", NULL, 0);
+
+	/* Empty */
+	panel = tepl_panel_simple_new ();
+	g_assert_null (tepl_panel_simple_get_active_item_name (panel));
+
+	tepl_panel_simple_set_active_item_name (panel, NULL);
+	g_assert_null (tepl_panel_simple_get_active_item_name (panel));
+
+	tepl_panel_simple_set_active_item_name (panel, "not-found");
+	g_assert_null (tepl_panel_simple_get_active_item_name (panel));
+
+	/* Add an item */
+	tepl_panel_add (TEPL_PANEL (panel), item1);
+	g_assert_null (tepl_panel_simple_get_active_item_name (panel));
+
+	tepl_panel_simple_set_active_item_name (panel, "name1");
+	g_assert_cmpstr (tepl_panel_simple_get_active_item_name (panel), ==, "name1");
+
+	tepl_panel_simple_set_active_item_name (panel, "not-found");
+	g_assert_cmpstr (tepl_panel_simple_get_active_item_name (panel), ==, "name1");
+
+	tepl_panel_simple_set_active_item_name (panel, NULL);
+	g_assert_null (tepl_panel_simple_get_active_item_name (panel));
+
+	/* With two items */
+	tepl_panel_add (TEPL_PANEL (panel), item2);
+	g_assert_null (tepl_panel_simple_get_active_item_name (panel));
+
+	tepl_panel_simple_set_active_item_name (panel, "name2");
+	g_assert_cmpstr (tepl_panel_simple_get_active_item_name (panel), ==, "name2");
+
+	tepl_panel_simple_set_active_item_name (panel, "name1");
+	g_assert_cmpstr (tepl_panel_simple_get_active_item_name (panel), ==, "name1");
+
+	/* Remove active-item */
+	tepl_panel_remove (TEPL_PANEL (panel), item1);
+	g_assert_null (tepl_panel_simple_get_active_item_name (panel));
+
+	tepl_panel_simple_set_active_item_name (panel, "name2");
+	g_assert_cmpstr (tepl_panel_simple_get_active_item_name (panel), ==, "name2");
+
+	tepl_panel_remove (TEPL_PANEL (panel), item2);
+	g_assert_null (tepl_panel_simple_get_active_item_name (panel));
+
+	g_object_unref (item1);
+	g_object_unref (item2);
+	g_object_unref (panel);
+}
+
 int
 main (int    argc,
       char **argv)
@@ -85,6 +148,7 @@ main (int    argc,
 	gtk_test_init (&argc, &argv);
 
 	g_test_add_func ("/PanelSimple/basics", test_basics);
+	g_test_add_func ("/PanelSimple/active_item_name", test_active_item_name);
 
 	return g_test_run ();
 }
