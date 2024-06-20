@@ -13,6 +13,14 @@
  * A #TeplPanelItem object contains a #GtkWidget plus associated information.
  */
 
+/* API design
+ * ==========
+ *
+ * Have properties so that the class is extensible without breaking the API. In
+ * that case, applications can use g_object_new() directly, or a
+ * tepl_panel_item_new_full() could be added, or with a Builder class.
+ */
+
 struct _TeplPanelItemPrivate
 {
 	/* Owned. The ref is released on ::destroy. */
