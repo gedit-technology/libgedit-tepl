@@ -26,31 +26,6 @@ static void stack_visible_child_notify_cb (GtkStack       *stack,
 					   GParamSpec     *pspec,
 					   TeplPanelStack *panel_stack);
 
-static gint
-get_real_position (TeplPanelSimple *panel_simple,
-		   TeplPanelItem   *item)
-{
-	GList *items;
-	GList *l;
-	gint pos;
-
-	items = tepl_panel_simple_get_items (panel_simple);
-	items = g_list_sort (items, (GCompareFunc) tepl_panel_item_compare);
-
-	for (l = items, pos = 0; l != NULL; l = l->next, pos++)
-	{
-		TeplPanelItem *cur_item = TEPL_PANEL_ITEM (l->data);
-
-		if (cur_item == item)
-		{
-			break;
-		}
-	}
-
-	g_list_free_full (items, g_object_unref);
-	return pos;
-}
-
 static void
 panel_simple_add_item_cb (TeplPanelSimple *panel_simple,
 			  TeplPanelItem   *item,
@@ -66,7 +41,7 @@ panel_simple_add_item_cb (TeplPanelSimple *panel_simple,
 					   "name", tepl_panel_item_get_name (item),
 					   "title", tepl_panel_item_get_title (item),
 					   "icon-name", tepl_panel_item_get_icon_name (item),
-					   "position", get_real_position (panel_simple, item),
+					   "position", tepl_panel_item_get_position (item),
 					   NULL);
 }
 
