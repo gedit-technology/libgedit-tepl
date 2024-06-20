@@ -10,14 +10,42 @@ test_basics (void)
 	GtkWidget *label;
 	TeplPanelItem *item;
 
-	label = gtk_label_new (NULL);
-	item = tepl_panel_item_new (label, "name", "Title", NULL, 0);
+	GtkWidget *prop_widget = NULL;
+	gchar *prop_name = NULL;
+	gchar *prop_title = NULL;
+	gchar *prop_icon_name = NULL;
+	gint prop_position = 0;
 
+	label = gtk_label_new (NULL);
+	item = tepl_panel_item_new (label, "name", "Title", NULL, 5);
+
+	/* Getter functions */
 	g_assert_true (tepl_panel_item_get_widget (item) == label);
 	g_assert_cmpstr (tepl_panel_item_get_name (item), ==, "name");
 	g_assert_cmpstr (tepl_panel_item_get_title (item), ==, "Title");
 	g_assert_null (tepl_panel_item_get_icon_name (item));
+	g_assert_cmpint (tepl_panel_item_get_position (item), ==, 5);
 
+	/* Get properties */
+	g_object_get (item,
+		      "widget", &prop_widget,
+		      "name", &prop_name,
+		      "title", &prop_title,
+		      "icon-name", &prop_icon_name,
+		      "position", &prop_position,
+		      NULL);
+
+	g_assert_true (prop_widget == label);
+	g_assert_cmpstr (prop_name, ==, "name");
+	g_assert_cmpstr (prop_title, ==, "Title");
+	g_assert_null (prop_icon_name);
+	g_assert_cmpint (prop_position, ==, 5);
+
+	g_object_unref (prop_widget);
+	g_free (prop_name);
+	g_free (prop_title);
+
+	/* Destroy */
 	gtk_widget_destroy (label);
 	g_assert_null (tepl_panel_item_get_widget (item));
 
