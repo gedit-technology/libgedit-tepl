@@ -28,16 +28,11 @@ struct _TeplLineColumnIndicatorPrivate
 	 * If @tab_group is %NULL, then @view is used but may be %NULL.
 	 */
 	TeplView *view; /* owned */
-	gulong view_destroy_handler_id;
 	TeplTabGroup *tab_group; /* owned */
 
 	TeplSignalGroup *view_signal_group;
 	TeplSignalGroup *buffer_signal_group;
 };
-
-/* Forward declarations */
-static void set_view (TeplLineColumnIndicator *indicator,
-		      TeplView                *view);
 
 G_DEFINE_TYPE_WITH_PRIVATE (TeplLineColumnIndicator, tepl_line_column_indicator, GTK_TYPE_BIN)
 
@@ -121,46 +116,6 @@ update_cursor_position (TeplLineColumnIndicator *indicator)
 }
 
 static void
-view_destroy_cb (TeplView                *view,
-		 TeplLineColumnIndicator *indicator)
-{
-	set_view (indicator, NULL);
-}
-
-static void
-set_view (TeplLineColumnIndicator *indicator,
-	  TeplView                *view)
-{
-	if (indicator->priv->view == view)
-	{
-		return;
-	}
-
-	if (indicator->priv->view != NULL)
-	{
-		if (indicator->priv->view_destroy_handler_id != 0)
-		{
-			g_signal_handler_disconnect (indicator->priv->view,
-						     indicator->priv->view_destroy_handler_id);
-			indicator->priv->view_destroy_handler_id = 0;
-		}
-
-		g_clear_object (&indicator->priv->view);
-	}
-
-	if (view != NULL)
-	{
-		indicator->priv->view = g_object_ref_sink (view);
-
-		indicator->priv->view_destroy_handler_id =
-			g_signal_connect (view,
-					  "destroy",
-					  G_CALLBACK (view_destroy_cb),
-					  indicator);
-	}
-}
-
-static void
 tepl_line_column_indicator_dispose (GObject *object)
 {
 	TeplLineColumnIndicator *indicator = TEPL_LINE_COLUMN_INDICATOR (object);
@@ -168,7 +123,7 @@ tepl_line_column_indicator_dispose (GObject *object)
 	tepl_signal_group_clear (&indicator->priv->view_signal_group);
 	tepl_signal_group_clear (&indicator->priv->buffer_signal_group);
 
-	set_view (indicator, NULL);
+	tepl_utils_set_widget ((GtkWidget **) &indicator->priv->view, NULL);
 	g_clear_object (&indicator->priv->tab_group);
 
 	/* In case a public function is called after a first dispose. */
@@ -354,7 +309,7 @@ tepl_line_column_indicator_set_view (TeplLineColumnIndicator *indicator,
 	g_return_if_fail (view == NULL || TEPL_IS_VIEW (view));
 	g_return_if_fail (indicator->priv->tab_group == NULL);
 
-	set_view (indicator, view);
+	tepl_utils_set_widget ((GtkWidget **) &indicator->priv->view, GTK_WIDGET (view));
 	view_changed (indicator);
 }
 
