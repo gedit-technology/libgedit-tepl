@@ -21,11 +21,6 @@ struct _TeplPanelStackPrivate
 
 G_DEFINE_TYPE_WITH_PRIVATE (TeplPanelStack, tepl_panel_stack, G_TYPE_OBJECT)
 
-/* Prototypes */
-static void stack_visible_child_notify_cb (GtkStack       *stack,
-					   GParamSpec     *pspec,
-					   TeplPanelStack *panel_stack);
-
 static void
 panel_simple_add_item_cb (TeplPanelSimple *panel_simple,
 			  TeplPanelItem   *item,
@@ -56,58 +51,6 @@ panel_simple_remove_item_cb (TeplPanelSimple *panel_simple,
 	{
 		gtk_container_remove (GTK_CONTAINER (panel_stack->priv->stack), widget);
 	}
-}
-
-static void
-panel_simple_active_item_notify_cb (TeplPanelSimple *panel_simple,
-				    GParamSpec      *pspec,
-				    TeplPanelStack  *panel_stack)
-{
-	TeplPanelItem *active_item;
-	GtkWidget *widget;
-
-	active_item = tepl_panel_simple_get_active_item (panel_simple);
-	if (active_item == NULL)
-	{
-		return;
-	}
-
-	widget = tepl_panel_item_get_widget (active_item);
-	if (widget == NULL)
-	{
-		return;
-	}
-
-	g_signal_handlers_block_by_func (panel_stack->priv->stack,
-					 stack_visible_child_notify_cb,
-					 panel_stack);
-
-	gtk_stack_set_visible_child (panel_stack->priv->stack, widget);
-
-	g_signal_handlers_unblock_by_func (panel_stack->priv->stack,
-					   stack_visible_child_notify_cb,
-					   panel_stack);
-}
-
-static void
-stack_visible_child_notify_cb (GtkStack       *stack,
-			       GParamSpec     *pspec,
-			       TeplPanelStack *panel_stack)
-{
-	const gchar *visible_child_name;
-
-	visible_child_name = gtk_stack_get_visible_child_name (stack);
-
-	g_signal_handlers_block_by_func (panel_stack->priv->panel_simple,
-					 panel_simple_active_item_notify_cb,
-					 panel_stack);
-
-	tepl_panel_simple_set_active_item_name (panel_stack->priv->panel_simple,
-						visible_child_name);
-
-	g_signal_handlers_unblock_by_func (panel_stack->priv->panel_simple,
-					   panel_simple_active_item_notify_cb,
-					   panel_stack);
 }
 
 static void
@@ -185,17 +128,9 @@ tepl_panel_stack_new (TeplPanelSimple *panel_simple,
 				 panel_stack,
 				 G_CONNECT_DEFAULT);
 
-	g_signal_connect_object (panel_stack->priv->panel_simple,
-				 "notify::active-item",
-				 G_CALLBACK (panel_simple_active_item_notify_cb),
-				 panel_stack,
-				 G_CONNECT_DEFAULT);
-
-	g_signal_connect_object (panel_stack->priv->stack,
-				 "notify::visible-child",
-				 G_CALLBACK (stack_visible_child_notify_cb),
-				 panel_stack,
-				 G_CONNECT_DEFAULT);
+	g_object_bind_property (panel_stack->priv->panel_simple, "active-item-name",
+				panel_stack->priv->stack, "visible-child-name",
+				G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
 
 	return panel_stack;
 }
