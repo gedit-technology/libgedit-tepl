@@ -309,7 +309,8 @@ tepl_line_column_indicator_set_view (TeplLineColumnIndicator *indicator,
 	g_return_if_fail (view == NULL || TEPL_IS_VIEW (view));
 	g_return_if_fail (indicator->priv->tab_group == NULL);
 
-	tepl_utils_set_widget ((GtkWidget **) &indicator->priv->view, GTK_WIDGET (view));
+	tepl_utils_set_widget ((GtkWidget **) &indicator->priv->view,
+			       (GtkWidget *) view);
 	view_changed (indicator);
 }
 
