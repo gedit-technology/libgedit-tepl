@@ -165,7 +165,7 @@ tepl_panel_simple_class_init (TeplPanelSimpleClass *klass)
 	 * added.
 	 *
 	 * It is a %G_SIGNAL_RUN_LAST signal: the item is added by the
-	 * #TeplPanelSimple's object method handler for this signal.
+	 * #TeplPanelSimple's method handler for this signal.
 	 *
 	 * Since: 6.11
 	 */
@@ -186,7 +186,7 @@ tepl_panel_simple_class_init (TeplPanelSimpleClass *klass)
 	 * removed.
 	 *
 	 * It is a %G_SIGNAL_RUN_LAST signal: the item is removed by the
-	 * #TeplPanelSimple's object method handler for this signal.
+	 * #TeplPanelSimple's method handler for this signal.
 	 *
 	 * Since: 6.11
 	 */
