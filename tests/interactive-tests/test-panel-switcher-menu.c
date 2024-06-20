@@ -17,13 +17,13 @@ create_panel_stack (void)
 	panel_simple = tepl_panel_stack_get_panel_simple (panel_stack);
 
 	label = gtk_label_new ("Widget 1");
-	item = tepl_panel_item_new (label, "name1", "Title 1", NULL);
+	item = tepl_panel_item_new (label, "name1", "Title 1", NULL, 0);
 	tepl_panel_add (TEPL_PANEL (panel_simple), item);
 	tepl_panel_set_active (TEPL_PANEL (panel_simple), item);
 	g_object_unref (item);
 
 	label = gtk_label_new ("Widget 2");
-	item = tepl_panel_item_new (label, "name2", "Title 2", NULL);
+	item = tepl_panel_item_new (label, "name2", "Title 2", NULL, 0);
 	tepl_panel_add (TEPL_PANEL (panel_simple), item);
 	g_object_unref (item);
 

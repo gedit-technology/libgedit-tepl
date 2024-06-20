@@ -24,7 +24,7 @@ test_basics (void)
 
 	/* Add an item */
 	label1 = gtk_label_new (NULL);
-	item1 = tepl_panel_item_new (label1, "name1", "Title 1", NULL);
+	item1 = tepl_panel_item_new (label1, "name1", "Title 1", NULL, 0);
 	tepl_panel_add (TEPL_PANEL (container), item1);
 
 	items = tepl_panel_container_get_items (container);
@@ -37,7 +37,7 @@ test_basics (void)
 
 	/* Add one more item */
 	label2 = gtk_label_new (NULL);
-	item2 = tepl_panel_item_new (label2, "name2", "Title 2", "icon-name");
+	item2 = tepl_panel_item_new (label2, "name2", "Title 2", "icon-name", 0);
 	tepl_panel_add (TEPL_PANEL (container), item2);
 
 	items = tepl_panel_container_get_items (container);

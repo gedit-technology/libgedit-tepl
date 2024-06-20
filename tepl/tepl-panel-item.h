@@ -45,7 +45,8 @@ G_MODULE_EXPORT
 TeplPanelItem *	tepl_panel_item_new			(GtkWidget   *widget,
 							 const gchar *name,
 							 const gchar *title,
-							 const gchar *icon_name);
+							 const gchar *icon_name,
+							 gint         position);
 
 G_MODULE_EXPORT
 GtkWidget *	tepl_panel_item_get_widget		(TeplPanelItem *item);

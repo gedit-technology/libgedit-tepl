@@ -273,6 +273,7 @@ tepl_panel_item_init (TeplPanelItem *item)
  * @name: the name.
  * @title: (nullable): the title.
  * @icon_name: (nullable): the icon-name.
+ * @position: the position.
  *
  * Creates a new #TeplPanelItem object.
  *
@@ -285,7 +286,8 @@ TeplPanelItem *
 tepl_panel_item_new (GtkWidget   *widget,
 		     const gchar *name,
 		     const gchar *title,
-		     const gchar *icon_name)
+		     const gchar *icon_name,
+		     gint         position)
 {
 	g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 	g_return_val_if_fail (name != NULL, NULL);
@@ -295,6 +297,7 @@ tepl_panel_item_new (GtkWidget   *widget,
 			     "name", name,
 			     "title", title,
 			     "icon-name", icon_name,
+			     "position", position,
 			     NULL);
 }
 

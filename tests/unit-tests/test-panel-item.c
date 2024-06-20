@@ -11,7 +11,7 @@ test_basics (void)
 	TeplPanelItem *item;
 
 	label = gtk_label_new (NULL);
-	item = tepl_panel_item_new (label, "name", "Title", NULL);
+	item = tepl_panel_item_new (label, "name", "Title", NULL, 0);
 
 	g_assert_true (tepl_panel_item_get_widget (item) == label);
 	g_assert_cmpstr (tepl_panel_item_get_name (item), ==, "name");

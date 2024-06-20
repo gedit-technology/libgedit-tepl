@@ -17,12 +17,12 @@ create_panel (void)
 	gtk_widget_set_vexpand (GTK_WIDGET (panel), TRUE);
 
 	label = gtk_label_new ("Widget 1");
-	item = tepl_panel_item_new (label, "name1", "Title 1", NULL);
+	item = tepl_panel_item_new (label, "name1", "Title 1", NULL, 0);
 	tepl_panel_add (TEPL_PANEL (panel), item);
 	g_object_unref (item);
 
 	label = gtk_label_new ("Widget 2");
-	item = tepl_panel_item_new (label, "name2", "Title 2", NULL);
+	item = tepl_panel_item_new (label, "name2", "Title 2", NULL, 0);
 	tepl_panel_add (TEPL_PANEL (panel), item);
 	g_object_unref (item);
 
