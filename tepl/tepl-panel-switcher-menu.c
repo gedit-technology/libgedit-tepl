@@ -19,7 +19,6 @@
 struct _TeplPanelSwitcherMenuPrivate
 {
 	TeplPanelSimple *panel;
-
 	GtkPopover *popover;
 };
 
@@ -30,15 +29,9 @@ G_DEFINE_TYPE_WITH_PRIVATE (TeplPanelSwitcherMenu, tepl_panel_switcher_menu, GTK
 static const gchar *
 get_title (TeplPanelSimple *panel)
 {
-	TeplPanelItem *active_item;
+	TeplPanelItem *active_item = tepl_panel_simple_get_active_item (panel);
 
-	active_item = tepl_panel_simple_get_active_item (panel);
-	if (active_item != NULL)
-	{
-		return tepl_panel_item_get_title (active_item);
-	}
-
-	return NULL;
+	return active_item != NULL ? tepl_panel_item_get_title (active_item) : NULL;
 }
 
 static GtkLabel *
@@ -292,8 +285,7 @@ tepl_panel_switcher_menu_new (TeplPanelSimple *panel)
 	g_return_val_if_fail (TEPL_IS_PANEL_SIMPLE (panel), NULL);
 
 	switcher = g_object_new (TEPL_TYPE_PANEL_SWITCHER_MENU, NULL);
-
-	switcher->priv->panel = g_object_ref_sink (panel);
+	switcher->priv->panel = g_object_ref (panel);
 
 	repopulate (switcher);
 
