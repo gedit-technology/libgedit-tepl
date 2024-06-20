@@ -148,30 +148,24 @@ static void
 tepl_panel_stack_init (TeplPanelStack *panel_stack)
 {
 	panel_stack->priv = tepl_panel_stack_get_instance_private (panel_stack);
-
-	panel_stack->priv->stack = GTK_STACK (gtk_stack_new ());
-	g_object_ref_sink (panel_stack->priv->stack);
-
-	g_signal_connect_object (panel_stack->priv->stack,
-				 "notify::visible-child",
-				 G_CALLBACK (stack_visible_child_notify_cb),
-				 panel_stack,
-				 G_CONNECT_DEFAULT);
 }
 
 /**
  * tepl_panel_stack_new:
  * @panel_simple: (nullable): a #TeplPanelSimple, or %NULL to create one.
+ * @stack: (nullable): a #GtkStack, or %NULL to create one.
  *
  * Returns: (transfer full): a new #TeplPanelStack object.
  * Since: 6.11
  */
 TeplPanelStack *
-tepl_panel_stack_new (TeplPanelSimple *panel_simple)
+tepl_panel_stack_new (TeplPanelSimple *panel_simple,
+		      GtkStack        *stack)
 {
 	TeplPanelStack *panel_stack;
 
 	g_return_val_if_fail (panel_simple == NULL || TEPL_IS_PANEL_SIMPLE (panel_simple), NULL);
+	g_return_val_if_fail (stack == NULL || GTK_IS_STACK (stack), NULL);
 
 	panel_stack = g_object_new (TEPL_TYPE_PANEL_STACK, NULL);
 
@@ -182,6 +176,16 @@ tepl_panel_stack_new (TeplPanelSimple *panel_simple)
 	else
 	{
 		panel_stack->priv->panel_simple = g_object_ref (panel_simple);
+	}
+
+	if (stack == NULL)
+	{
+		panel_stack->priv->stack = GTK_STACK (gtk_stack_new ());
+		g_object_ref_sink (panel_stack->priv->stack);
+	}
+	else
+	{
+		panel_stack->priv->stack = g_object_ref_sink (stack);
 	}
 
 	g_signal_connect_object (panel_stack->priv->panel_simple,
@@ -199,6 +203,12 @@ tepl_panel_stack_new (TeplPanelSimple *panel_simple)
 	g_signal_connect_object (panel_stack->priv->panel_simple,
 				 "notify::active-item",
 				 G_CALLBACK (panel_simple_active_item_notify_cb),
+				 panel_stack,
+				 G_CONNECT_DEFAULT);
+
+	g_signal_connect_object (panel_stack->priv->stack,
+				 "notify::visible-child",
+				 G_CALLBACK (stack_visible_child_notify_cb),
 				 panel_stack,
 				 G_CONNECT_DEFAULT);
 
