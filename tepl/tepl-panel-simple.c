@@ -37,6 +37,7 @@ enum
 {
 	PROP_0,
 	PROP_ACTIVE_ITEM,
+	PROP_ACTIVE_ITEM_NAME,
 	N_PROPERTIES
 };
 
@@ -67,6 +68,10 @@ tepl_panel_simple_get_property (GObject    *object,
 			g_value_set_object (value, tepl_panel_simple_get_active_item (panel));
 			break;
 
+		case PROP_ACTIVE_ITEM_NAME:
+			g_value_set_string (value, tepl_panel_simple_get_active_item_name (panel));
+			break;
+
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 			break;
@@ -79,12 +84,16 @@ tepl_panel_simple_set_property (GObject      *object,
                                 const GValue *value,
                                 GParamSpec   *pspec)
 {
-	TeplPanel *panel = TEPL_PANEL (object);
+	TeplPanelSimple *panel = TEPL_PANEL_SIMPLE (object);
 
 	switch (prop_id)
 	{
 		case PROP_ACTIVE_ITEM:
-			tepl_panel_set_active (panel, g_value_get_object (value));
+			tepl_panel_set_active (TEPL_PANEL (panel), g_value_get_object (value));
+			break;
+
+		case PROP_ACTIVE_ITEM_NAME:
+			tepl_panel_simple_set_active_item_name (panel, g_value_get_string (value));
 			break;
 
 		default:
@@ -237,6 +246,21 @@ tepl_panel_simple_class_init (TeplPanelSimpleClass *klass)
 				     G_PARAM_READWRITE |
 				     G_PARAM_STATIC_STRINGS);
 
+	/**
+	 * TeplPanelSimple:active-item-name:
+	 *
+	 * The name of the #TeplPanelSimple:active-item.
+	 *
+	 * Since: 6.11
+	 */
+	properties[PROP_ACTIVE_ITEM_NAME] =
+		g_param_spec_string ("active-item-name",
+				     "active-item-name",
+				     "",
+				     NULL,
+				     G_PARAM_READWRITE |
+				     G_PARAM_STATIC_STRINGS);
+
 	g_object_class_install_properties (object_class, N_PROPERTIES, properties);
 }
 
@@ -276,7 +300,8 @@ tepl_panel_simple_set_active (TeplPanel     *panel,
 	{
 		g_object_notify_by_pspec (G_OBJECT (panel_simple),
 					  properties[PROP_ACTIVE_ITEM]);
-
+		g_object_notify_by_pspec (G_OBJECT (panel_simple),
+					  properties[PROP_ACTIVE_ITEM_NAME]);
 		g_signal_emit (panel, signals[SIGNAL_CHANGED], 0);
 	}
 }
