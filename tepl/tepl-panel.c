@@ -57,7 +57,7 @@ tepl_panel_add (TeplPanel     *panel,
 	g_return_if_fail (TEPL_IS_PANEL (panel));
 	g_return_if_fail (TEPL_IS_PANEL_ITEM (item));
 
-	return TEPL_PANEL_GET_INTERFACE (panel)->add (panel, item);
+	TEPL_PANEL_GET_INTERFACE (panel)->add (panel, item);
 }
 
 /**
