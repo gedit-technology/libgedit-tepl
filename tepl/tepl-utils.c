@@ -1227,6 +1227,54 @@ tepl_utils_setup_statusbar (GtkStatusbar *statusbar)
 }
 
 /**
+ * tepl_utils_set_widget:
+ * @widget_ptr: a pointer to a #GtkWidget.
+ * @new_widget: (nullable): the new #GtkWidget.
+ *
+ * Like g_set_object() but for a #GtkWidget and without the return value.
+ *
+ * It connects and disconnects the #GtkWidget::destroy signal.
+ *
+ * Since: 6.11
+ */
+void
+tepl_utils_set_widget (GtkWidget **widget_ptr,
+		       GtkWidget  *new_widget)
+{
+	g_return_if_fail (widget_ptr != NULL);
+	g_return_if_fail (*widget_ptr == NULL || GTK_IS_WIDGET (*widget_ptr));
+	g_return_if_fail (new_widget == NULL || GTK_IS_WIDGET (new_widget));
+
+	if (*widget_ptr == new_widget)
+	{
+		return;
+	}
+
+	if (new_widget != NULL)
+	{
+		g_object_ref_sink (new_widget);
+	}
+
+	if (*widget_ptr != NULL)
+	{
+		g_signal_handlers_disconnect_by_func (*widget_ptr,
+						      gtk_widget_destroyed,
+						      widget_ptr);
+		g_object_unref (*widget_ptr);
+	}
+
+	*widget_ptr = new_widget;
+
+	if (*widget_ptr != NULL)
+	{
+		g_signal_connect (*widget_ptr,
+				  "destroy",
+				  G_CALLBACK (gtk_widget_destroyed),
+				  widget_ptr);
+	}
+}
+
+/**
  * tepl_utils_binding_transform_func_smart_bool:
  * @binding: a #GBinding.
  * @from_value: the #GValue containing the value to transform.

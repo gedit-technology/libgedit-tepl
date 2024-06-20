@@ -148,6 +148,10 @@ GtkWidget *	tepl_utils_get_titled_component			(const gchar *title,
 G_MODULE_EXPORT
 void		tepl_utils_setup_statusbar			(GtkStatusbar *statusbar);
 
+G_MODULE_EXPORT
+void		tepl_utils_set_widget				(GtkWidget **widget_ptr,
+								 GtkWidget  *new_widget);
+
 /* Other */
 
 G_MODULE_EXPORT

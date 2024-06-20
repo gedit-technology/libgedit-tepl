@@ -228,11 +228,81 @@ test_get_fallback_basename_for_display (void)
 	g_free (basename);
 }
 
+static void
+test_set_widget_case1 (void)
+{
+	GtkWidget *location = NULL;
+
+	tepl_utils_set_widget (&location, NULL);
+	g_assert_null (location);
+}
+
+static void
+test_set_widget_case2 (void)
+{
+	GtkWidget *label;
+	GtkWidget *location = NULL;
+
+	label = gtk_label_new (NULL);
+	tepl_utils_set_widget (&location, label);
+	g_assert_true (location == label);
+
+	gtk_widget_destroy (label);
+	label = NULL;
+	g_assert_null (location);
+}
+
+static void
+test_set_widget_case3 (void)
+{
+	GtkWidget *label;
+	GtkWidget *location = NULL;
+
+	label = gtk_label_new (NULL);
+	g_object_ref_sink (label);
+
+	tepl_utils_set_widget (&location, label);
+	g_assert_true (location == label);
+
+	tepl_utils_set_widget (&location, NULL);
+	g_assert_null (location);
+
+	g_object_unref (label);
+}
+
+static void
+test_set_widget_case4 (void)
+{
+	GtkWidget *label1;
+	GtkWidget *label2;
+	GtkWidget *location = NULL;
+
+	label1 = gtk_label_new (NULL);
+	label2 = gtk_label_new (NULL);
+	g_object_ref_sink (label1);
+	g_object_ref_sink (label2);
+
+	tepl_utils_set_widget (&location, label1);
+	g_assert_true (location == label1);
+
+	tepl_utils_set_widget (&location, label2);
+	g_assert_true (location == label2);
+
+	gtk_widget_destroy (label1);
+	g_assert_true (location == label2);
+
+	gtk_widget_destroy (label2);
+	g_assert_null (location);
+
+	g_object_unref (label1);
+	g_object_unref (label2);
+}
+
 int
 main (int    argc,
       char **argv)
 {
-	g_test_init (&argc, &argv, NULL);
+	gtk_test_init (&argc, &argv);
 
 	g_test_add_func ("/utils/str-middle-truncate", test_str_middle_truncate);
 	g_test_add_func ("/utils/str-end-truncate", test_str_end_truncate);
@@ -243,6 +313,10 @@ main (int    argc,
 	g_test_add_func ("/utils/replace-home-dir-with-tilde", test_replace_home_dir_with_tilde);
 	g_test_add_func ("/utils/decode-uri", test_decode_uri);
 	g_test_add_func ("/utils/get-fallback-basename-for-display", test_get_fallback_basename_for_display);
+	g_test_add_func ("/utils/set_widget_case1", test_set_widget_case1);
+	g_test_add_func ("/utils/set_widget_case2", test_set_widget_case2);
+	g_test_add_func ("/utils/set_widget_case3", test_set_widget_case3);
+	g_test_add_func ("/utils/set_widget_case4", test_set_widget_case4);
 
 	return g_test_run ();
 }
