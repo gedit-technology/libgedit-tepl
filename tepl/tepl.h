@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: 2016-2022 - Sébastien Wilmet <swilmet@gnome.org>
+/* SPDX-FileCopyrightText: 2016-2024 - Sébastien Wilmet
  * SPDX-License-Identifier: LGPL-3.0-or-later
  */
 
@@ -42,10 +42,10 @@
 #include <tepl/tepl-panel.h>
 #include <tepl/tepl-panel-container.h>
 #include <tepl/tepl-panel-item.h>
+#include <tepl/tepl-panel-notebook.h>
 #include <tepl/tepl-panel-simple.h>
 #include <tepl/tepl-panel-stack.h>
 #include <tepl/tepl-panel-switcher-menu.h>
-#include <tepl/tepl-panel-switcher-notebook.h>
 #include <tepl/tepl-pango.h>
 #include <tepl/tepl-prefs.h>
 #include <tepl/tepl-prefs-dialog.h>

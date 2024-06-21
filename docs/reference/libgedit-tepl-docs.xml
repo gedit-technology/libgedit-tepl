@@ -104,10 +104,10 @@
       <xi:include href="xml/panel.xml"/>
       <xi:include href="xml/panel-item.xml"/>
       <xi:include href="xml/panel-container.xml"/>
+      <xi:include href="xml/panel-notebook.xml"/>
       <xi:include href="xml/panel-simple.xml"/>
       <xi:include href="xml/panel-stack.xml"/>
       <xi:include href="xml/panel-switcher-menu.xml"/>
-      <xi:include href="xml/panel-switcher-notebook.xml"/>
       <xi:include href="xml/panel1.xml"/>
     </chapter>
 

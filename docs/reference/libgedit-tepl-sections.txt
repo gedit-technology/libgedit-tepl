@@ -519,6 +519,22 @@ tepl_panel_item_get_type
 </SECTION>
 
 <SECTION>
+<FILE>panel-notebook</FILE>
+TeplPanelNotebook
+tepl_panel_notebook_new
+<SUBSECTION Standard>
+TEPL_IS_PANEL_NOTEBOOK
+TEPL_IS_PANEL_NOTEBOOK_CLASS
+TEPL_PANEL_NOTEBOOK
+TEPL_PANEL_NOTEBOOK_CLASS
+TEPL_PANEL_NOTEBOOK_GET_CLASS
+TEPL_TYPE_PANEL_NOTEBOOK
+TeplPanelNotebookClass
+TeplPanelNotebookPrivate
+tepl_panel_notebook_get_type
+</SECTION>
+
+<SECTION>
 <FILE>panel-simple</FILE>
 TeplPanelSimple
 tepl_panel_simple_new
@@ -571,22 +587,6 @@ TEPL_TYPE_PANEL_SWITCHER_MENU
 TeplPanelSwitcherMenuClass
 TeplPanelSwitcherMenuPrivate
 tepl_panel_switcher_menu_get_type
-</SECTION>
-
-<SECTION>
-<FILE>panel-switcher-notebook</FILE>
-TeplPanelSwitcherNotebook
-tepl_panel_switcher_notebook_new
-<SUBSECTION Standard>
-TEPL_IS_PANEL_SWITCHER_NOTEBOOK
-TEPL_IS_PANEL_SWITCHER_NOTEBOOK_CLASS
-TEPL_PANEL_SWITCHER_NOTEBOOK
-TEPL_PANEL_SWITCHER_NOTEBOOK_CLASS
-TEPL_PANEL_SWITCHER_NOTEBOOK_GET_CLASS
-TEPL_TYPE_PANEL_SWITCHER_NOTEBOOK
-TeplPanelSwitcherNotebookClass
-TeplPanelSwitcherNotebookPrivate
-tepl_panel_switcher_notebook_get_type
 </SECTION>
 
 <SECTION>
