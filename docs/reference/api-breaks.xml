@@ -372,6 +372,13 @@
           has changed.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <code>TeplPanelSwitcherNotebook</code> class has been removed, you
+          can use <link linkend="TeplPanelNotebook">TeplPanelNotebook</link>
+          instead.
+        </para>
+      </listitem>
     </itemizedlist>
   </chapter>
 </part>
