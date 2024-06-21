@@ -475,27 +475,6 @@ tepl_panel_get_type
 </SECTION>
 
 <SECTION>
-<FILE>panel-container</FILE>
-TeplPanelContainer
-tepl_panel_container_new
-tepl_panel_container_get_items
-tepl_panel_container_get_active_item
-tepl_panel_container_get_active_item_name
-tepl_panel_container_set_active_item_name
-tepl_panel_container_has_several_items
-<SUBSECTION Standard>
-TEPL_IS_PANEL_CONTAINER
-TEPL_IS_PANEL_CONTAINER_CLASS
-TEPL_PANEL_CONTAINER
-TEPL_PANEL_CONTAINER_CLASS
-TEPL_PANEL_CONTAINER_GET_CLASS
-TEPL_TYPE_PANEL_CONTAINER
-TeplPanelContainerClass
-TeplPanelContainerPrivate
-tepl_panel_container_get_type
-</SECTION>
-
-<SECTION>
 <FILE>panel-item</FILE>
 TeplPanelItem
 tepl_panel_item_new

@@ -379,6 +379,12 @@
           instead.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <code>TeplPanelContainer</code> class has been removed, you can
+          use <link linkend="TeplPanelSimple">TeplPanelSimple</link> instead.
+        </para>
+      </listitem>
     </itemizedlist>
   </chapter>
 </part>

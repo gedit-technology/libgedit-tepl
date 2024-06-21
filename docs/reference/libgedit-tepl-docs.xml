@@ -103,7 +103,6 @@
       <title>GTK Extras - Side or Bottom Panel</title>
       <xi:include href="xml/panel.xml"/>
       <xi:include href="xml/panel-item.xml"/>
-      <xi:include href="xml/panel-container.xml"/>
       <xi:include href="xml/panel-notebook.xml"/>
       <xi:include href="xml/panel-simple.xml"/>
       <xi:include href="xml/panel-stack.xml"/>
